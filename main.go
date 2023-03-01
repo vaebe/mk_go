@@ -1,13 +1,31 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"mk/initialize"
+	"mk/routers"
+)
 
 func main() {
+	// 初始化日志
+	initialize.InitLogger()
+
+	// 初始化配置
+	initialize.InitConfig()
+
 	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	r.Run(":3234") // 监听并在 0.0.0.0:8080 上启动服务
+
+	// 路由分组
+	baseRouter := r.Group("/mk")
+	{
+		// user 路由
+		user.LoadUserRouter(baseRouter)
+	}
+
+	err := r.Run(":3234")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
