@@ -9,6 +9,7 @@ import (
 var (
 	DB          *gorm.DB
 	RedisClient *redis.Client
+	JWTInfo     *config.JWTConfig
 	MysqlConfig *config.MysqlConfig
 	RedisConfig *config.RedisConfig
 )

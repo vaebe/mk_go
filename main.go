@@ -14,6 +14,9 @@ func main() {
 	// 初始化配置
 	initialize.InitConfig()
 
+	// 初始化mysql
+	initialize.InitMysql()
+
 	r := gin.Default()
 
 	// 路由分组
@@ -23,7 +26,10 @@ func main() {
 		user.LoadUserRouter(baseRouter)
 	}
 
-	err := r.Run(":3234")
+	//Port, _ := utils.GetFreePort()
+	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", 53105)
+
+	err := r.Run(serviceAddress)
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -19,7 +19,7 @@ func InitConfig() {
 	configFilePrefix := "config"
 
 	// 配置文件路径
-	configFileName := fmt.Sprintf("mk_go/%s-dev.yaml", configFilePrefix)
+	configFileName := fmt.Sprintf("./%s-dev.yaml", configFilePrefix)
 
 	v := viper.New()
 	//文件的路径如何设置
@@ -29,13 +29,13 @@ func InitConfig() {
 	}
 
 	// mysqlConfig - 全局变量
-	if err := v.UnmarshalKey("mysqlConfig", global.MysqlConfig); err != nil {
+	if err := v.UnmarshalKey("mysqlConfig", &global.MysqlConfig); err != nil {
 		panic(err)
 	}
 	zap.S().Infof("MysqlConfig配置信息: %v", global.MysqlConfig)
 
 	// redisConfig - 全局变量
-	if err := v.UnmarshalKey("redisConfig", global.RedisConfig); err != nil {
+	if err := v.UnmarshalKey("redisConfig", &global.RedisConfig); err != nil {
 		panic(err)
 	}
 	zap.S().Infof("UserSrvConfig配置信息: %v", global.RedisConfig)
