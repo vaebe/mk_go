@@ -38,5 +38,11 @@ func InitConfig() {
 	if err := v.UnmarshalKey("redisConfig", &global.RedisConfig); err != nil {
 		panic(err)
 	}
-	zap.S().Infof("UserSrvConfig配置信息: %v", global.RedisConfig)
+	zap.S().Infof("redisConfig配置信息: %v", global.RedisConfig)
+
+	// jwt 全局变量
+	if err := v.UnmarshalKey("JWTConfig", &global.JWTConfig); err != nil {
+		panic(err)
+	}
+	zap.S().Infof("JWTConfig配置信息: %v", global.JWTConfig)
 }

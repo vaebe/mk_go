@@ -1,9 +1,12 @@
 package config
 
 type RedisConfig struct {
-	Host   string `mapstructure:"host" json:"host"`
-	Port   int    `mapstructure:"port" json:"port"`
-	Expire int    `mapstructure:"expire" json:"expire"`
+	Host     string `mapstructure:"host" json:"host"`
+	Port     int    `mapstructure:"port" json:"port"`
+	Expire   int    `mapstructure:"expire" json:"expire"`
+	Username string `mapstructure:"username" json:"username"`
+	Password string `mapstructure:"password" json:"password"`
+	DB       int    `mapstructure:"db" json:"db"`
 }
 
 type MysqlConfig struct {
@@ -15,5 +18,5 @@ type MysqlConfig struct {
 }
 
 type JWTConfig struct {
-	SigningKey string `mapstructure:"key" json:"key"`
+	SigningKey string `mapstructure:"signingKey" json:"signingKey"`
 }
