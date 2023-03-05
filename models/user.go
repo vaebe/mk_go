@@ -22,3 +22,9 @@ type UserTest struct {
 	Role     int        `gorm:"column:role;default:1;type:int;comment '1普通用户 2管理员'"`
 	Desc     string     `gorm:"column:desc;type:text;comment '描述'"`
 }
+
+type RegisterForm struct {
+	Mobile   string `form:"mobile" json:"mobile" binding:"required,mobile"`
+	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
+	Code     string `form:"code" json:"code" binding:"required,min=6,max=6"`
+}

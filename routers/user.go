@@ -9,5 +9,6 @@ func LoadUserRouter(r *gin.RouterGroup) {
 	userRoutes := r.Group("user")
 	{
 		userRoutes.GET("/login", user.Login)
+		userRoutes.POST("/registerUser", user.Register)
 	}
 }
