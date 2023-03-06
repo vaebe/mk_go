@@ -45,4 +45,10 @@ func InitConfig() {
 		panic(err)
 	}
 	zap.S().Infof("JWTConfig配置信息: %v", global.JWTConfig)
+
+	// email 邮箱
+	if err := v.UnmarshalKey("emailConfig", &global.EmailConfig); err != nil {
+		panic(err)
+	}
+	zap.S().Infof("emailConfig配置信息: %v", global.EmailConfig)
 }

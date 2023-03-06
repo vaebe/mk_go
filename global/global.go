@@ -14,4 +14,5 @@ var (
 	JWTConfig   *config.JWTConfig
 	MysqlConfig *config.MysqlConfig
 	RedisConfig *config.RedisConfig
+	EmailConfig *config.EmailConfig
 )

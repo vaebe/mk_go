@@ -20,3 +20,7 @@ type MysqlConfig struct {
 type JWTConfig struct {
 	SigningKey string `mapstructure:"signingKey" json:"signingKey"`
 }
+
+type EmailConfig struct {
+	Key string `mapstructure:"key" json:"key"`
+}
