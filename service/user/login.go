@@ -8,6 +8,7 @@ import (
 	"mk/global"
 	middlewares "mk/middleware"
 	"mk/models"
+	"mk/service/email"
 	"mk/utils"
 	"net/http"
 	"time"
@@ -33,6 +34,31 @@ func Login(c *gin.Context) {
 	c.AsciiJSON(http.StatusOK, data)
 }
 
+// SendVerificationCode 发送验证码
+func SendVerificationCode(ctx *gin.Context) {
+	//表单验证
+	verificationCodeForm := models.VerificationCodeForm{}
+
+	if err := ctx.ShouldBind(&verificationCodeForm); err != nil {
+		zap.S().Info(&verificationCodeForm)
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	// 获取随机验证码
+	verificationCode := utils.GenerateSmsCode(6)
+
+	// 发送验证码邮件
+	err := email.SendTheVerificationCodeEmail(verificationCode, verificationCodeForm.Email)
+	if err != nil {
+		utils.ResponseResultsError(ctx, "发送邮件验证码失败")
+	}
+
+	// 将数据存储到redis
+	global.RedisClient.Set(context.Background(), verificationCodeForm.Email, verificationCode, time.Duration(global.RedisConfig.Expire)*time.Second)
+	utils.ResponseResultsSuccess(ctx, "发送验证码成功！")
+}
+
 // Register 用户注册
 func Register(ctx *gin.Context) {
 
@@ -40,8 +66,6 @@ func Register(ctx *gin.Context) {
 	registerForm := models.RegisterForm{}
 
 	if err := ctx.ShouldBind(&registerForm); err != nil {
-		zap.S().Info(&registerForm)
-
 		utils.HandleValidatorError(ctx, err)
 		return
 	}

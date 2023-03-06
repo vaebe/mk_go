@@ -28,3 +28,7 @@ type RegisterForm struct {
 	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
 	Code     string `form:"code" json:"code" binding:"required,min=6,max=6"`
 }
+
+type VerificationCodeForm struct {
+	Email string `form:"email" json:"email" binding:"required,email"`
+}
