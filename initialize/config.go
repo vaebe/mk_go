@@ -13,8 +13,8 @@ func GetEnvInfo(env string) bool {
 	return viper.GetBool(env)
 }
 
-// InitConfig 初始化config配置
-func InitConfig() {
+// 设置 config 数据
+func setConfig() {
 	//debug := GetEnvInfo("Mk_DEBUG")
 	configFilePrefix := "config"
 
@@ -51,4 +51,27 @@ func InitConfig() {
 		panic(err)
 	}
 	zap.S().Infof("emailConfig配置信息: %v", global.EmailConfig)
+}
+
+// InitConfig 初始化config配置
+func InitConfig() {
+	setConfig()
+
+	// 初始化日志
+	InitLogger()
+
+	// 初始化mysql
+	InitMysql()
+
+	// 初始化redis
+	InitRedis()
+
+	// 初始化表单验证翻译
+	err := InitTrans("zh")
+	if err != nil {
+		zap.S().Error("InitTrans:", err.Error())
+	}
+
+	// 初始化自定义表单验证规则
+	CustomValidators()
 }
