@@ -1,0 +1,72 @@
+definitions:
+  models.RegisterForm:
+    properties:
+      code:
+        maxLength: 6
+        minLength: 6
+        type: string
+      mobile:
+        type: string
+      password:
+        maxLength: 20
+        minLength: 3
+        type: string
+    required:
+    - code
+    - mobile
+    - password
+    type: object
+  utils.EmptyInfo:
+    type: object
+  utils.ResponseResultInfo:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+paths:
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户注册
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 用户注册
+      tags:
+      - user
+swagger: "2.0"

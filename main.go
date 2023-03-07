@@ -7,12 +7,14 @@ import (
 	"mk/routers"
 )
 
-func main() {
-	// 初始化配置
-	initialize.InitConfig()
+// @contact.name   API Support
+// @contact.url    http://www.swagger.io/support
+// @contact.email  support@swagger.io
 
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+func main() {
 	r := gin.Default()
-	// 路由分组
 	baseRouter := r.Group("/mk")
 	{
 		user.LoadUserRouter(baseRouter)
@@ -20,6 +22,12 @@ func main() {
 
 	//Port, _ := utils.GetFreePort()
 	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", 53105)
+
+	// 初始化配置
+	initialize.InitConfig()
+
+	// 初始化swagger
+	initialize.InitSwagger(r, serviceAddress)
 
 	err := r.Run(serviceAddress)
 	if err != nil {

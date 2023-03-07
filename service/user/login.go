@@ -59,9 +59,19 @@ func SendVerificationCode(ctx *gin.Context) {
 	utils.ResponseResultsSuccess(ctx, "发送验证码成功！")
 }
 
-// Register 用户注册
+// Register
+// @Summary     用户注册
+// @Description  用户注册
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param 			param body    models.RegisterForm  true  "请求对象"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      400  {object}  utils.EmptyInfo
+// @Failure      404  {object}  utils.EmptyInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /user/register [post]
 func Register(ctx *gin.Context) {
-
 	//表单验证
 	registerForm := models.RegisterForm{}
 
