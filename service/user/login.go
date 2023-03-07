@@ -34,7 +34,16 @@ func Login(c *gin.Context) {
 	c.AsciiJSON(http.StatusOK, data)
 }
 
-// SendVerificationCode 发送验证码
+// SendVerificationCode
+// @Summary     发送验证码
+// @Description  发送验证码
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param 			param body    models.VerificationCodeForm  true  "请求对象"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /user/sendVerificationCode [post]
 func SendVerificationCode(ctx *gin.Context) {
 	//表单验证
 	verificationCodeForm := models.VerificationCodeForm{}
@@ -67,8 +76,6 @@ func SendVerificationCode(ctx *gin.Context) {
 // @Produce      json
 // @Param 			param body    models.RegisterForm  true  "请求对象"
 // @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      400  {object}  utils.EmptyInfo
-// @Failure      404  {object}  utils.EmptyInfo
 // @Failure      500  {object}  utils.EmptyInfo
 // @Router       /user/register [post]
 func Register(ctx *gin.Context) {

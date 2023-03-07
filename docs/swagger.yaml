@@ -16,6 +16,13 @@ definitions:
     - mobile
     - password
     type: object
+  models.VerificationCodeForm:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
   utils.EmptyInfo:
     type: object
   utils.ResponseResultInfo:
@@ -54,19 +61,37 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/utils.ResponseResultInfo'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/utils.EmptyInfo'
-        "404":
-          description: Not Found
-          schema:
-            $ref: '#/definitions/utils.EmptyInfo'
         "500":
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
       summary: 用户注册
+      tags:
+      - user
+  /user/sendVerificationCode:
+    post:
+      consumes:
+      - application/json
+      description: 发送验证码
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/models.VerificationCodeForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 发送验证码
       tags:
       - user
 swagger: "2.0"
