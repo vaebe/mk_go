@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm/schema"
 	"log"
 	"mk/global"
+	"mk/models"
 	"os"
 	"time"
 )
@@ -37,6 +38,12 @@ func InitMysql() {
 		},
 		Logger: newLogger,
 	})
+	if err != nil {
+		panic(err)
+	}
+
+	// 自动建表
+	err = global.DB.AutoMigrate(&models.User{})
 	if err != nil {
 		panic(err)
 	}
