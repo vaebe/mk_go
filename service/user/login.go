@@ -35,7 +35,7 @@ func generateToken(user models.User) (token string, err error) {
 // SendVerificationCode
 // @Summary     发送验证码
 // @Description  发送验证码
-// @Tags         user
+// @Tags         user用户
 // @Accept       json
 // @Produce      json
 // @Param 			param body    models.VerificationCodeForm  true  "请求对象"
@@ -88,7 +88,7 @@ func loginSuccess(ctx *gin.Context, user models.User) {
 // Register
 // @Summary     用户注册
 // @Description  用户注册
-// @Tags         user
+// @Tags         user用户
 // @Accept       json
 // @Produce      json
 // @Param 			param body    models.RegisterForm  true  "请求对象"
@@ -135,7 +135,7 @@ func Register(ctx *gin.Context) {
 // Login
 // @Summary     用户登陆
 // @Description  用户登陆
-// @Tags         user
+// @Tags         user用户
 // @Accept       json
 // @Produce      json
 // @Param 			param body    models.LoginForm  true  "请求对象"

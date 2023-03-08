@@ -1,20 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
-type UserTest struct {
-	BaseModel
-	Mobile   string     `gorm:"index:idx_mobile;unique;type:varbinary(11);not null;comment '手机号'"`
-	Password string     `gorm:"type:varbinary(100);not null;comment '密码'"`
-	NickName string     `gorm:"type:datetime;comment '昵称'"`
-	Birthday *time.Time `gorm:"type:varbinary(20);comment '生日'"`
-	Gender   string     `gorm:"column:gender;default:male;type:varbinary(6);comment 'female 女 male 男'"`
-	Role     int        `gorm:"column:role;default:1;type:int;comment '1普通用户 2管理员'"`
-	Desc     string     `gorm:"column:desc;type:text;comment '描述'"`
-}
-
 type User struct {
 	BaseModel
 	NickName              string `gorm:"type:varbinary(40);unique;not null;comment '昵称'" json:"nickName"`
@@ -32,17 +17,27 @@ type User struct {
 	UserInteractionPoints string `gorm:"type:int;not null;default:0;comment '用户互动积分'" json:"userInteractionPoints"`
 }
 
+// VerificationCodeForm 发送验证码
 type VerificationCodeForm struct {
 	Email string `form:"email" json:"email" binding:"required,email"`
 }
 
+// RegisterForm 注册
 type RegisterForm struct {
 	Email    string `form:"email" json:"email" binding:"required,email"`
 	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
 	Code     string `form:"code" json:"code" binding:"required,min=6,max=6"`
 }
 
+// LoginForm 登陆
 type LoginForm struct {
 	Email    string `form:"email" json:"email" binding:"required,email"`
 	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
+}
+
+// UserListForm 获取用户列表查询参数
+type UserListForm struct {
+	PaginationParameters
+	Email    string `json:"email" form:"email" `
+	NickName string `json:"nickName" form:"nickName" `
 }

@@ -28,6 +28,24 @@ definitions:
     - email
     - password
     type: object
+  models.UserListForm:
+    properties:
+      email:
+        type: string
+      nickName:
+        type: string
+      pageNo:
+        example: 1
+        minimum: 0
+        type: integer
+      pageSize:
+        example: 10
+        minimum: 0
+        type: integer
+    required:
+    - pageNo
+    - pageSize
+    type: object
   models.VerificationCodeForm:
     properties:
       email:
@@ -54,6 +72,32 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
+  /user/getUserList:
+    post:
+      consumes:
+      - application/json
+      description: 获取user用户列表
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserListForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取user用户列表
+      tags:
+      - user用户
   /user/login:
     post:
       consumes:
@@ -79,7 +123,7 @@ paths:
             $ref: '#/definitions/utils.EmptyInfo'
       summary: 用户登陆
       tags:
-      - user
+      - user用户
   /user/register:
     post:
       consumes:
@@ -105,7 +149,7 @@ paths:
             $ref: '#/definitions/utils.EmptyInfo'
       summary: 用户注册
       tags:
-      - user
+      - user用户
   /user/sendVerificationCode:
     post:
       consumes:
@@ -131,5 +175,5 @@ paths:
             $ref: '#/definitions/utils.EmptyInfo'
       summary: 发送验证码
       tags:
-      - user
+      - user用户
 swagger: "2.0"
