@@ -15,16 +15,6 @@ type UserTest struct {
 	Desc     string     `gorm:"column:desc;type:text;comment '描述'"`
 }
 
-type RegisterForm struct {
-	Email    string `form:"email" json:"email" binding:"required,email"`
-	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
-	Code     string `form:"code" json:"code" binding:"required,min=6,max=6"`
-}
-
-type VerificationCodeForm struct {
-	Email string `form:"email" json:"email" binding:"required,email"`
-}
-
 type User struct {
 	BaseModel
 	NickName              string `gorm:"type:varbinary(40);unique;not null;comment '昵称'" json:"nickName"`
@@ -40,4 +30,19 @@ type User struct {
 	PersonalProfile       string `gorm:"type:varbinary(300);comment '个人简介'" json:"personalProfile"`
 	UserCreationPoints    string `gorm:"type:int;not null;default:0;comment '用户创作积分'" json:"userCreationPoints"`
 	UserInteractionPoints string `gorm:"type:int;not null;default:0;comment '用户互动积分'" json:"userInteractionPoints"`
+}
+
+type VerificationCodeForm struct {
+	Email string `form:"email" json:"email" binding:"required,email"`
+}
+
+type RegisterForm struct {
+	Email    string `form:"email" json:"email" binding:"required,email"`
+	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
+	Code     string `form:"code" json:"code" binding:"required,min=6,max=6"`
+}
+
+type LoginForm struct {
+	Email    string `form:"email" json:"email" binding:"required,email"`
+	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
 }

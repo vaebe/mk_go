@@ -1,4 +1,16 @@
 definitions:
+  models.LoginForm:
+    properties:
+      email:
+        type: string
+      password:
+        maxLength: 20
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    type: object
   models.RegisterForm:
     properties:
       code:
@@ -42,6 +54,32 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户登陆
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 用户登陆
+      tags:
+      - user
   /user/register:
     post:
       consumes:

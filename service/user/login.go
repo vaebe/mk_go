@@ -12,7 +12,6 @@ import (
 	"mk/models"
 	"mk/service/email"
 	"mk/utils"
-	"net/http"
 	"time"
 )
 
@@ -31,26 +30,6 @@ func generateToken(user models.User) (token string, err error) {
 		},
 	}
 	return j.CreateToken(claims)
-}
-
-func Login(c *gin.Context) {
-	var users []models.UserTest
-	res := global.DB.Find(&users)
-
-	// 存在错误
-	if res.Error != nil {
-		return
-	}
-
-	zap.S().Info("数据", users)
-
-	data := map[string]interface{}{
-		"code": "0",
-		"msg":  "登陆",
-	}
-
-	// 输出 : {"lang":"GO\u8bed\u8a00","tag":"\u003cbr\u003e"}
-	c.AsciiJSON(http.StatusOK, data)
 }
 
 // SendVerificationCode
@@ -85,6 +64,25 @@ func SendVerificationCode(ctx *gin.Context) {
 	// 将数据存储到redis
 	global.RedisClient.Set(context.Background(), verificationCodeForm.Email, verificationCode, time.Duration(global.RedisConfig.Expire)*time.Second)
 	utils.ResponseResultsSuccess(ctx, "发送验证码成功！")
+}
+
+// loginSuccess 登陆成功后的操作
+func loginSuccess(ctx *gin.Context, user models.User) {
+	token, err := generateToken(user)
+	if err != nil {
+		zap.S().Info("生成token错误", err.Error())
+		utils.ResponseResultsError(ctx, "生成token错误!")
+		return
+	}
+
+	resultsData := map[string]any{
+		"id":         user.ID,
+		"nick_name":  user.NickName,
+		"github":     user.Github,
+		"token":      token,
+		"expired_at": (time.Now().Unix() + 60*60*24*30) * 1000,
+	}
+	utils.ResponseResultsSuccess(ctx, resultsData)
 }
 
 // Register
@@ -131,19 +129,36 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	token, err := generateToken(user)
-	if err != nil {
-		zap.S().Info("生成token错误", err.Error())
-		utils.ResponseResultsError(ctx, "生成token错误!")
+	loginSuccess(ctx, user)
+}
+
+// Login
+// @Summary     用户登陆
+// @Description  用户登陆
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Param 			param body    models.LoginForm  true  "请求对象"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /user/login [post]
+func Login(ctx *gin.Context) {
+	//表单验证
+	loginForm := models.LoginForm{}
+
+	if err := ctx.ShouldBind(&loginForm); err != nil {
+		utils.HandleValidatorError(ctx, err)
 		return
 	}
 
-	resultsData := map[string]any{
-		"id":         user.ID,
-		"nick_name":  user.NickName,
-		"github":     user.Github,
-		"token":      token,
-		"expired_at": (time.Now().Unix() + 60*60*24*30) * 1000,
+	userInfo := models.User{}
+
+	global.DB.Model(&models.User{UserAccount: loginForm.Email}).First(&userInfo)
+
+	if userInfo.Password != loginForm.PassWord {
+		utils.ResponseResultsError(ctx, "密码不正确")
+		return
 	}
-	utils.ResponseResultsSuccess(ctx, resultsData)
+
+	loginSuccess(ctx, userInfo)
 }
