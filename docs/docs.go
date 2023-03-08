@@ -109,7 +109,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "code",
-                "mobile",
+                "email",
                 "password"
             ],
             "properties": {
@@ -118,7 +118,7 @@ const docTemplate = `{
                     "maxLength": 6,
                     "minLength": 6
                 },
-                "mobile": {
+                "email": {
                     "type": "string"
                 },
                 "password": {

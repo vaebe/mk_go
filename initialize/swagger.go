@@ -28,4 +28,5 @@ func InitSwagger(r *gin.Engine, serviceAddress string) {
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.DefaultModelsExpandDepth(-1)))
+	zap.S().Infof("swagger访问地址:http://%s/swagger/index.html", serviceAddress)
 }

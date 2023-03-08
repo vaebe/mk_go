@@ -2,8 +2,10 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 	"mk/global"
 	middlewares "mk/middleware"
@@ -13,6 +15,23 @@ import (
 	"net/http"
 	"time"
 )
+
+// generateToken 生成token
+func generateToken(user models.User) (token string, err error) {
+	//生成token
+	j := middlewares.NewJWT()
+	claims := models.CustomClaims{
+		ID:          uint(user.ID),
+		NickName:    user.NickName,
+		AuthorityId: uint(user.Role),
+		RegisteredClaims: jwt.RegisteredClaims{
+			NotBefore: jwt.NewNumericDate(time.Now()),                     // 签名的生效时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // 24小时
+			Issuer:    "1057",
+		},
+	}
+	return j.CreateToken(claims)
+}
 
 func Login(c *gin.Context) {
 	var users []models.UserTest
@@ -88,21 +107,21 @@ func Register(ctx *gin.Context) {
 	}
 
 	// 验证短信验证码
-	redisCode := global.RedisClient.Get(context.Background(), registerForm.Mobile)
+	redisCode := global.RedisClient.Get(context.Background(), registerForm.Email)
 	verificationCode, _ := redisCode.Result()
 
 	if verificationCode == "redis" || verificationCode != registerForm.Code {
-		zap.S().Info("验证码不正确！")
+		zap.S().Infof("验证码不正确:应为%s实际为%s", verificationCode, registerForm.Code)
 
 		utils.ResponseResultsError(ctx, "验证码不正确!")
 		return
 	}
 
-	user := models.UserTest{
-		NickName: registerForm.Mobile,
-		Password: registerForm.PassWord,
-		Mobile:   registerForm.Mobile,
-		Role:     int(1),
+	user := models.User{
+		NickName:    fmt.Sprintf("mk%s", uuid.New().String()),
+		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
+		UserAccount: registerForm.Email, // 暂时使用邮箱注册
+		Password:    registerForm.PassWord,
 	}
 	userRes := global.DB.Create(&user)
 
@@ -112,20 +131,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	//生成token
-	j := middlewares.NewJWT()
-	claims := models.CustomClaims{
-		ID:          uint(user.ID),
-		NickName:    user.NickName,
-		AuthorityId: uint(user.Role),
-		RegisteredClaims: jwt.RegisteredClaims{
-			NotBefore: jwt.NewNumericDate(time.Now()),                     // 签名的生效时间
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // 24小时
-			Issuer:    "1057",
-		},
-	}
-	token, err := j.CreateToken(claims)
-
+	token, err := generateToken(user)
 	if err != nil {
 		zap.S().Info("生成token错误", err.Error())
 		utils.ResponseResultsError(ctx, "生成token错误!")
@@ -135,6 +141,7 @@ func Register(ctx *gin.Context) {
 	resultsData := map[string]any{
 		"id":         user.ID,
 		"nick_name":  user.NickName,
+		"github":     user.Github,
 		"token":      token,
 		"expired_at": (time.Now().Unix() + 60*60*24*30) * 1000,
 	}
