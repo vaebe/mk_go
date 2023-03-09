@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"mk/initialize"
-	"mk/routers"
+	"mk/routers/article"
+	"mk/routers/user"
 )
 
 // @contact.name   API Support
@@ -18,9 +19,9 @@ func main() {
 	baseRouter := r.Group("/mk")
 	{
 		user.LoadUserRouter(baseRouter)
+		article.LoadArticleRouter(baseRouter)
 	}
 
-	//Port, _ := utils.GetFreePort()
 	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", 53105)
 
 	// 初始化配置
