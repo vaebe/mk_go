@@ -13,5 +13,6 @@ func LoadArticleRouter(r *gin.RouterGroup) {
 		userRoutes.POST("/saveDraft", article.Draft)
 		userRoutes.POST("/getArticleList", article.GetArticleList)
 		userRoutes.POST("/getUserArticleList", article.GetUserArticleList)
+		userRoutes.GET("/getArticleDetails", article.Details)
 	}
 }

@@ -158,6 +158,31 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
+  /article/getArticleDetails:
+    get:
+      consumes:
+      - application/json
+      description: 获取文章详情
+      parameters:
+      - description: 文章id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取文章详情
+      tags:
+      - article文章
   /article/getArticleList:
     post:
       consumes:

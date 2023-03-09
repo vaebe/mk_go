@@ -129,3 +129,34 @@ func GetUserArticleList(ctx *gin.Context) {
 		List:     articles,
 	})
 }
+
+// Details
+// @Summary     获取文章详情
+// @Description  获取文章详情
+// @Tags         article文章
+// @Accept       json
+// @Produce      json
+// @Param        id   query      int  true  "文章id"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /article/getArticleDetails [get]
+func Details(ctx *gin.Context) {
+	articleId := ctx.Query("id")
+
+	if articleId == "" {
+		utils.ResponseResultsError(ctx, "文章id不能为空！")
+		return
+	}
+
+	zap.S().Info(articleId)
+
+	var articles []article.Article
+	res := global.DB.Where("id", articleId).Find(&articles)
+
+	total := int32(res.RowsAffected)
+	if total == 0 {
+		utils.ResponseResultsError(ctx, "文章不存在！")
+		return
+	}
+	utils.ResponseResultsSuccess(ctx, articles[0])
+}
