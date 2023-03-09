@@ -221,6 +221,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/getUserDetails": {
+            "get": {
+                "description": "获取用户详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user用户"
+                ],
+                "summary": "获取用户详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/user/getUserList": {
             "post": {
                 "description": "获取user用户列表",

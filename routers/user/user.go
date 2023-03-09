@@ -12,5 +12,6 @@ func LoadUserRouter(r *gin.RouterGroup) {
 		userRoutes.POST("/register", user.Register)
 		userRoutes.POST("/sendVerificationCode", user.SendVerificationCode)
 		userRoutes.POST("/getUserList", user.GetUserList)
+		userRoutes.GET("/getUserDetails", user.Details)
 	}
 }

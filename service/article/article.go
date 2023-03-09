@@ -148,8 +148,6 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
-	zap.S().Info(articleId)
-
 	var articles []article.Article
 	res := global.DB.Where("id", articleId).Find(&articles)
 

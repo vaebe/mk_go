@@ -8,8 +8,6 @@ import (
 	"mk/utils"
 )
 
-// todo 根据用户id获取用户信息
-
 // GetUserList
 // @Summary     获取user用户列表
 // @Description  获取user用户列表
@@ -49,4 +47,33 @@ func GetUserList(ctx *gin.Context) {
 		Total:    total,
 		List:     users,
 	})
+}
+
+// Details
+// @Summary     获取用户详情
+// @Description  获取用户详情
+// @Tags         user用户
+// @Accept       json
+// @Produce      json
+// @Param        id   query      int  true  "用户id"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /user/getUserDetails [get]
+func Details(ctx *gin.Context) {
+	articleId := ctx.Query("id")
+
+	if articleId == "" {
+		utils.ResponseResultsError(ctx, "用户id不能为空！")
+		return
+	}
+
+	var users []models.User
+	res := global.DB.Where("id", articleId).Find(&users)
+
+	total := int32(res.RowsAffected)
+	if total == 0 {
+		utils.ResponseResultsError(ctx, "用户不存在！")
+		return
+	}
+	utils.ResponseResultsSuccess(ctx, users[0])
 }
