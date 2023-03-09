@@ -9,6 +9,7 @@ import (
 	"log"
 	"mk/global"
 	"mk/models"
+	"mk/models/article"
 	"os"
 	"time"
 )
@@ -43,7 +44,7 @@ func InitMysql() {
 	}
 
 	// 自动建表
-	err = global.DB.AutoMigrate(&models.User{})
+	err = global.DB.AutoMigrate(&models.User{}, &article.Article{})
 	if err != nil {
 		panic(err)
 	}

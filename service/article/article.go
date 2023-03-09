@@ -1,0 +1,131 @@
+package article
+
+import (
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
+	"mk/global"
+	"mk/models"
+	"mk/models/article"
+	"mk/utils"
+)
+
+// Save
+// @Summary     保存文章
+// @Description  保存文章
+// @Tags         article文章
+// @Accept       json
+// @Produce      json
+// @Param 			param body    	article.SaveForm  true  "请求对象"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /article/save [post]
+func Save(ctx *gin.Context) {
+	saveForm := article.SaveForm{}
+
+	if err := ctx.ShouldBind(&saveForm); err != nil {
+		zap.S().Info("文章保存信息:", &saveForm)
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	global.DB.Create(&article.Article{
+		UserId:           saveForm.UserId,
+		Classify:         saveForm.Classify,
+		CollectionColumn: saveForm.CollectionColumn,
+		Content:          saveForm.Content,
+		CoverImg:         saveForm.CoverImg,
+		Tags:             saveForm.Tags,
+		Title:            saveForm.Title,
+		Summary:          saveForm.Summary,
+		Status:           "2", // 文章保存的信息必须进行审核
+	})
+
+	utils.ResponseResultsSuccess(ctx, "保存成功！")
+}
+
+// GetArticleList
+// @Summary     获取文章列表
+// @Description  获取文章列表
+// @Tags         article文章
+// @Accept       json
+// @Produce      json
+// @Param 			param body    	article.AllListForm  true  "请求对象"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /article/getArticleList [post]
+func GetArticleList(ctx *gin.Context) {
+	listForm := article.AllListForm{}
+
+	if err := ctx.ShouldBind(&listForm); err != nil {
+		zap.S().Info("文章列表查询参数:", &listForm)
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	var articles []article.Article
+	res := global.DB.Where("title LIKE ? AND tags LIKE ? AND classify LIKE ?",
+		"%"+listForm.Title+"%", "%"+listForm.Tag+"%", "%"+listForm.Classify+"%").Find(&articles)
+
+	// 存在错误
+	if res.Error != nil {
+		zap.S().Info(res.Error)
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	// 获取总数
+	total := int32(res.RowsAffected)
+
+	// 分页
+	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
+
+	utils.ResponseResultsSuccess(ctx, &models.PagingData{
+		PageSize: listForm.PageSize,
+		PageNo:   listForm.PageNo,
+		Total:    total,
+		List:     articles,
+	})
+}
+
+// GetUserArticleList
+// @Summary     获取用户文章列表
+// @Description  获取用户文章列表
+// @Tags         article文章
+// @Accept       json
+// @Produce      json
+// @Param 			param body    	article.UserArticleListForm  true  "请求对象"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /article/getUserArticleList [post]
+func GetUserArticleList(ctx *gin.Context) {
+	listForm := article.UserArticleListForm{}
+
+	if err := ctx.ShouldBind(&listForm); err != nil {
+		zap.S().Info("文章列表查询参数:", &listForm)
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	var articles []article.Article
+	res := global.DB.Where("user_id", listForm.UserId).Find(&articles)
+
+	// 存在错误
+	if res.Error != nil {
+		zap.S().Info(res.Error)
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	// 获取总数
+	total := int32(res.RowsAffected)
+
+	// 分页
+	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
+
+	utils.ResponseResultsSuccess(ctx, &models.PagingData{
+		PageSize: listForm.PageSize,
+		PageNo:   listForm.PageNo,
+		Total:    total,
+		List:     articles,
+	})
+}

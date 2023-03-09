@@ -1,8 +1,10 @@
-package models
+package article
 
-// ArticleColumn 文章专栏
-type ArticleColumn struct {
-	BaseModel
+import "mk/models"
+
+// Column 文章专栏
+type Column struct {
+	models.BaseModel
 	Name         string `gorm:"type:varbinary(50);unique;not null;comment '专栏名称'" json:"name"`
 	Introduction string `gorm:"type:varbinary(300);unique;not null;comment '专栏简介'" json:"introduction"`
 	CoverImg     string `gorm:"type:varbinary(200);not null;comment '专栏封面'" json:"coverImg"`

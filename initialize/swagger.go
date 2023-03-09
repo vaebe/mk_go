@@ -14,11 +14,10 @@ func InitSwagger(r *gin.Engine, serviceAddress string) {
 	// 执行命令生成swagger
 	cmd := exec.Command("swag", "init")
 	stdoutStderr, err := cmd.CombinedOutput()
-	if err != nil {
-		zap.S().Info(err)
-		return
-	}
 	zap.S().Infof("\n%s", stdoutStderr)
+	if err != nil {
+		panic(err)
+	}
 
 	docs.SwaggerInfo.Title = "MK API"
 	docs.SwaggerInfo.Description = "MK API server."

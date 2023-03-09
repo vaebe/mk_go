@@ -8,7 +8,7 @@ import (
 	"mk/utils"
 )
 
-//
+// todo 根据用户id获取用户信息
 
 // GetUserList
 // @Summary     获取user用户列表

@@ -1,4 +1,90 @@
 definitions:
+  article.AllListForm:
+    properties:
+      classify:
+        type: string
+      pageNo:
+        example: 1
+        minimum: 0
+        type: integer
+      pageSize:
+        example: 10
+        minimum: 0
+        type: integer
+      tag:
+        type: string
+      title:
+        type: string
+    required:
+    - pageNo
+    - pageSize
+    type: object
+  article.SaveDraftForm:
+    properties:
+      classify:
+        type: string
+      collectionColumn:
+        type: string
+      content:
+        type: string
+      coverImg:
+        type: string
+      summary:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      userId:
+        type: integer
+    required:
+    - title
+    - userId
+    type: object
+  article.SaveForm:
+    properties:
+      classify:
+        type: string
+      collectionColumn:
+        type: string
+      content:
+        type: string
+      coverImg:
+        type: string
+      summary:
+        type: string
+      tags:
+        type: string
+      title:
+        type: string
+      userId:
+        type: integer
+    required:
+    - classify
+    - collectionColumn
+    - content
+    - coverImg
+    - summary
+    - tags
+    - title
+    - userId
+    type: object
+  article.UserArticleListForm:
+    properties:
+      pageNo:
+        example: 1
+        minimum: 0
+        type: integer
+      pageSize:
+        example: 10
+        minimum: 0
+        type: integer
+      userId:
+        type: integer
+    required:
+    - pageNo
+    - pageSize
+    type: object
   models.LoginForm:
     properties:
       email:
@@ -72,6 +158,110 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
+  /article/getArticleList:
+    post:
+      consumes:
+      - application/json
+      description: 获取文章列表
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/article.AllListForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取文章列表
+      tags:
+      - article文章
+  /article/getUserArticleList:
+    post:
+      consumes:
+      - application/json
+      description: 获取用户文章列表
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/article.UserArticleListForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取用户文章列表
+      tags:
+      - article文章
+  /article/save:
+    post:
+      consumes:
+      - application/json
+      description: 保存文章
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/article.SaveForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 保存文章
+      tags:
+      - article文章
+  /article/saveDraft:
+    post:
+      consumes:
+      - application/json
+      description: 保存草稿
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/article.SaveDraftForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 保存草稿
+      tags:
+      - article文章
   /user/getUserList:
     post:
       consumes:
