@@ -85,6 +85,24 @@ definitions:
     - pageNo
     - pageSize
     type: object
+  enum.EnumsForm:
+    properties:
+      name:
+        type: string
+      parentId:
+        type: string
+      typeCode:
+        type: string
+      typeName:
+        type: string
+      value:
+        type: string
+    required:
+    - name
+    - typeCode
+    - typeName
+    - value
+    type: object
   models.LoginForm:
     properties:
       email:
@@ -287,6 +305,101 @@ paths:
       summary: 保存草稿
       tags:
       - article文章
+  /enum/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 根据id删除指定枚举
+      parameters:
+      - description: 枚举id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 根据id删除指定枚举
+      tags:
+      - enum枚举
+  /enum/getAllEnums:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取全部数据
+      tags:
+      - enum枚举
+  /enum/getEnumDetails:
+    get:
+      consumes:
+      - application/json
+      description: 获取枚举详情
+      parameters:
+      - description: 枚举id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取枚举详情
+      tags:
+      - enum枚举
+  /enum/save:
+    post:
+      consumes:
+      - application/json
+      description: 增加、编辑
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/enum.EnumsForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 增加、编辑
+      tags:
+      - enum枚举
   /user/getUserDetails:
     get:
       consumes:

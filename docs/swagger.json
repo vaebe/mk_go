@@ -210,6 +210,151 @@
                 }
             }
         },
+        "/enum/delete": {
+            "delete": {
+                "description": "根据id删除指定枚举",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "enum枚举"
+                ],
+                "summary": "根据id删除指定枚举",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "枚举id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/enum/getAllEnums": {
+            "get": {
+                "description": "获取全部数据",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "enum枚举"
+                ],
+                "summary": "获取全部数据",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/enum/getEnumDetails": {
+            "get": {
+                "description": "获取枚举详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "enum枚举"
+                ],
+                "summary": "获取枚举详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "枚举id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/enum/save": {
+            "post": {
+                "description": "增加、编辑",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "enum枚举"
+                ],
+                "summary": "增加、编辑",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/enum.EnumsForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/user/getUserDetails": {
             "get": {
                 "description": "获取用户详情",
@@ -529,6 +674,32 @@
                 },
                 "userId": {
                     "type": "integer"
+                }
+            }
+        },
+        "enum.EnumsForm": {
+            "type": "object",
+            "required": [
+                "name",
+                "typeCode",
+                "typeName",
+                "value"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "string"
+                },
+                "typeCode": {
+                    "type": "string"
+                },
+                "typeName": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         },

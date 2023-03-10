@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"mk/initialize"
 	"mk/routers/article"
+	"mk/routers/enum"
 	"mk/routers/user"
 )
 
@@ -20,6 +21,7 @@ func main() {
 	{
 		user.LoadUserRouter(baseRouter)
 		article.LoadArticleRouter(baseRouter)
+		enum.LoadEnumRouter(baseRouter)
 	}
 
 	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", 53105)
