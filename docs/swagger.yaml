@@ -374,6 +374,31 @@ paths:
       summary: 获取枚举详情
       tags:
       - enum枚举
+  /enum/getEnumsByType:
+    get:
+      consumes:
+      - application/json
+      description: 根据分类查询枚举
+      parameters:
+      - description: 枚举类型code
+        in: query
+        name: type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 根据分类查询枚举
+      tags:
+      - enum枚举
   /enum/save:
     post:
       consumes:

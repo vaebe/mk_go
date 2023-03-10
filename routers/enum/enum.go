@@ -11,5 +11,8 @@ func LoadEnumRouter(r *gin.RouterGroup) {
 	{
 		userRoutes.POST("/save", enum.Save)
 		userRoutes.DELETE("/delete", enum.Delete)
+		userRoutes.GET("/details", enum.Details)
+		userRoutes.GET("/getEnumsByType", enum.GetEnumsByType)
+		userRoutes.GET("/getAllEnums", enum.GetAllEnums)
 	}
 }

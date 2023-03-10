@@ -9,12 +9,12 @@ import (
 )
 
 // Save
-// @Summary     增加、编辑
+// @Summary      增加、编辑
 // @Description  增加、编辑
 // @Tags         enum枚举
 // @Accept       json
 // @Produce      json
-// @Param 				param body    enum.EnumsForm true  "请求对象"
+// @Param 			 param body    enum.EnumsForm true  "请求对象"
 // @Success      200  {object}  utils.ResponseResultInfo
 // @Failure      500  {object}  utils.EmptyInfo
 // @Router       /enum/save [post]
@@ -81,16 +81,55 @@ func Delete(ctx *gin.Context) {
 // @Failure      500  {object}  utils.EmptyInfo
 // @Router       /enum/getEnumDetails [get]
 func Details(ctx *gin.Context) {
+	enumsId := ctx.Query("id")
 
+	if enumsId == "" {
+		utils.ResponseResultsError(ctx, "枚举id不能为空！")
+		return
+	}
+
+	enumInfo := enum.EnumsForm{}
+	res := global.DB.Model(&enum.Enum{}).Where("id = ?", enumsId).First(&enumInfo)
+
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	utils.ResponseResultsSuccess(ctx, enumInfo)
 }
 
-// GetEnumsByType 根据分类查询 单个 多个
+// GetEnumsByType
+// @Summary      根据分类查询枚举
+// @Description  根据分类查询枚举
+// @Tags         enum枚举
+// @Accept       json
+// @Produce      json
+// @Param        type   query   string  true  "枚举类型code"
+// @Success      200  {object}  utils.ResponseResultInfo
+// @Failure      500  {object}  utils.EmptyInfo
+// @Router       /enum/getEnumsByType [get]
 func GetEnumsByType(ctx *gin.Context) {
+	typeCode := ctx.Query("type")
 
+	if typeCode == "" {
+		utils.ResponseResultsError(ctx, "枚举类型code不能为空！")
+		return
+	}
+
+	var enumsList []enum.EnumsForm
+	res := global.DB.Model(&enum.Enum{}).Where("type_code", typeCode).Find(&enumsList)
+
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	utils.ResponseResultsSuccess(ctx, enumsList)
 }
 
 // GetAllEnums
-// @Summary     获取全部数据
+// @Summary      获取全部数据
 // @Description  获取全部数据
 // @Tags         enum枚举
 // @Accept       json
@@ -99,5 +138,18 @@ func GetEnumsByType(ctx *gin.Context) {
 // @Failure      500  {object}  utils.EmptyInfo
 // @Router       /enum/getAllEnums [get]
 func GetAllEnums(ctx *gin.Context) {
+	var enumsList []enum.EnumsForm
+	res := global.DB.Model(&enum.Enum{}).Find(&enumsList)
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
 
+	enums := make(map[string][]enum.EnumsForm)
+
+	for _, v := range enumsList {
+		enums[v.TypeCode] = append(enums[v.TypeCode], v)
+	}
+
+	utils.ResponseResultsSuccess(ctx, enums)
 }

@@ -315,6 +315,44 @@
                 }
             }
         },
+        "/enum/getEnumsByType": {
+            "get": {
+                "description": "根据分类查询枚举",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "enum枚举"
+                ],
+                "summary": "根据分类查询枚举",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "枚举类型code",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/enum/save": {
             "post": {
                 "description": "增加、编辑",
