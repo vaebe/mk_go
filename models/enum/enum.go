@@ -18,5 +18,5 @@ type EnumsForm struct {
 	Value    string `form:"value" json:"value" binding:"required"`
 	TypeName string `form:"typeName" json:"typeName" binding:"required"`
 	TypeCode string `form:"typeCode" json:"typeCode" binding:"required"`
-	ParentId string `form:"parentId" json:"parentId" ex`
+	ParentId string `form:"parentId" json:"parentId"`
 }

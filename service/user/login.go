@@ -76,11 +76,21 @@ func loginSuccess(ctx *gin.Context, user models.User) {
 	}
 
 	resultsData := map[string]any{
-		"id":         user.ID,
-		"nick_name":  user.NickName,
-		"github":     user.Github,
-		"token":      token,
-		"expired_at": (time.Now().Unix() + 60*60*24*30) * 1000,
+		"id":                    user.ID,
+		"nickName":              user.NickName,
+		"userAvatar":            user.UserAvatar,
+		"userName":              user.UserName,
+		"userAccount":           user.UserAccount,
+		"github":                user.Github,
+		"posts":                 user.Posts,
+		"role":                  user.Role,
+		"company":               user.Company,
+		"homepage":              user.Homepage,
+		"personalProfile":       user.PersonalProfile,
+		"userCreationPoints":    user.UserCreationPoints,
+		"userInteractionPoints": user.UserInteractionPoints,
+		"token":                 token,
+		"expired_at":            (time.Now().Unix() + 60*60*24*30) * 1000,
 	}
 	utils.ResponseResultsSuccess(ctx, resultsData)
 }
