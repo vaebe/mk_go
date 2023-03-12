@@ -150,10 +150,9 @@ func Details(ctx *gin.Context) {
 	}
 
 	var articles []article.Article
-	res := global.DB.Where("id", articleId).Find(&articles)
+	res := global.DB.Where("id", articleId).First(&articles)
 
-	total := int32(res.RowsAffected)
-	if total == 0 {
+	if res.Error != nil {
 		utils.ResponseResultsError(ctx, "文章不存在！")
 		return
 	}

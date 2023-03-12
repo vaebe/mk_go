@@ -68,10 +68,9 @@ func Details(ctx *gin.Context) {
 	}
 
 	var users []models.User
-	res := global.DB.Where("id", articleId).Find(&users)
+	res := global.DB.Where("id", articleId).First(&users)
 
-	total := int32(res.RowsAffected)
-	if total == 0 {
+	if res.Error != nil {
 		utils.ResponseResultsError(ctx, "用户不存在！")
 		return
 	}
