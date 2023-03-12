@@ -4,46 +4,14 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/thoas/go-funk"
+	"go.uber.org/zap"
 	"mk/global"
 	"mk/models"
 	"net/http"
+	"strings"
 	"time"
 )
-
-func JWTAuth() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localSstorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
-		token := c.Request.Header.Get("x-token")
-		if token == "" {
-			c.JSON(http.StatusUnauthorized, map[string]string{
-				"msg": "请登录",
-			})
-			c.Abort()
-			return
-		}
-		j := NewJWT()
-		// parseToken 解析token包含的信息
-		claims, err := j.ParseToken(token)
-		if err != nil {
-			if err == TokenExpired {
-				if err == TokenExpired {
-					c.JSON(http.StatusUnauthorized, map[string]string{
-						"msg": "授权已过期",
-					})
-					c.Abort()
-					return
-				}
-			}
-
-			c.JSON(http.StatusUnauthorized, "未登陆")
-			c.Abort()
-			return
-		}
-		c.Set("claims", claims)
-		c.Set("userId", claims.ID)
-		c.Next()
-	}
-}
 
 type JWT struct {
 	SigningKey []byte
@@ -95,9 +63,7 @@ func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
 
 	} else {
 		return nil, TokenInvalid
-
 	}
-
 }
 
 // RefreshToken 更新token
@@ -119,4 +85,57 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 		return j.CreateToken(*claims)
 	}
 	return "", TokenInvalid
+}
+
+// JWTAuth token校验
+func JWTAuth(whitelist []string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		curRoutePath := c.Request.RequestURI
+		// 白名单路由内不验证token
+		isWhitelistRouting := funk.Contains(whitelist, curRoutePath)
+		// swagger 路由不验证token
+		isSwaggerRoute := strings.Contains(curRoutePath, "/swagger/")
+
+		if isWhitelistRouting || isSwaggerRoute {
+			c.Next()
+			return
+		}
+
+		// 我们这里jwt鉴权取头部信息 authorization 登录时回返回token信息
+		token := c.Request.Header.Get("authorization")
+		zap.S().Info(token)
+		if token == "" {
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"code": -1,
+				"msg":  "token不存在！",
+			})
+			c.Abort()
+			return
+		}
+		j := NewJWT()
+		// parseToken 解析token包含的信息
+		claims, err := j.ParseToken(token)
+		if err != nil {
+			if err == TokenExpired {
+				if err == TokenExpired {
+					c.JSON(http.StatusUnauthorized, gin.H{
+						"code": -1,
+						"msg":  "授权已过期！",
+					})
+					c.Abort()
+					return
+				}
+			}
+
+			c.JSON(http.StatusUnauthorized, gin.H{
+				"code": -1,
+				"msg":  "未登陆！",
+			})
+			c.Abort()
+			return
+		}
+		c.Set("claims", claims)
+		c.Set("userId", claims.ID)
+		c.Next()
+	}
 }

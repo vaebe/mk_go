@@ -169,12 +169,7 @@ definitions:
     type: object
 info:
   contact:
-    email: support@swagger.io
     name: API Support
-    url: http://www.swagger.io/support
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
 paths:
   /article/getArticleDetails:
     get:
@@ -198,6 +193,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 获取文章详情
       tags:
       - article文章
@@ -554,4 +551,9 @@ paths:
       summary: 发送验证码
       tags:
       - user用户
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

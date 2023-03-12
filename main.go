@@ -11,15 +11,16 @@ import (
 )
 
 // @contact.name   API Support
-// @contact.url    http://www.swagger.io/support
-// @contact.email  support@swagger.io
-
-// @license.name  Apache 2.0
-// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name Authorization
 func main() {
+	// 路由白名单
+	routerWhiteList := []string{"/mk/user/login", "/swagger/index.html", "/favicon.ico"}
+
 	r := gin.Default()
-	r.Use(middlewares.Cors())
-	baseRouter := r.Group("/mk", middlewares.Cors())
+	r.Use(middlewares.Cors(), middlewares.JWTAuth(routerWhiteList))
+	baseRouter := r.Group("/mk")
 	{
 		user.LoadUserRouter(baseRouter)
 		article.LoadArticleRouter(baseRouter)

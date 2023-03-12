@@ -139,6 +139,7 @@ func GetUserArticleList(ctx *gin.Context) {
 // @Param        id   query      int  true  "文章id"
 // @Success      200  {object}  utils.ResponseResultInfo
 // @Failure      500  {object}  utils.EmptyInfo
+// @Security ApiKeyAuth
 // @Router       /article/getArticleDetails [get]
 func Details(ctx *gin.Context) {
 	articleId := ctx.Query("id")
