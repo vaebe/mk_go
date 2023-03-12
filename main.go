@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"mk/initialize"
+	middlewares "mk/middleware"
 	"mk/routers/article"
 	"mk/routers/enum"
 	"mk/routers/user"
@@ -17,7 +18,8 @@ import (
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 func main() {
 	r := gin.Default()
-	baseRouter := r.Group("/mk")
+	r.Use(middlewares.Cors())
+	baseRouter := r.Group("/mk", middlewares.Cors())
 	{
 		user.LoadUserRouter(baseRouter)
 		article.LoadArticleRouter(baseRouter)
