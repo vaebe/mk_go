@@ -19,13 +19,6 @@ type Article struct {
 	Status           string `gorm:"type:varbinary(6);not null;comment '状态 1草稿 2待审核 3审核未通过 4发布 5已删除'" json:"status"`
 }
 
-// RegisterForm 注册
-type RegisterForm struct {
-	Email    string `form:"email" json:"email" binding:"required,email"`
-	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
-	Code     string `form:"code" json:"code" binding:"required,min=6,max=6"`
-}
-
 // SaveForm 文章保存表单
 type SaveForm struct {
 	UserId           int32  `json:"userId" form:"userId" binding:"required"`
