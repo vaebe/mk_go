@@ -24,3 +24,8 @@ type JWTConfig struct {
 type EmailConfig struct {
 	Key string `mapstructure:"key" json:"key"`
 }
+
+type QiNiuConfig struct {
+	Access string `mapstructure:"access" json:"access"`
+	Secret string `mapstructure:"secret" json:"secret"`
+}

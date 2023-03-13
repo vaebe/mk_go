@@ -15,4 +15,5 @@ var (
 	MysqlConfig *config.MysqlConfig
 	RedisConfig *config.RedisConfig
 	EmailConfig *config.EmailConfig
+	QiNiuConfig *config.QiNiuConfig
 )

@@ -51,14 +51,21 @@ func setConfig() {
 		panic(err)
 	}
 	zap.S().Infof("emailConfig配置信息: %v", global.EmailConfig)
+
+	// 七牛云存储
+	if err := v.UnmarshalKey("qiNiuConfig", &global.QiNiuConfig); err != nil {
+		panic(err)
+	}
+	zap.S().Infof("七牛云存储配置信息: %v", global.QiNiuConfig)
 }
 
 // InitConfig 初始化config配置
 func InitConfig() {
-	setConfig()
-
 	// 初始化日志
 	InitLogger()
+
+	// 设置配置信息
+	setConfig()
 
 	// 初始化mysql
 	InitMysql()
