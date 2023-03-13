@@ -8,10 +8,10 @@ import (
 	"gorm.io/gorm/schema"
 	"log"
 	"mk/global"
-	"mk/models"
 	"mk/models/article"
 	"mk/models/articleColumn"
 	"mk/models/enum"
+	"mk/models/user"
 	"os"
 	"time"
 )
@@ -46,7 +46,7 @@ func InitMysql() {
 	}
 
 	// 自动建表
-	err = global.DB.AutoMigrate(&models.User{}, &article.Article{}, &enum.Enum{}, &articleColumn.ArticleColumn{})
+	err = global.DB.AutoMigrate(&user.User{}, &article.Article{}, &enum.Enum{}, &articleColumn.ArticleColumn{})
 	if err != nil {
 		panic(err)
 	}

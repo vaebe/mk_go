@@ -116,38 +116,7 @@ definitions:
     - typeName
     - value
     type: object
-  models.LoginForm:
-    properties:
-      email:
-        example: mk@163.com
-        type: string
-      password:
-        example: "123456"
-        maxLength: 20
-        minLength: 3
-        type: string
-    required:
-    - email
-    - password
-    type: object
-  models.RegisterForm:
-    properties:
-      code:
-        maxLength: 6
-        minLength: 6
-        type: string
-      email:
-        type: string
-      password:
-        maxLength: 20
-        minLength: 3
-        type: string
-    required:
-    - code
-    - email
-    - password
-    type: object
-  models.UserListForm:
+  user.ListForm:
     properties:
       email:
         type: string
@@ -165,7 +134,38 @@ definitions:
     - pageNo
     - pageSize
     type: object
-  models.VerificationCodeForm:
+  user.LoginForm:
+    properties:
+      email:
+        example: mk@163.com
+        type: string
+      password:
+        example: "123456"
+        maxLength: 20
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  user.RegisterForm:
+    properties:
+      code:
+        maxLength: 6
+        minLength: 6
+        type: string
+      email:
+        type: string
+      password:
+        maxLength: 20
+        minLength: 3
+        type: string
+    required:
+    - code
+    - email
+    - password
+    type: object
+  user.VerificationCodeForm:
     properties:
       email:
         type: string
@@ -623,7 +623,7 @@ paths:
         name: param
         required: true
         schema:
-          $ref: '#/definitions/models.UserListForm'
+          $ref: '#/definitions/user.ListForm'
       produces:
       - application/json
       responses:
@@ -651,7 +651,7 @@ paths:
         name: param
         required: true
         schema:
-          $ref: '#/definitions/models.LoginForm'
+          $ref: '#/definitions/user.LoginForm'
       produces:
       - application/json
       responses:
@@ -677,7 +677,7 @@ paths:
         name: param
         required: true
         schema:
-          $ref: '#/definitions/models.RegisterForm'
+          $ref: '#/definitions/user.RegisterForm'
       produces:
       - application/json
       responses:
@@ -703,7 +703,7 @@ paths:
         name: param
         required: true
         schema:
-          $ref: '#/definitions/models.VerificationCodeForm'
+          $ref: '#/definitions/user.VerificationCodeForm'
       produces:
       - application/json
       responses:

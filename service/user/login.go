@@ -10,13 +10,14 @@ import (
 	"mk/global"
 	middlewares "mk/middleware"
 	"mk/models"
+	"mk/models/user"
 	"mk/service/email"
 	"mk/utils"
 	"time"
 )
 
 // generateToken 生成token
-func generateToken(user models.User) (token string, err error) {
+func generateToken(user user.User) (token string, err error) {
 	//生成token
 	j := middlewares.NewJWT()
 	claims := models.CustomClaims{
@@ -39,13 +40,13 @@ func generateToken(user models.User) (token string, err error) {
 //	@Tags			user用户
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	body		models.VerificationCodeForm	true	"请求对象"
+//	@Param			param	body		user.VerificationCodeForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Router			/user/sendVerificationCode [post]
 func SendVerificationCode(ctx *gin.Context) {
 	//表单验证
-	verificationCodeForm := models.VerificationCodeForm{}
+	verificationCodeForm := user.VerificationCodeForm{}
 
 	if err := ctx.ShouldBind(&verificationCodeForm); err != nil {
 		zap.S().Info(&verificationCodeForm)
@@ -68,7 +69,7 @@ func SendVerificationCode(ctx *gin.Context) {
 }
 
 // loginSuccess 登陆成功后的操作
-func loginSuccess(ctx *gin.Context, user models.User) {
+func loginSuccess(ctx *gin.Context, user user.User) {
 	token, err := generateToken(user)
 	if err != nil {
 		zap.S().Info("生成token错误", err.Error())
@@ -103,13 +104,13 @@ func loginSuccess(ctx *gin.Context, user models.User) {
 //	@Tags			user用户
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	body		models.RegisterForm	true	"请求对象"
+//	@Param			param	body		user.RegisterForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Router			/user/register [post]
 func Register(ctx *gin.Context) {
 	//表单验证
-	registerForm := models.RegisterForm{}
+	registerForm := user.RegisterForm{}
 
 	if err := ctx.ShouldBind(&registerForm); err != nil {
 		utils.HandleValidatorError(ctx, err)
@@ -127,7 +128,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	user := models.User{
+	user := user.User{
 		NickName:    fmt.Sprintf("mk%s", uuid.New().String()),
 		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
 		UserAccount: registerForm.Email, // 暂时使用邮箱注册
@@ -151,22 +152,22 @@ func Register(ctx *gin.Context) {
 //	@Tags			user用户
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	body		models.LoginForm	true	"请求对象"
+//	@Param			param	body		user.LoginForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Router			/user/login [post]
 func Login(ctx *gin.Context) {
 	//表单验证
-	loginForm := models.LoginForm{}
+	loginForm := user.LoginForm{}
 
 	if err := ctx.ShouldBind(&loginForm); err != nil {
 		utils.HandleValidatorError(ctx, err)
 		return
 	}
 
-	userInfo := models.User{}
+	userInfo := user.User{}
 
-	global.DB.Model(&models.User{UserAccount: loginForm.Email}).First(&userInfo)
+	global.DB.Model(&user.User{UserAccount: loginForm.Email}).First(&userInfo)
 
 	if userInfo.Password != loginForm.PassWord {
 		utils.ResponseResultsError(ctx, "密码不正确")

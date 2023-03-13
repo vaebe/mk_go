@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"mk/global"
 	"mk/models"
+	"mk/models/user"
 	"mk/utils"
 )
 
@@ -15,19 +16,19 @@ import (
 //	@Tags			user用户
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	body		models.UserListForm	true	"请求对象"
+//	@Param			param	body		user.ListForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth
 //	@Router			/user/getUserList [post]
 func GetUserList(ctx *gin.Context) {
-	userListForm := models.UserListForm{}
+	userListForm := user.ListForm{}
 	if err := ctx.ShouldBind(&userListForm); err != nil {
 		utils.HandleValidatorError(ctx, err)
 		return
 	}
 
-	var users []models.User
+	var users []user.User
 	res := global.DB.Where("user_account LIKE ? AND nick_name LIKE ?", "%"+userListForm.Email+"%", "%"+userListForm.NickName+"%").Find(&users)
 
 	// 存在错误
@@ -71,7 +72,7 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
-	var users []models.User
+	var users []user.User
 	res := global.DB.Where("id", articleId).First(&users)
 
 	if res.Error != nil {

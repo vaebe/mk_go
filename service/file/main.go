@@ -12,7 +12,7 @@ import (
 //	@Tags			file文件
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	formData  file	true	"请求对象"
+//	@Param			param	formData	file	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth

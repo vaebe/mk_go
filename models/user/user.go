@@ -1,7 +1,9 @@
-package models
+package user
+
+import "mk/models"
 
 type User struct {
-	BaseModel
+	models.BaseModel
 	NickName              string `gorm:"type:varbinary(40);unique;not null;comment '昵称'" json:"nickName"`
 	UserAvatar            string `gorm:"type:varbinary(300);not null;comment '用户头像'" json:"userAvatar"`
 	UserName              string `gorm:"type:varbinary(50);unique;comment '用户名'" json:"userName"`
@@ -35,9 +37,9 @@ type LoginForm struct {
 	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20" example:"123456"`
 }
 
-// UserListForm 获取用户列表查询参数
-type UserListForm struct {
-	PaginationParameters
+// ListForm 获取用户列表查询参数
+type ListForm struct {
+	models.PaginationParameters
 	Email    string `json:"email" form:"email" `
 	NickName string `json:"nickName" form:"nickName" `
 }

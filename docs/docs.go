@@ -724,7 +724,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.UserListForm"
+                            "$ref": "#/definitions/user.ListForm"
                         }
                     }
                 ],
@@ -764,7 +764,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.LoginForm"
+                            "$ref": "#/definitions/user.LoginForm"
                         }
                     }
                 ],
@@ -804,7 +804,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.RegisterForm"
+                            "$ref": "#/definitions/user.RegisterForm"
                         }
                     }
                 ],
@@ -844,7 +844,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.VerificationCodeForm"
+                            "$ref": "#/definitions/user.VerificationCodeForm"
                         }
                     }
                 ],
@@ -1033,49 +1033,7 @@ const docTemplate = `{
                 }
             }
         },
-        "models.LoginForm": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string",
-                    "example": "mk@163.com"
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 3,
-                    "example": "123456"
-                }
-            }
-        },
-        "models.RegisterForm": {
-            "type": "object",
-            "required": [
-                "code",
-                "email",
-                "password"
-            ],
-            "properties": {
-                "code": {
-                    "type": "string",
-                    "maxLength": 6,
-                    "minLength": 6
-                },
-                "email": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 20,
-                    "minLength": 3
-                }
-            }
-        },
-        "models.UserListForm": {
+        "user.ListForm": {
             "type": "object",
             "required": [
                 "pageNo",
@@ -1100,7 +1058,49 @@ const docTemplate = `{
                 }
             }
         },
-        "models.VerificationCodeForm": {
+        "user.LoginForm": {
+            "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "mk@163.com"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 3,
+                    "example": "123456"
+                }
+            }
+        },
+        "user.RegisterForm": {
+            "type": "object",
+            "required": [
+                "code",
+                "email",
+                "password"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string",
+                    "maxLength": 6,
+                    "minLength": 6
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 20,
+                    "minLength": 3
+                }
+            }
+        },
+        "user.VerificationCodeForm": {
             "type": "object",
             "required": [
                 "email"
