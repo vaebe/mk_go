@@ -33,15 +33,16 @@ func generateToken(user models.User) (token string, err error) {
 }
 
 // SendVerificationCode
-// @Summary     发送验证码
-// @Description  发送验证码
-// @Tags         user用户
-// @Accept       json
-// @Produce      json
-// @Param 			param body    models.VerificationCodeForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /user/sendVerificationCode [post]
+//
+//	@Summary		发送验证码
+//	@Description	发送验证码
+//	@Tags			user用户
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		models.VerificationCodeForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Router			/user/sendVerificationCode [post]
 func SendVerificationCode(ctx *gin.Context) {
 	//表单验证
 	verificationCodeForm := models.VerificationCodeForm{}
@@ -96,15 +97,16 @@ func loginSuccess(ctx *gin.Context, user models.User) {
 }
 
 // Register
-// @Summary     用户注册
-// @Description  用户注册
-// @Tags         user用户
-// @Accept       json
-// @Produce      json
-// @Param 			param body    models.RegisterForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /user/register [post]
+//
+//	@Summary		用户注册
+//	@Description	用户注册
+//	@Tags			user用户
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		models.RegisterForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Router			/user/register [post]
 func Register(ctx *gin.Context) {
 	//表单验证
 	registerForm := models.RegisterForm{}
@@ -143,15 +145,16 @@ func Register(ctx *gin.Context) {
 }
 
 // Login
-// @Summary     用户登陆
-// @Description  用户登陆
-// @Tags         user用户
-// @Accept       json
-// @Produce      json
-// @Param 			param body    models.LoginForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /user/login [post]
+//
+//	@Summary		用户登陆
+//	@Description	用户登陆
+//	@Tags			user用户
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		models.LoginForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Router			/user/login [post]
 func Login(ctx *gin.Context) {
 	//表单验证
 	loginForm := models.LoginForm{}

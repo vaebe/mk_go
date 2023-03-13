@@ -62,6 +62,11 @@ const docTemplate = `{
         },
         "/article/getArticleList": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取文章列表",
                 "consumes": [
                     "application/json"
@@ -102,6 +107,11 @@ const docTemplate = `{
         },
         "/article/getUserArticleList": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取用户文章列表",
                 "consumes": [
                     "application/json"
@@ -142,6 +152,11 @@ const docTemplate = `{
         },
         "/article/save": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "保存文章",
                 "consumes": [
                     "application/json"
@@ -182,6 +197,11 @@ const docTemplate = `{
         },
         "/article/saveDraft": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "保存草稿",
                 "consumes": [
                     "application/json"
@@ -387,6 +407,11 @@ const docTemplate = `{
         },
         "/enum/delete": {
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "根据id删除指定枚举",
                 "consumes": [
                     "application/json"
@@ -425,6 +450,11 @@ const docTemplate = `{
         },
         "/enum/details": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取枚举详情",
                 "consumes": [
                     "application/json"
@@ -463,6 +493,11 @@ const docTemplate = `{
         },
         "/enum/getAllEnums": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取全部数据",
                 "consumes": [
                     "application/json"
@@ -492,6 +527,11 @@ const docTemplate = `{
         },
         "/enum/getEnumsByType": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "根据分类查询枚举",
                 "consumes": [
                     "application/json"
@@ -530,6 +570,11 @@ const docTemplate = `{
         },
         "/enum/save": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "增加、编辑",
                 "consumes": [
                     "application/json"
@@ -570,6 +615,11 @@ const docTemplate = `{
         },
         "/user/getUserDetails": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取用户详情",
                 "consumes": [
                     "application/json"
@@ -608,6 +658,11 @@ const docTemplate = `{
         },
         "/user/getUserList": {
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取user用户列表",
                 "consumes": [
                     "application/json"

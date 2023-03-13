@@ -10,15 +10,17 @@ import (
 )
 
 // Save
-// @Summary     保存文章
-// @Description  保存文章
-// @Tags         article文章
-// @Accept       json
-// @Produce      json
-// @Param 			param body    	article.SaveForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /article/save [post]
+//
+//	@Summary		保存文章
+//	@Description	保存文章
+//	@Tags			article文章
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		article.SaveForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/article/save [post]
 func Save(ctx *gin.Context) {
 	saveForm := article.SaveForm{}
 
@@ -44,15 +46,17 @@ func Save(ctx *gin.Context) {
 }
 
 // GetArticleList
-// @Summary     获取文章列表
-// @Description  获取文章列表
-// @Tags         article文章
-// @Accept       json
-// @Produce      json
-// @Param 			param body    	article.AllListForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /article/getArticleList [post]
+//
+//	@Summary		获取文章列表
+//	@Description	获取文章列表
+//	@Tags			article文章
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		article.AllListForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/article/getArticleList [post]
 func GetArticleList(ctx *gin.Context) {
 	listForm := article.AllListForm{}
 
@@ -88,15 +92,17 @@ func GetArticleList(ctx *gin.Context) {
 }
 
 // GetUserArticleList
-// @Summary     获取用户文章列表
-// @Description  获取用户文章列表
-// @Tags         article文章
-// @Accept       json
-// @Produce      json
-// @Param 			param body    	article.UserArticleListForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /article/getUserArticleList [post]
+//
+//	@Summary		获取用户文章列表
+//	@Description	获取用户文章列表
+//	@Tags			article文章
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		article.UserArticleListForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/article/getUserArticleList [post]
 func GetUserArticleList(ctx *gin.Context) {
 	listForm := article.UserArticleListForm{}
 
@@ -131,16 +137,17 @@ func GetUserArticleList(ctx *gin.Context) {
 }
 
 // Details
-// @Summary     获取文章详情
-// @Description  获取文章详情
-// @Tags         article文章
-// @Accept       json
-// @Produce      json
-// @Param        id   query      int  true  "文章id"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Security ApiKeyAuth
-// @Router       /article/getArticleDetails [get]
+//
+//	@Summary		获取文章详情
+//	@Description	获取文章详情
+//	@Tags			article文章
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"文章id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/article/getArticleDetails [get]
 func Details(ctx *gin.Context) {
 	articleId := ctx.Query("id")
 

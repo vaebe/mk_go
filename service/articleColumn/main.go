@@ -9,16 +9,17 @@ import (
 )
 
 // Save
-// @Summary      保存专栏
-// @Description  保存专栏
-// @Tags         articleColumn专栏
-// @Accept       json
-// @Produce      json
-// @Param 			 param body    	articleColumn.SaveForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Security     ApiKeyAuth
-// @Router       /articleColumn/save [post]
+//
+//	@Summary		保存专栏
+//	@Description	保存专栏
+//	@Tags			articleColumn专栏
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		articleColumn.SaveForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/articleColumn/save [post]
 func Save(ctx *gin.Context) {
 	saveForm := articleColumn.SaveForm{}
 
@@ -39,16 +40,17 @@ func Save(ctx *gin.Context) {
 }
 
 // Delete
-// @Summary      根据id删除专栏
-// @Description  根据id删除专栏
-// @Tags         articleColumn专栏
-// @Accept       json
-// @Produce      json
-// @Param        id   query     int  true  "专栏id"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Security     ApiKeyAuth
-// @Router       /articleColumn/delete [delete]
+//
+//	@Summary		根据id删除专栏
+//	@Description	根据id删除专栏
+//	@Tags			articleColumn专栏
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"专栏id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/articleColumn/delete [delete]
 func Delete(ctx *gin.Context) {
 	enumsId := ctx.Query("id")
 
@@ -69,16 +71,17 @@ func Delete(ctx *gin.Context) {
 }
 
 // Details
-// @Summary      获取专栏详情
-// @Description  获取专栏详情
-// @Tags         articleColumn专栏
-// @Accept       json
-// @Produce      json
-// @Param        id   query     int  true  "专栏id"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Security     ApiKeyAuth
-// @Router       /articleColumn/details [get]
+//
+//	@Summary		获取专栏详情
+//	@Description	获取专栏详情
+//	@Tags			articleColumn专栏
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"专栏id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/articleColumn/details [get]
 func Details(ctx *gin.Context) {
 	enumsId := ctx.Query("id")
 
@@ -99,15 +102,16 @@ func Details(ctx *gin.Context) {
 }
 
 // AllArticleColumnList
-// @Summary      获取全部专栏
-// @Description  获取全部专栏
-// @Tags         articleColumn专栏
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Security     ApiKeyAuth
-// @Router       /articleColumn/getAllArticleColumnList [get]
+//
+//	@Summary		获取全部专栏
+//	@Description	获取全部专栏
+//	@Tags			articleColumn专栏
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/articleColumn/getAllArticleColumnList [get]
 func AllArticleColumnList(ctx *gin.Context) {
 	var articleColumnList []articleColumn.ArticleColumn
 	res := global.DB.Model(&articleColumn.ArticleColumn{}).Find(&articleColumnList)

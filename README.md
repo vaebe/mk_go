@@ -1,8 +1,9 @@
 # mk-go
 mk 后端
 
-# redis
+##  redis
 + [文档](https://redis.uptrace.dev/zh/guide/go-redis.html)
 
-# 生成swagger
-`swag init`
+##  swagger
++ 生成 `swag init`
++ 注释格式化 `swag fmt`

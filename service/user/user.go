@@ -9,15 +9,17 @@ import (
 )
 
 // GetUserList
-// @Summary     获取user用户列表
-// @Description  获取user用户列表
-// @Tags         user用户
-// @Accept       json
-// @Produce      json
-// @Param 			param body    models.UserListForm  true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /user/getUserList [post]
+//
+//	@Summary		获取user用户列表
+//	@Description	获取user用户列表
+//	@Tags			user用户
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		models.UserListForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/user/getUserList [post]
 func GetUserList(ctx *gin.Context) {
 	userListForm := models.UserListForm{}
 	if err := ctx.ShouldBind(&userListForm); err != nil {
@@ -50,15 +52,17 @@ func GetUserList(ctx *gin.Context) {
 }
 
 // Details
-// @Summary     获取用户详情
-// @Description  获取用户详情
-// @Tags         user用户
-// @Accept       json
-// @Produce      json
-// @Param        id   query      int  true  "用户id"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /user/getUserDetails [get]
+//
+//	@Summary		获取用户详情
+//	@Description	获取用户详情
+//	@Tags			user用户
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"用户id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/user/getUserDetails [get]
 func Details(ctx *gin.Context) {
 	articleId := ctx.Query("id")
 

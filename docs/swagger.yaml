@@ -236,6 +236,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 获取文章列表
       tags:
       - article文章
@@ -262,6 +264,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 获取用户文章列表
       tags:
       - article文章
@@ -288,6 +292,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 保存文章
       tags:
       - article文章
@@ -314,6 +320,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 保存草稿
       tags:
       - article文章
@@ -442,6 +450,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 根据id删除指定枚举
       tags:
       - enum枚举
@@ -467,6 +477,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 获取枚举详情
       tags:
       - enum枚举
@@ -486,6 +498,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 获取全部数据
       tags:
       - enum枚举
@@ -511,6 +525,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 根据分类查询枚举
       tags:
       - enum枚举
@@ -537,6 +553,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 增加、编辑
       tags:
       - enum枚举
@@ -562,6 +580,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 获取用户详情
       tags:
       - user用户
@@ -588,6 +608,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
       summary: 获取user用户列表
       tags:
       - user用户

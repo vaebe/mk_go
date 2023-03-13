@@ -11,10 +11,10 @@ import (
 	"mk/routers/user"
 )
 
-// @contact.name   API Support
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
+// @contact.name				API Support
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
 func main() {
 	// 路由白名单
 	routerWhiteList := []string{"/mk/user/login", "/swagger/index.html", "/favicon.ico"}
