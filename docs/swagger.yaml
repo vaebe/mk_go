@@ -558,6 +558,33 @@ paths:
       summary: 增加、编辑
       tags:
       - enum枚举
+  /file/upload:
+    post:
+      consumes:
+      - application/json
+      description: 文件上传
+      parameters:
+      - description: 请求对象
+        in: formData
+        name: param
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 文件上传
+      tags:
+      - file文件
   /user/getUserDetails:
     get:
       consumes:
