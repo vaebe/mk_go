@@ -9,15 +9,17 @@ import (
 )
 
 // Save
-// @Summary      增加、编辑
-// @Description  增加、编辑
-// @Tags         enum枚举
-// @Accept       json
-// @Produce      json
-// @Param 			 param body    enum.EnumsForm true  "请求对象"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /enum/save [post]
+//
+//	@Summary		增加、编辑
+//	@Description	增加、编辑
+//	@Tags			enum枚举
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		enum.EnumsForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/enum/save [post]
 func Save(ctx *gin.Context) {
 	enumForm := enum.EnumsForm{}
 	if err := ctx.ShouldBind(&enumForm); err != nil {
@@ -42,15 +44,17 @@ func Save(ctx *gin.Context) {
 }
 
 // Delete
-// @Summary      根据id删除指定枚举
-// @Description  根据id删除指定枚举
-// @Tags         enum枚举
-// @Accept       json
-// @Produce      json
-// @Param        id   query      int  true  "枚举id"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /enum/delete [delete]
+//
+//	@Summary		根据id删除指定枚举
+//	@Description	根据id删除指定枚举
+//	@Tags			enum枚举
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"枚举id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/enum/delete [delete]
 func Delete(ctx *gin.Context) {
 	enumsId := ctx.Query("id")
 
@@ -71,15 +75,17 @@ func Delete(ctx *gin.Context) {
 }
 
 // Details
-// @Summary     获取枚举详情
-// @Description  获取枚举详情
-// @Tags         enum枚举
-// @Accept       json
-// @Produce      json
-// @Param        id   query      int  true  "枚举id"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /enum/getEnumDetails [get]
+//
+//	@Summary		获取枚举详情
+//	@Description	获取枚举详情
+//	@Tags			enum枚举
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"枚举id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/enum/details [get]
 func Details(ctx *gin.Context) {
 	enumsId := ctx.Query("id")
 
@@ -100,15 +106,17 @@ func Details(ctx *gin.Context) {
 }
 
 // GetEnumsByType
-// @Summary      根据分类查询枚举
-// @Description  根据分类查询枚举
-// @Tags         enum枚举
-// @Accept       json
-// @Produce      json
-// @Param        type   query   string  true  "枚举类型code"
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /enum/getEnumsByType [get]
+//
+//	@Summary		根据分类查询枚举
+//	@Description	根据分类查询枚举
+//	@Tags			enum枚举
+//	@Accept			json
+//	@Produce		json
+//	@Param			type	query		string	true	"枚举类型code"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/enum/getEnumsByType [get]
 func GetEnumsByType(ctx *gin.Context) {
 	typeCode := ctx.Query("type")
 
@@ -129,14 +137,16 @@ func GetEnumsByType(ctx *gin.Context) {
 }
 
 // GetAllEnums
-// @Summary      获取全部数据
-// @Description  获取全部数据
-// @Tags         enum枚举
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  utils.ResponseResultInfo
-// @Failure      500  {object}  utils.EmptyInfo
-// @Router       /enum/getAllEnums [get]
+//
+//	@Summary		获取全部数据
+//	@Description	获取全部数据
+//	@Tags			enum枚举
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/enum/getAllEnums [get]
 func GetAllEnums(ctx *gin.Context) {
 	var enumsList []enum.EnumsForm
 	res := global.DB.Model(&enum.Enum{}).Find(&enumsList)
