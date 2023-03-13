@@ -4,6 +4,7 @@ import "mk/models"
 
 type User struct {
 	models.BaseModel
+	UserId                string `gorm:"type:varbinary(60);unique;not null;comment '用户id'" json:"userId"`
 	NickName              string `gorm:"type:varbinary(40);unique;not null;comment '昵称'" json:"nickName"`
 	UserAvatar            string `gorm:"type:varbinary(300);not null;comment '用户头像'" json:"userAvatar"`
 	UserName              string `gorm:"type:varbinary(50);unique;comment '用户名'" json:"userName"`
