@@ -7,11 +7,11 @@ import (
 
 // BaseModel 基础数据
 type BaseModel struct {
-	ID        int32                 `gorm:"primaryKey; comment '主键'"`
-	CreatedAt time.Time             `gorm:"column=add_time; comment '创建时间'"`
-	UpdatedAt time.Time             `gorm:"column=update_time; comment '更新时间'"`
-	DeletedAt time.Time             `gorm:"column=delete_time; default:null; comment '删除时间'"`
-	IsDeleted soft_delete.DeletedAt `gorm:"softDelete:flag,DeletedAtField:DeletedAt; comment '删除标志 0 1'"`
+	ID        int32                 `gorm:"primaryKey; comment '主键'" json:"id"`
+	CreatedAt time.Time             `gorm:"column=add_time; comment '创建时间'" json:"createdAt"`
+	UpdatedAt time.Time             `gorm:"column=update_time; comment '更新时间'" json:"updatedAt"`
+	DeletedAt time.Time             `gorm:"column=delete_time; default:null; comment '删除时间'" json:"deletedAt"`
+	IsDeleted soft_delete.DeletedAt `gorm:"softDelete:flag,DeletedAtField:DeletedAt; comment '删除标志 0 1'" json:"isDeleted"`
 }
 
 // PaginationParameters 分页参数
