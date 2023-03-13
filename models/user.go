@@ -31,8 +31,8 @@ type RegisterForm struct {
 
 // LoginForm 登陆
 type LoginForm struct {
-	Email    string `form:"email" json:"email" binding:"required,email"`
-	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
+	Email    string `form:"email" json:"email" binding:"required,email" example:"mk@163.com"`
+	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20" example:"123456"`
 }
 
 // UserListForm 获取用户列表查询参数
