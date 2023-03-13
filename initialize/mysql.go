@@ -10,6 +10,7 @@ import (
 	"mk/global"
 	"mk/models"
 	"mk/models/article"
+	"mk/models/articleColumn"
 	"mk/models/enum"
 	"os"
 	"time"
@@ -45,7 +46,7 @@ func InitMysql() {
 	}
 
 	// 自动建表
-	err = global.DB.AutoMigrate(&models.User{}, &article.Article{}, &enum.Enum{})
+	err = global.DB.AutoMigrate(&models.User{}, &article.Article{}, &enum.Enum{}, &articleColumn.ArticleColumn{})
 	if err != nil {
 		panic(err)
 	}
