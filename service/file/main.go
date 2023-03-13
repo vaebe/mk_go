@@ -38,7 +38,7 @@ func Upload(ctx *gin.Context) {
 	}
 
 	curTime := time.Now().UTC().Format("2006-01-02")
-	key := fmt.Sprintf("%s/%s-%s", curTime, uuid.New(), fileName)
+	key := fmt.Sprintf("mk/%s/%s-%s", curTime, uuid.New(), fileName)
 	filesReader, _ := files.Open()
 
 	putPolicy := storage.PutPolicy{
