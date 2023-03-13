@@ -26,6 +26,8 @@ type EmailConfig struct {
 }
 
 type QiNiuConfig struct {
-	Access string `mapstructure:"access" json:"access"`
-	Secret string `mapstructure:"secret" json:"secret"`
+	Access  string `mapstructure:"access" json:"access"`
+	Secret  string `mapstructure:"secret" json:"secret"`
+	Bucket  string `mapstructure:"bucket" json:"bucket"`
+	BaseUrl string `mapstructure:"baseUrl" json:"baseUrl"`
 }

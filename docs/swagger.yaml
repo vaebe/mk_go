@@ -566,7 +566,7 @@ paths:
       parameters:
       - description: 请求对象
         in: formData
-        name: param
+        name: file
         required: true
         type: file
       produces:

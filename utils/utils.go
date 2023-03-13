@@ -65,3 +65,13 @@ func Paginate(page, pageSize int) func(db *gorm.DB) *gorm.DB {
 		return db.Offset(offset).Limit(pageSize)
 	}
 }
+
+// GetFileSuffixName 获取文件后缀名称
+func GetFileSuffixName(filename string) string {
+	indexOfDot := strings.LastIndex(filename, ".") //获取文件后缀名前的.的位置
+	if indexOfDot < 0 {
+		return ""
+	}
+	suffix := filename[indexOfDot+1 : len(filename)] //获取后缀名
+	return strings.ToLower(suffix)                   //后缀名统一小写处理
+}

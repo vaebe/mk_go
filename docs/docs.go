@@ -635,7 +635,7 @@ const docTemplate = `{
                     {
                         "type": "file",
                         "description": "请求对象",
-                        "name": "param",
+                        "name": "file",
                         "in": "formData",
                         "required": true
                     }

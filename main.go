@@ -8,6 +8,7 @@ import (
 	"mk/routers/article"
 	"mk/routers/articleColumn"
 	"mk/routers/enum"
+	"mk/routers/file"
 	"mk/routers/user"
 )
 
@@ -27,6 +28,7 @@ func main() {
 		article.LoadArticleRouter(baseRouter)
 		enum.LoadEnumRouter(baseRouter)
 		articleColumn.LoadArticleColumnRouter(baseRouter)
+		file.LoadFileRouter(baseRouter)
 	}
 
 	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", 53105)
