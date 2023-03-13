@@ -85,6 +85,19 @@ definitions:
     - pageNo
     - pageSize
     type: object
+  articleColumn.SaveForm:
+    properties:
+      coverImg:
+        type: string
+      introduction:
+        type: string
+      name:
+        type: string
+    required:
+    - coverImg
+    - introduction
+    - name
+    type: object
   enum.EnumsForm:
     properties:
       name:
@@ -106,8 +119,10 @@ definitions:
   models.LoginForm:
     properties:
       email:
+        example: mk@163.com
         type: string
       password:
+        example: "123456"
         maxLength: 20
         minLength: 3
         type: string
@@ -302,6 +317,109 @@ paths:
       summary: 保存草稿
       tags:
       - article文章
+  /articleColumn/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 根据id删除专栏
+      parameters:
+      - description: 专栏id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 根据id删除专栏
+      tags:
+      - articleColumn专栏
+  /articleColumn/details:
+    get:
+      consumes:
+      - application/json
+      description: 获取专栏详情
+      parameters:
+      - description: 专栏id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取专栏详情
+      tags:
+      - articleColumn专栏
+  /articleColumn/getAllArticleColumnList:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部专栏
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取全部专栏
+      tags:
+      - articleColumn专栏
+  /articleColumn/save:
+    post:
+      consumes:
+      - application/json
+      description: 保存专栏
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/articleColumn.SaveForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 保存专栏
+      tags:
+      - articleColumn专栏
   /enum/delete:
     delete:
       consumes:
@@ -327,26 +445,7 @@ paths:
       summary: 根据id删除指定枚举
       tags:
       - enum枚举
-  /enum/getAllEnums:
-    get:
-      consumes:
-      - application/json
-      description: 获取全部数据
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.ResponseResultInfo'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.EmptyInfo'
-      summary: 获取全部数据
-      tags:
-      - enum枚举
-  /enum/getEnumDetails:
+  /enum/details:
     get:
       consumes:
       - application/json
@@ -369,6 +468,25 @@ paths:
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
       summary: 获取枚举详情
+      tags:
+      - enum枚举
+  /enum/getAllEnums:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部数据
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取全部数据
       tags:
       - enum枚举
   /enum/getEnumsByType:

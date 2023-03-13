@@ -220,6 +220,171 @@ const docTemplate = `{
                 }
             }
         },
+        "/articleColumn/delete": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "根据id删除专栏",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "根据id删除专栏",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "专栏id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/articleColumn/details": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取专栏详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "获取专栏详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "专栏id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/articleColumn/getAllArticleColumnList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取全部专栏",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "获取全部专栏",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/articleColumn/save": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "保存专栏",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "保存专栏",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/articleColumn.SaveForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/enum/delete": {
             "delete": {
                 "description": "根据id删除指定枚举",
@@ -258,36 +423,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/enum/getAllEnums": {
-            "get": {
-                "description": "获取全部数据",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "enum枚举"
-                ],
-                "summary": "获取全部数据",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ResponseResultInfo"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.EmptyInfo"
-                        }
-                    }
-                }
-            }
-        },
-        "/enum/getEnumDetails": {
+        "/enum/details": {
             "get": {
                 "description": "获取枚举详情",
                 "consumes": [
@@ -309,6 +445,35 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/enum/getAllEnums": {
+            "get": {
+                "description": "获取全部数据",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "enum枚举"
+                ],
+                "summary": "获取全部数据",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -725,6 +890,25 @@ const docTemplate = `{
                 }
             }
         },
+        "articleColumn.SaveForm": {
+            "type": "object",
+            "required": [
+                "coverImg",
+                "introduction",
+                "name"
+            ],
+            "properties": {
+                "coverImg": {
+                    "type": "string"
+                },
+                "introduction": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "enum.EnumsForm": {
             "type": "object",
             "required": [
@@ -759,12 +943,14 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "mk@163.com"
                 },
                 "password": {
                     "type": "string",
                     "maxLength": 20,
-                    "minLength": 3
+                    "minLength": 3,
+                    "example": "123456"
                 }
             }
         },
