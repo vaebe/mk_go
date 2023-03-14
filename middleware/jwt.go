@@ -106,7 +106,7 @@ func JWTAuth(whitelist []string) gin.HandlerFunc {
 		zap.S().Info(token)
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"code": -1,
+				"code": 401,
 				"msg":  "token不存在！",
 			})
 			c.Abort()
@@ -119,7 +119,7 @@ func JWTAuth(whitelist []string) gin.HandlerFunc {
 			if err == TokenExpired {
 				if err == TokenExpired {
 					c.JSON(http.StatusUnauthorized, gin.H{
-						"code": -1,
+						"code": 401,
 						"msg":  "授权已过期！",
 					})
 					c.Abort()
@@ -128,7 +128,7 @@ func JWTAuth(whitelist []string) gin.HandlerFunc {
 			}
 
 			c.JSON(http.StatusUnauthorized, gin.H{
-				"code": -1,
+				"code": 401,
 				"msg":  "未登陆！",
 			})
 			c.Abort()
