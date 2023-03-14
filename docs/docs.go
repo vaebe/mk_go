@@ -62,11 +62,6 @@ const docTemplate = `{
         },
         "/article/getArticleList": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取文章列表",
                 "consumes": [
                     "application/json"

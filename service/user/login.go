@@ -128,13 +128,13 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	user := user.User{
+	userInfo := user.User{
 		NickName:    fmt.Sprintf("mk%s", uuid.New().String()),
 		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
 		UserAccount: registerForm.Email, // 暂时使用邮箱注册
 		Password:    registerForm.PassWord,
 	}
-	userRes := global.DB.Create(&user)
+	userRes := global.DB.Create(&userInfo)
 
 	if userRes.Error != nil {
 		zap.S().Info("创建用户失败！", userRes.Error)
@@ -142,7 +142,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	loginSuccess(ctx, user)
+	loginSuccess(ctx, userInfo)
 }
 
 // Login
@@ -167,7 +167,10 @@ func Login(ctx *gin.Context) {
 
 	userInfo := user.User{}
 
-	global.DB.Model(&user.User{UserAccount: loginForm.Email}).First(&userInfo)
+	global.DB.Where("user_account = ?", loginForm.Email).First(&userInfo)
+
+	zap.S().Info(loginForm)
+	zap.S().Info(userInfo.Password)
 
 	if userInfo.Password != loginForm.PassWord {
 		utils.ResponseResultsError(ctx, "密码不正确")

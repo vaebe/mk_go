@@ -55,7 +55,6 @@ func Save(ctx *gin.Context) {
 //	@Param			param	body		article.AllListForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
 //	@Router			/article/getArticleList [post]
 func GetArticleList(ctx *gin.Context) {
 	listForm := article.AllListForm{}
@@ -83,6 +82,8 @@ func GetArticleList(ctx *gin.Context) {
 	// 分页
 	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
 
+	// todo 全部列表不需要返回文章详情
+	// 增加用户名称 、comments  评论数
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
 		PageSize: listForm.PageSize,
 		PageNo:   listForm.PageNo,
