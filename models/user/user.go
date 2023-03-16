@@ -4,7 +4,7 @@ import "mk/models"
 
 type User struct {
 	models.BaseModel
-	UserId                string `gorm:"type:varbinary(60);unique;not null;comment '用户id'" json:"userId"`
+	UserId                int32  `gorm:"type:int;unique;not null;comment '用户id'" json:"userId"`
 	NickName              string `gorm:"type:varbinary(40);unique;not null;comment '昵称'" json:"nickName"`
 	UserAvatar            string `gorm:"type:varbinary(300);not null;comment '用户头像'" json:"userAvatar"`
 	UserName              string `gorm:"type:varbinary(50);unique;comment '用户名'" json:"userName"`
@@ -12,12 +12,12 @@ type User struct {
 	Password              string `gorm:"type:varbinary(300);not null;comment '密码'" json:"password"`
 	Github                string `gorm:"type:varbinary(100);comment 'github账户'" json:"github"`
 	Posts                 string `gorm:"type:varbinary(200);comment '职位'" json:"posts"`
-	Role                  int    `gorm:"column:role;default:1;type:int;comment '1普通用户 2管理员'" json:"role"`
+	Role                  int32  `gorm:"column:role;default:1;type:int;comment '1普通用户 2管理员'" json:"role"`
 	Company               string `gorm:"type:varbinary(200);comment '所在公司'" json:"company"`
 	Homepage              string `gorm:"type:varbinary(300);comment '个人主页'" json:"homepage"`
 	PersonalProfile       string `gorm:"type:varbinary(300);comment '个人简介'" json:"personalProfile"`
-	UserCreationPoints    string `gorm:"type:int;not null;default:0;comment '用户创作积分'" json:"userCreationPoints"`
-	UserInteractionPoints string `gorm:"type:int;not null;default:0;comment '用户互动积分'" json:"userInteractionPoints"`
+	UserCreationPoints    int32  `gorm:"type:int;not null;default:0;comment '用户创作积分'" json:"userCreationPoints"`
+	UserInteractionPoints int32  `gorm:"type:int;not null;default:0;comment '用户互动积分'" json:"userInteractionPoints"`
 }
 
 // VerificationCodeForm 发送验证码

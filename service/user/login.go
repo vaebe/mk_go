@@ -79,6 +79,7 @@ func loginSuccess(ctx *gin.Context, user user.User) {
 
 	resultsData := map[string]any{
 		"id":                    user.ID,
+		"userId":                user.UserId,
 		"nickName":              user.NickName,
 		"userAvatar":            user.UserAvatar,
 		"userName":              user.UserName,
@@ -128,6 +129,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
+	// todo 增加生成userid逻辑
 	userInfo := user.User{
 		NickName:    fmt.Sprintf("mk%s", uuid.New().String()),
 		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
@@ -168,9 +170,6 @@ func Login(ctx *gin.Context) {
 	userInfo := user.User{}
 
 	global.DB.Where("user_account = ?", loginForm.Email).First(&userInfo)
-
-	zap.S().Info(loginForm)
-	zap.S().Info(userInfo.Password)
 
 	if userInfo.Password != loginForm.PassWord {
 		utils.ResponseResultsError(ctx, "密码不正确")
