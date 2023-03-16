@@ -157,6 +157,7 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
+	// todo 根据用户id过滤数据
 	var articles []article.Article
 	res := global.DB.Where("id", articleId).First(&articles)
 

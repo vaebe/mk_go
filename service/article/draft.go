@@ -29,7 +29,7 @@ func Draft(ctx *gin.Context) {
 		return
 	}
 
-	global.DB.Create(&article.Article{
+	articleInfo := article.Article{
 		UserId:           saveDraftForm.UserId,
 		Classify:         saveDraftForm.Classify,
 		CollectionColumn: saveDraftForm.CollectionColumn,
@@ -39,7 +39,9 @@ func Draft(ctx *gin.Context) {
 		Title:            saveDraftForm.Title,
 		Summary:          saveDraftForm.Summary,
 		Status:           "1",
-	})
+	}
 
-	utils.ResponseResultsSuccess(ctx, "保存成功！")
+	global.DB.Create(&articleInfo)
+
+	utils.ResponseResultsSuccess(ctx, articleInfo.ID)
 }
