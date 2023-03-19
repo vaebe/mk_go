@@ -6,9 +6,9 @@ type User struct {
 	models.BaseModel
 	UserId                int32  `gorm:"type:int;unique;not null;comment '用户id'" json:"userId"`
 	NickName              string `gorm:"type:varbinary(40);unique;not null;comment '昵称'" json:"nickName"`
-	UserAvatar            string `gorm:"type:varbinary(300);not null;comment '用户头像'" json:"userAvatar"`
 	UserName              string `gorm:"type:varbinary(50);unique;comment '用户名'" json:"userName"`
 	UserAccount           string `gorm:"type:varbinary(50);unique;not null;comment '用户账号'" json:"userAccount"`
+	UserAvatar            string `gorm:"type:varbinary(300);not null;comment '用户头像'" json:"userAvatar"`
 	Password              string `gorm:"type:varbinary(300);not null;comment '密码'" json:"password"`
 	Github                string `gorm:"type:varbinary(100);comment 'github账户'" json:"github"`
 	Posts                 string `gorm:"type:varbinary(200);comment '职位'" json:"posts"`

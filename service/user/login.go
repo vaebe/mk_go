@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/google/uuid"
 	"go.uber.org/zap"
+	"math/rand"
 	"mk/global"
 	middlewares "mk/middleware"
 	"mk/models"
@@ -99,6 +99,16 @@ func loginSuccess(ctx *gin.Context, user user.User) {
 	utils.ResponseResultsSuccess(ctx, resultsData)
 }
 
+// generateUserId 生成用户id
+func generateUserId() int32 {
+	// 获取最后一个创建的用户
+	lastUserInfo := user.User{}
+	global.DB.Last(&lastUserInfo)
+
+	rand.NewSource(time.Now().UnixNano())
+	return lastUserInfo.UserId + int32(rand.Intn(101))
+}
+
 // Register
 //
 //	@Summary		用户注册
@@ -130,9 +140,11 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	// todo 增加生成userid逻辑
+	userId := generateUserId()
 	userInfo := user.User{
-		NickName:    fmt.Sprintf("mk%s", uuid.New().String()),
+		NickName:    fmt.Sprintf("mk%v", userId),
+		UserId:      userId,
+		UserName:    fmt.Sprintf("mk%v", userId),
 		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
 		UserAccount: registerForm.Email, // 暂时使用邮箱注册
 		Password:    registerForm.PassWord,
