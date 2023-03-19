@@ -22,6 +22,7 @@ func generateToken(user user.User) (token string, err error) {
 	j := middlewares.NewJWT()
 	claims := models.CustomClaims{
 		ID:          uint(user.ID),
+		UserId:      uint(user.UserId),
 		NickName:    user.NickName,
 		AuthorityId: uint(user.Role),
 		RegisteredClaims: jwt.RegisteredClaims{

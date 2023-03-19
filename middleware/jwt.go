@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/thoas/go-funk"
-	"go.uber.org/zap"
 	"mk/global"
 	"mk/models"
 	"net/http"
@@ -103,7 +102,7 @@ func JWTAuth(whitelist []string) gin.HandlerFunc {
 
 		// 我们这里jwt鉴权取头部信息 authorization 登录时回返回token信息
 		token := c.Request.Header.Get("authorization")
-		zap.S().Info(token)
+
 		if token == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": 401,
@@ -135,7 +134,7 @@ func JWTAuth(whitelist []string) gin.HandlerFunc {
 			return
 		}
 		c.Set("claims", claims)
-		c.Set("userId", claims.ID)
+		c.Set("userId", claims.UserId)
 		c.Next()
 	}
 }
