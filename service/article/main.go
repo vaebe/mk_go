@@ -60,7 +60,6 @@ func GetArticleList(ctx *gin.Context) {
 	listForm := article.AllListForm{}
 
 	if err := ctx.ShouldBind(&listForm); err != nil {
-		zap.S().Info("文章列表查询参数:", &listForm)
 		utils.HandleValidatorError(ctx, err)
 		return
 	}
@@ -106,15 +105,14 @@ func GetArticleList(ctx *gin.Context) {
 //	@Router			/article/getUserArticleList [post]
 func GetUserArticleList(ctx *gin.Context) {
 	listForm := article.UserArticleListForm{}
-
 	if err := ctx.ShouldBind(&listForm); err != nil {
-		zap.S().Info("文章列表查询参数:", &listForm)
 		utils.HandleValidatorError(ctx, err)
 		return
 	}
 
+	userId, _ := ctx.Get("userId")
 	var articles []article.Article
-	res := global.DB.Where("user_id", listForm.UserId).Find(&articles)
+	res := global.DB.Where("user_id", userId).Find(&articles)
 
 	// 存在错误
 	if res.Error != nil {
@@ -157,9 +155,9 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
-	// todo 根据用户id过滤数据
+	userId, _ := ctx.Get("userId")
 	var articles []article.Article
-	res := global.DB.Where("id", articleId).First(&articles)
+	res := global.DB.Where("id = ?, user_id = ?", articleId, userId).First(&articles)
 
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, "文章不存在！")

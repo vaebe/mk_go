@@ -54,5 +54,4 @@ type AllListForm struct {
 // UserArticleListForm 获取文章列表
 type UserArticleListForm struct {
 	models.PaginationParameters
-	UserId int32 `json:"userId" form:"userId"`
 }

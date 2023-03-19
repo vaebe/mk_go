@@ -977,9 +977,6 @@ const docTemplate = `{
                     "type": "integer",
                     "minimum": 0,
                     "example": 10
-                },
-                "userId": {
-                    "type": "integer"
                 }
             }
         },

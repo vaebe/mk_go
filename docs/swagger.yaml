@@ -79,8 +79,6 @@ definitions:
         example: 10
         minimum: 0
         type: integer
-      userId:
-        type: integer
     required:
     - pageNo
     - pageSize
