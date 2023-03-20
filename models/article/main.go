@@ -21,6 +21,7 @@ type Article struct {
 
 // SaveForm 文章保存表单
 type SaveForm struct {
+	ID               int32  `json:"id" form:"id"`
 	UserId           int32  `json:"userId" form:"userId" binding:"required"`
 	Title            string `json:"title" form:"userId" binding:"required"`
 	Content          string `json:"content" form:"content" binding:"required"`
@@ -33,6 +34,7 @@ type SaveForm struct {
 
 // SaveDraftForm 保存草稿表单
 type SaveDraftForm struct {
+	ID               int32  `json:"id" form:"id"`
 	UserId           int32  `json:"userId" form:"userId" binding:"required"`
 	Title            string `json:"title" form:"userId" binding:"required"`
 	Content          string `json:"content" form:"content"`

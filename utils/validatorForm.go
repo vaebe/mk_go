@@ -20,6 +20,7 @@ func HandleValidatorError(c *gin.Context, err error) {
 	errs, ok := err.(validator.ValidationErrors)
 	if !ok {
 		ResponseResultsError(c, err.Error())
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{

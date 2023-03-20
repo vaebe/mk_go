@@ -41,7 +41,12 @@ func Draft(ctx *gin.Context) {
 		Status:           "1",
 	}
 
-	global.DB.Create(&articleInfo)
+	// id不存在新增
+	if saveDraftForm.ID == 0 {
+		global.DB.Create(&articleInfo)
+	} else {
+		global.DB.Model(&article.Article{}).Where("id", saveDraftForm.ID).Updates(articleInfo)
+	}
 
 	utils.ResponseResultsSuccess(ctx, articleInfo.ID)
 }

@@ -908,6 +908,9 @@ const docTemplate = `{
                 "coverImg": {
                     "type": "string"
                 },
+                "id": {
+                    "type": "integer"
+                },
                 "summary": {
                     "type": "string"
                 },

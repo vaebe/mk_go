@@ -30,7 +30,7 @@ func Save(ctx *gin.Context) {
 		return
 	}
 
-	global.DB.Create(&article.Article{
+	articleInfo := article.Article{
 		UserId:           saveForm.UserId,
 		Classify:         saveForm.Classify,
 		CollectionColumn: saveForm.CollectionColumn,
@@ -40,7 +40,14 @@ func Save(ctx *gin.Context) {
 		Title:            saveForm.Title,
 		Summary:          saveForm.Summary,
 		Status:           "2", // 文章保存的信息必须进行审核
-	})
+	}
+
+	// id不存在新增
+	if saveForm.ID == 0 {
+		global.DB.Create(&articleInfo)
+	} else {
+		global.DB.Model(&article.Article{}).Where("id", saveForm.ID).Updates(articleInfo)
+	}
 
 	utils.ResponseResultsSuccess(ctx, "保存成功！")
 }
