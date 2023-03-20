@@ -16,7 +16,8 @@ type Article struct {
 	Views            int    `gorm:"type:int;default:1;comment '阅读数'" json:"views"`
 	Likes            int    `gorm:"type:int;default:1;comment '点赞数'" json:"likes"`
 	Favorites        int    `gorm:"type:int;default:1;comment '收藏数'" json:"favorites"`
-	Status           string `gorm:"type:varbinary(6);not null;comment '状态 1草稿 2待审核 3审核未通过 4发布 5已删除'" json:"status"`
+	ShowNumber       int    `gorm:"type:int;default:1;comment '展现数'" json:"showNumber"`
+	Status           string `gorm:"type:varbinary(6);not null;comment '状态 1草稿 2待审核 3审核未通过 4已发布 5已删除'" json:"status"`
 }
 
 // SaveForm 文章保存表单

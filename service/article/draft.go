@@ -43,10 +43,11 @@ func Draft(ctx *gin.Context) {
 
 	// id不存在新增
 	if saveDraftForm.ID == 0 {
+		// todo 自定义文章 id 的生成
 		global.DB.Create(&articleInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": articleInfo.ID})
 	} else {
-		global.DB.Model(&article.Article{}).Where("id", saveDraftForm.ID).Updates(articleInfo)
+		global.DB.Model(&article.Article{}).Where("id", saveDraftForm.ID).Updates(&articleInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveDraftForm.ID})
 	}
-
-	utils.ResponseResultsSuccess(ctx, articleInfo.ID)
 }

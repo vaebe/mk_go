@@ -45,11 +45,11 @@ func Save(ctx *gin.Context) {
 	// id不存在新增
 	if saveForm.ID == 0 {
 		global.DB.Create(&articleInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": articleInfo.ID})
 	} else {
-		global.DB.Model(&article.Article{}).Where("id", saveForm.ID).Updates(articleInfo)
+		global.DB.Model(&article.Article{}).Where("id", saveForm.ID).Updates(&articleInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveForm.ID})
 	}
-
-	utils.ResponseResultsSuccess(ctx, "保存成功！")
 }
 
 // GetArticleList
@@ -131,6 +131,7 @@ func GetUserArticleList(ctx *gin.Context) {
 	// 获取总数
 	total := int32(res.RowsAffected)
 
+	// todo 根据参数状态过滤数据 all 不包含 草稿
 	// 分页
 	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
 
@@ -164,7 +165,7 @@ func Details(ctx *gin.Context) {
 
 	userId, _ := ctx.Get("userId")
 	var articles []article.Article
-	res := global.DB.Where("id = ?, user_id = ?", articleId, userId).First(&articles)
+	res := global.DB.Where("id = ? AND user_id = ?", articleId, userId).First(&articles)
 
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, "文章不存在！")
