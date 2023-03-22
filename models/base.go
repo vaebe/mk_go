@@ -2,16 +2,16 @@ package models
 
 import (
 	"gorm.io/plugin/soft_delete"
-	"time"
+	"mk/utils/localTime"
 )
 
 // BaseModel 基础数据
 type BaseModel struct {
 	ID        int32                 `gorm:"primaryKey; comment '主键'" json:"id"`
-	CreatedAt time.Time             `gorm:"column=add_time; comment '创建时间'" json:"createdAt"`
-	UpdatedAt time.Time             `gorm:"column=update_time; comment '更新时间'" json:"updatedAt"`
-	DeletedAt time.Time             `gorm:"column=delete_time; default:null; comment '删除时间'" json:"deletedAt"`
-	IsDeleted soft_delete.DeletedAt `gorm:"softDelete:flag,DeletedAtField:DeletedAt; comment '删除标志 0 1'" json:"isDeleted"`
+	CreatedAt *localTime.LocalTime  `gorm:"column=created_at; comment '创建时间'" json:"createdAt"`
+	UpdatedAt *localTime.LocalTime  `gorm:"column=updated_at; comment '更新时间'" json:"updatedAt"`
+	DeletedAt *localTime.LocalTime  `gorm:"column=deleted_at; default:null; comment '删除时间'" json:"-"`
+	IsDeleted soft_delete.DeletedAt `gorm:"softDelete:flag,DeletedAtField:DeletedAt; comment '删除标志 0 1'" json:"-"`
 }
 
 // PaginationParameters 分页参数
