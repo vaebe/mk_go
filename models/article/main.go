@@ -24,7 +24,7 @@ type Article struct {
 type SaveForm struct {
 	ID               int32  `json:"id" form:"id"`
 	UserId           int32  `json:"userId" form:"userId" binding:"required"`
-	Title            string `json:"title" form:"userId" binding:"required"`
+	Title            string `json:"title" form:"title" binding:"required"`
 	Content          string `json:"content" form:"content" binding:"required"`
 	Classify         string `json:"classify" form:"classify" binding:"required"`
 	Tags             string `json:"tags" form:"tags" binding:"required"`
@@ -37,7 +37,7 @@ type SaveForm struct {
 type SaveDraftForm struct {
 	ID               int32  `json:"id" form:"id"`
 	UserId           int32  `json:"userId" form:"userId" binding:"required"`
-	Title            string `json:"title" form:"userId" binding:"required"`
+	Title            string `json:"title" form:"title" binding:"required"`
 	Content          string `json:"content" form:"content"`
 	Classify         string `json:"classify" form:"classify"`
 	Tags             string `json:"tags" form:"tags"`
@@ -49,7 +49,7 @@ type SaveDraftForm struct {
 // AllListForm 获取全部文章列表
 type AllListForm struct {
 	models.PaginationParameters
-	Title    string `json:"title" form:"userId"`
+	Title    string `json:"title" form:"title"`
 	Classify string `json:"classify" form:"classify"`
 	Tag      string `json:"tag" form:"tag"`
 }

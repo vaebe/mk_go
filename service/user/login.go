@@ -22,7 +22,6 @@ func generateToken(user user.User) (token string, err error) {
 	j := middlewares.NewJWT()
 	claims := models.CustomClaims{
 		ID:          uint(user.ID),
-		UserId:      uint(user.UserId),
 		NickName:    user.NickName,
 		AuthorityId: uint(user.Role),
 		RegisteredClaims: jwt.RegisteredClaims{
@@ -80,7 +79,6 @@ func loginSuccess(ctx *gin.Context, user user.User) {
 
 	resultsData := map[string]any{
 		"id":                    user.ID,
-		"userId":                user.UserId,
 		"nickName":              user.NickName,
 		"userAvatar":            user.UserAvatar,
 		"userName":              user.UserName,
@@ -106,7 +104,7 @@ func generateUserId() int32 {
 	global.DB.Last(&lastUserInfo)
 
 	rand.NewSource(time.Now().UnixNano())
-	return lastUserInfo.UserId + int32(rand.Intn(101))
+	return lastUserInfo.ID + int32(rand.Intn(101))
 }
 
 // Register
@@ -143,7 +141,6 @@ func Register(ctx *gin.Context) {
 	userId := generateUserId()
 	userInfo := user.User{
 		NickName:    fmt.Sprintf("mk%v", userId),
-		UserId:      userId,
 		UserName:    fmt.Sprintf("mk%v", userId),
 		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
 		UserAccount: registerForm.Email, // 暂时使用邮箱注册

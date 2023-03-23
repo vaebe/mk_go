@@ -23,7 +23,7 @@ type PaginationParameters struct {
 // PagingData 分页数据对象
 type PagingData struct {
 	List     any   `json:"list"`
-	PageSize int   `json:"pageSize" `
-	PageNo   int   `json:"pageNo" `
+	PageSize int   `json:"pageSize"`
+	PageNo   int   `json:"pageNo"`
 	Total    int32 `json:"total"`
 }

@@ -134,7 +134,7 @@ func JWTAuth(whitelist []string) gin.HandlerFunc {
 			return
 		}
 		c.Set("claims", claims)
-		c.Set("userId", claims.UserId)
+		c.Set("userId", claims.ID)
 		c.Next()
 	}
 }
