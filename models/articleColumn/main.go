@@ -19,7 +19,7 @@ type ArticleColumn struct {
 type SaveForm struct {
 	Name         string `json:"name" form:"name" binding:"required"`
 	Introduction string `json:"introduction" form:"introduction" binding:"required"`
-	CoverImg     string `json:"coverImg" form:"coverImg" binding:"required"`
+	CoverImg     string `json:"coverImg" form:"coverImg"`
 }
 
 // ListForm 获取列表
