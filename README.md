@@ -7,3 +7,6 @@ mk 后端
 ##  swagger
 + 生成 `swag init`
 + 注释格式化 `swag fmt`
+
+# todo 
++ 对接微信扫码登陆
