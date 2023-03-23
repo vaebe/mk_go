@@ -29,12 +29,18 @@ func Save(ctx *gin.Context) {
 		return
 	}
 
-	global.DB.Create(&articleColumn.ArticleColumn{
+	savaInfo := articleColumn.ArticleColumn{
 		Name:         saveForm.Name,
 		Introduction: saveForm.Introduction,
 		CoverImg:     saveForm.CoverImg,
 		Status:       "1", // 新建专栏需要审核
-	})
+	}
+
+	if savaInfo.CoverImg == "" {
+		savaInfo.CoverImg = "http://rrajr4lp6.bkt.clouddn.com/mk/default/default_article_column.jpg"
+	}
+
+	global.DB.Create(&savaInfo)
 
 	utils.ResponseResultsSuccess(ctx, "保存成功！")
 }

@@ -96,7 +96,6 @@ definitions:
       name:
         type: string
     required:
-    - coverImg
     - introduction
     - name
     type: object

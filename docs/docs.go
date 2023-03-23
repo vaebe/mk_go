@@ -989,7 +989,6 @@ const docTemplate = `{
         "articleColumn.SaveForm": {
             "type": "object",
             "required": [
-                "coverImg",
                 "introduction",
                 "name"
             ],
