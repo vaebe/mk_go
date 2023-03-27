@@ -40,9 +40,14 @@ func Save(ctx *gin.Context) {
 		savaInfo.CoverImg = "http://rrajr4lp6.bkt.clouddn.com/mk/default/default_article_column.jpg"
 	}
 
-	global.DB.Create(&savaInfo)
-
-	utils.ResponseResultsSuccess(ctx, "保存成功！")
+	// id 不存在新增
+	if saveForm.ID == 0 {
+		global.DB.Create(&savaInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": savaInfo.ID})
+	} else {
+		global.DB.Model(&articleColumn.ArticleColumn{}).Where("id", saveForm.ID).Updates(&savaInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveForm.ID})
+	}
 }
 
 // Delete

@@ -17,6 +17,7 @@ type ArticleColumn struct {
 
 // SaveForm 文章专栏信息
 type SaveForm struct {
+	ID           int32  `json:"id" form:"id"`
 	Name         string `json:"name" form:"name" binding:"required"`
 	Introduction string `json:"introduction" form:"introduction" binding:"required"`
 	CoverImg     string `json:"coverImg" form:"coverImg"`
