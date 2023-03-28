@@ -9,6 +9,44 @@ import (
 	"mk/utils"
 )
 
+// SaveArticle 保存文章
+func SaveArticle(ctx *gin.Context, status string) {
+	saveDraftForm := article.SaveDraftForm{}
+
+	if err := ctx.ShouldBind(&saveDraftForm); err != nil {
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	articleInfo := article.Article{
+		UserId:           saveDraftForm.UserId,
+		Classify:         saveDraftForm.Classify,
+		CollectionColumn: saveDraftForm.CollectionColumn,
+		Content:          saveDraftForm.Content,
+		CoverImg:         saveDraftForm.CoverImg,
+		Tags:             saveDraftForm.Tags,
+		Title:            saveDraftForm.Title,
+		Summary:          saveDraftForm.Summary,
+		Status:           status,
+	}
+
+	// id 不存在新增
+	if saveDraftForm.ID == 0 {
+		global.DB.Create(&articleInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": articleInfo.ID})
+	} else {
+		userId, _ := ctx.Get("userId")
+		// 增加 userId 防止非对应用户更改信息
+		res := global.DB.Model(&article.Article{}).Where("id = ? AND user_id = ?", saveDraftForm.ID, userId).Updates(&articleInfo)
+		if res.Error != nil {
+			utils.ResponseResultsError(ctx, res.Error.Error())
+			return
+		}
+
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveDraftForm.ID})
+	}
+}
+
 // Save
 //
 //	@Summary		保存文章
@@ -22,34 +60,7 @@ import (
 //	@Security		ApiKeyAuth
 //	@Router			/article/save [post]
 func Save(ctx *gin.Context) {
-	saveForm := article.SaveForm{}
-
-	if err := ctx.ShouldBind(&saveForm); err != nil {
-		zap.S().Info("文章保存信息:", &saveForm)
-		utils.HandleValidatorError(ctx, err)
-		return
-	}
-
-	articleInfo := article.Article{
-		UserId:           saveForm.UserId,
-		Classify:         saveForm.Classify,
-		CollectionColumn: saveForm.CollectionColumn,
-		Content:          saveForm.Content,
-		CoverImg:         saveForm.CoverImg,
-		Tags:             saveForm.Tags,
-		Title:            saveForm.Title,
-		Summary:          saveForm.Summary,
-		Status:           "2", // 文章保存的信息必须进行审核
-	}
-
-	// id不存在新增
-	if saveForm.ID == 0 {
-		global.DB.Create(&articleInfo)
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": articleInfo.ID})
-	} else {
-		global.DB.Model(&article.Article{}).Where("id", saveForm.ID).Updates(&articleInfo)
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveForm.ID})
-	}
+	SaveArticle(ctx, "2")
 }
 
 // GetArticleList
