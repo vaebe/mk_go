@@ -28,3 +28,10 @@ type ListForm struct {
 	Name   string `json:"name" form:"name"`
 	Status string `json:"status" form:"status"`
 }
+
+// ReviewForm 文章专栏审核表单
+type ReviewForm struct {
+	ID          int32  `json:"id" form:"id"`
+	Status      string `json:"status" form:"status" example:"2"` // 2未通过、3已发布
+	Description string `json:"description" form:"description"`   // 审核意见
+}

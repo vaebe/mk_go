@@ -12,13 +12,8 @@ definitions:
         minimum: 0
         type: integer
       status:
-        enum:
-        - "1"
-        - "2"
-        - "3"
-        - "4"
-        - "5"
-        example: 1草稿 2待审核 3审核未通过 4已发布 5已删除
+        description: 1草稿 2待审核 3审核未通过 4已发布 5已删除
+        example: "1"
         type: string
       tag:
         type: string
@@ -30,6 +25,9 @@ definitions:
     type: object
   article.ReviewForm:
     properties:
+      description:
+        description: 审核意见
+        type: string
       id:
         type: integer
       status:
@@ -104,6 +102,18 @@ definitions:
     required:
     - pageNo
     - pageSize
+    type: object
+  articleColumn.ReviewForm:
+    properties:
+      description:
+        description: 审核意见
+        type: string
+      id:
+        type: integer
+      status:
+        description: 2未通过、3已发布
+        example: "2"
+        type: string
     type: object
   articleColumn.SaveForm:
     properties:
@@ -292,14 +302,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: 文章审核
+      description: 文章专栏审核
       parameters:
       - description: 请求对象
         in: body
         name: param
         required: true
         schema:
-          $ref: '#/definitions/article.ReviewForm'
+          $ref: '#/definitions/articleColumn.ReviewForm'
       produces:
       - application/json
       responses:
@@ -313,9 +323,9 @@ paths:
             $ref: '#/definitions/utils.EmptyInfo'
       security:
       - ApiKeyAuth: []
-      summary: 文章审核
+      summary: 文章专栏审核
       tags:
-      - article文章
+      - articleColumn专栏
   /article/save:
     post:
       consumes:

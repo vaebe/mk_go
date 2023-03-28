@@ -146,3 +146,39 @@ func AllArticleColumnList(ctx *gin.Context) {
 
 	utils.ResponseResultsSuccess(ctx, columns)
 }
+
+// Review
+//
+//	@Summary		文章专栏审核
+//	@Description	文章专栏审核
+//	@Tags			articleColumn专栏
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		articleColumn.ReviewForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/article/review [post]
+func Review(ctx *gin.Context) {
+	reviewForm := articleColumn.ReviewForm{}
+	if err := ctx.ShouldBind(&reviewForm); err != nil {
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	authorityId, _ := ctx.Get("authorityId")
+	if authorityId == 1 {
+		utils.ResponseResultsError(ctx, "您没有审核权限！")
+		return
+	}
+
+	res := global.DB.Where("id = ?", reviewForm.ID).Updates(articleColumn.ArticleColumn{
+		Status: reviewForm.Status,
+	})
+
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+	} else {
+		utils.ResponseResultsSuccess(ctx, "审核成功！")
+	}
+}

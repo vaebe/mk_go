@@ -152,7 +152,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "文章审核",
+                "description": "文章专栏审核",
                 "consumes": [
                     "application/json"
                 ],
@@ -160,9 +160,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "article文章"
+                    "articleColumn专栏"
                 ],
-                "summary": "文章审核",
+                "summary": "文章专栏审核",
                 "parameters": [
                     {
                         "description": "请求对象",
@@ -170,7 +170,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/article.ReviewForm"
+                            "$ref": "#/definitions/articleColumn.ReviewForm"
                         }
                     }
                 ],
@@ -927,15 +927,9 @@ const docTemplate = `{
                     "example": 10
                 },
                 "status": {
+                    "description": "1草稿 2待审核 3审核未通过 4已发布 5已删除",
                     "type": "string",
-                    "enum": [
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5"
-                    ],
-                    "example": "1草稿 2待审核 3审核未通过 4已发布 5已删除"
+                    "example": "1"
                 },
                 "tag": {
                     "type": "string"
@@ -948,6 +942,10 @@ const docTemplate = `{
         "article.ReviewForm": {
             "type": "object",
             "properties": {
+                "description": {
+                    "description": "审核意见",
+                    "type": "string"
+                },
                 "id": {
                     "type": "integer"
                 },
@@ -1052,6 +1050,23 @@ const docTemplate = `{
                     "type": "integer",
                     "minimum": 0,
                     "example": 10
+                }
+            }
+        },
+        "articleColumn.ReviewForm": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "审核意见",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "2未通过、3已发布",
+                    "type": "string",
+                    "example": "2"
                 }
             }
         },
