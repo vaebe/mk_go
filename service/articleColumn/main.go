@@ -45,7 +45,13 @@ func Save(ctx *gin.Context) {
 		global.DB.Create(&savaInfo)
 		utils.ResponseResultsSuccess(ctx, map[string]any{"id": savaInfo.ID})
 	} else {
-		global.DB.Model(&articleColumn.ArticleColumn{}).Where("id", saveForm.ID).Updates(&savaInfo)
+		userId, _ := ctx.Get("userId")
+		res := global.DB.Model(&articleColumn.ArticleColumn{}).Where("id = ? AND user_id = ?", saveForm.ID, userId).Updates(&savaInfo)
+		if res.Error != nil {
+			utils.ResponseResultsError(ctx, res.Error.Error())
+			return
+		}
+
 		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveForm.ID})
 	}
 }
@@ -63,14 +69,15 @@ func Save(ctx *gin.Context) {
 //	@Security		ApiKeyAuth
 //	@Router			/articleColumn/delete [delete]
 func Delete(ctx *gin.Context) {
-	enumsId := ctx.Query("id")
+	columnId := ctx.Query("id")
 
-	if enumsId == "" {
+	if columnId == "" {
 		utils.ResponseResultsError(ctx, "专栏id不能为空！")
 		return
 	}
 
-	res := global.DB.Where("id = ?", enumsId).Delete(&articleColumn.ArticleColumn{})
+	userId, _ := ctx.Get("userId")
+	res := global.DB.Where("id = ? AND user_id = ?", columnId, userId).Delete(&articleColumn.ArticleColumn{})
 
 	total := res.RowsAffected
 	if total == 0 {
