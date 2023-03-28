@@ -145,6 +145,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/article/review": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "文章审核",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "article文章"
+                ],
+                "summary": "文章审核",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/article.ReviewForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/article/save": {
             "post": {
                 "security": [
@@ -889,13 +934,27 @@ const docTemplate = `{
                         "3",
                         "4",
                         "5"
-                    ]
+                    ],
+                    "example": "1草稿 2待审核 3审核未通过 4已发布 5已删除"
                 },
                 "tag": {
                     "type": "string"
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "article.ReviewForm": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "3驳回 4通过",
+                    "type": "string",
+                    "example": "3"
                 }
             }
         },

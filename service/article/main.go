@@ -187,3 +187,39 @@ func Details(ctx *gin.Context) {
 	}
 	utils.ResponseResultsSuccess(ctx, articles[0])
 }
+
+// Review
+//
+//	@Summary		文章审核
+//	@Description	文章审核
+//	@Tags			article文章
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		article.ReviewForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/article/review [post]
+func Review(ctx *gin.Context) {
+	reviewForm := article.ReviewForm{}
+	if err := ctx.ShouldBind(&reviewForm); err != nil {
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	authorityId, _ := ctx.Get("authorityId")
+	if authorityId == 1 {
+		utils.ResponseResultsError(ctx, "您没有审核权限！")
+		return
+	}
+
+	res := global.DB.Where("id = ?", reviewForm.ID).Updates(article.Article{
+		Status: reviewForm.Status,
+	})
+
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+	} else {
+		utils.ResponseResultsSuccess(ctx, "审核成功！")
+	}
+}

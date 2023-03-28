@@ -52,10 +52,16 @@ type AllListForm struct {
 	Title    string `json:"title" form:"title"`
 	Classify string `json:"classify" form:"classify"`
 	Tag      string `json:"tag" form:"tag"`
-	Status   string `json:"status" form:"status" enums:"1,2,3,4,5"`
+	Status   string `json:"status" form:"status" example:"1"` // 1草稿 2待审核 3审核未通过 4已发布 5已删除
 }
 
 // UserArticleListForm 获取文章列表
 type UserArticleListForm struct {
 	models.PaginationParameters
+}
+
+// ReviewForm 文章审核表单
+type ReviewForm struct {
+	ID     int32  `json:"id" form:"id"`
+	Status string `json:"status" form:"status" example:"3"` // 3驳回 4通过
 }

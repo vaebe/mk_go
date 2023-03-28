@@ -18,6 +18,7 @@ definitions:
         - "3"
         - "4"
         - "5"
+        example: 1草稿 2待审核 3审核未通过 4已发布 5已删除
         type: string
       tag:
         type: string
@@ -26,6 +27,15 @@ definitions:
     required:
     - pageNo
     - pageSize
+    type: object
+  article.ReviewForm:
+    properties:
+      id:
+        type: integer
+      status:
+        description: 3驳回 4通过
+        example: "3"
+        type: string
     type: object
   article.SaveDraftForm:
     properties:
@@ -276,6 +286,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取用户文章列表
+      tags:
+      - article文章
+  /article/review:
+    post:
+      consumes:
+      - application/json
+      description: 文章审核
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/article.ReviewForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 文章审核
       tags:
       - article文章
   /article/save:
