@@ -25,6 +25,7 @@ type SaveForm struct {
 
 // ListForm 获取列表
 type ListForm struct {
+	models.PaginationParameters
 	Name   string `json:"name" form:"name"`
 	Status string `json:"status" form:"status"`
 }

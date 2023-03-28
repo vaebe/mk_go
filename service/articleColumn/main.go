@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"mk/global"
+	"mk/models"
 	"mk/models/articleColumn"
 	"mk/utils"
 )
@@ -126,25 +127,41 @@ func Details(ctx *gin.Context) {
 //	@Tags			articleColumn专栏
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	utils.ResponseResultInfo
-//	@Failure		500	{object}	utils.EmptyInfo
+//	@Param			param	body		articleColumn.ListForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth
-//	@Router			/articleColumn/getAllArticleColumnList [get]
+//	@Router			/articleColumn/getAllArticleColumnList [post]
 func AllArticleColumnList(ctx *gin.Context) {
+	listForm := articleColumn.ListForm{}
+
+	if err := ctx.ShouldBind(&listForm); err != nil {
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
 	var articleColumnList []articleColumn.ArticleColumn
-	res := global.DB.Model(&articleColumn.ArticleColumn{}).Find(&articleColumnList)
+	res := global.DB.Where("name LIKE ? AND status LIKE ?", "%"+listForm.Name+"%", "%"+listForm.Status+"%").Find(&articleColumnList)
+
+	// 存在错误
 	if res.Error != nil {
+		zap.S().Info(res.Error)
 		utils.ResponseResultsError(ctx, res.Error.Error())
 		return
 	}
 
-	// 按状态分类的对象
-	columns := make(map[string][]articleColumn.ArticleColumn)
-	for _, v := range articleColumnList {
-		columns[v.Status] = append(columns[v.Status], v)
-	}
+	// 获取总数
+	total := int32(res.RowsAffected)
 
-	utils.ResponseResultsSuccess(ctx, columns)
+	// 分页
+	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articleColumnList)
+
+	utils.ResponseResultsSuccess(ctx, &models.PagingData{
+		PageSize: listForm.PageSize,
+		PageNo:   listForm.PageNo,
+		Total:    total,
+		List:     articleColumnList,
+	})
 }
 
 // Review
@@ -158,7 +175,7 @@ func AllArticleColumnList(ctx *gin.Context) {
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth
-//	@Router			/article/review [post]
+//	@Router			/articleColumn/review [post]
 func Review(ctx *gin.Context) {
 	reviewForm := articleColumn.ReviewForm{}
 	if err := ctx.ShouldBind(&reviewForm); err != nil {

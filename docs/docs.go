@@ -152,7 +152,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "文章专栏审核",
+                "description": "文章审核",
                 "consumes": [
                     "application/json"
                 ],
@@ -160,9 +160,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "articleColumn专栏"
+                    "article文章"
                 ],
-                "summary": "文章专栏审核",
+                "summary": "文章审核",
                 "parameters": [
                     {
                         "description": "请求对象",
@@ -170,7 +170,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/articleColumn.ReviewForm"
+                            "$ref": "#/definitions/article.ReviewForm"
                         }
                     }
                 ],
@@ -367,7 +367,7 @@ const docTemplate = `{
             }
         },
         "/articleColumn/getAllArticleColumnList": {
-            "get": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -384,6 +384,62 @@ const docTemplate = `{
                     "articleColumn专栏"
                 ],
                 "summary": "获取全部专栏",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/articleColumn.ListForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/articleColumn/review": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "文章专栏审核",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "文章专栏审核",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/articleColumn.ReviewForm"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1050,6 +1106,31 @@ const docTemplate = `{
                     "type": "integer",
                     "minimum": 0,
                     "example": 10
+                }
+            }
+        },
+        "articleColumn.ListForm": {
+            "type": "object",
+            "required": [
+                "pageNo",
+                "pageSize"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "pageNo": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 1
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 10
+                },
+                "status": {
+                    "type": "string"
                 }
             }
         },

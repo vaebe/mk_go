@@ -12,7 +12,7 @@ func LoadArticleColumnRouter(r *gin.RouterGroup) {
 		userRoutes.POST("/save", articleColumn.Save)
 		userRoutes.DELETE("/delete", articleColumn.Delete)
 		userRoutes.GET("/details", articleColumn.Details)
-		userRoutes.GET("/getAllArticleColumnList", articleColumn.AllArticleColumnList)
+		userRoutes.POST("/getAllArticleColumnList", articleColumn.AllArticleColumnList)
 		userRoutes.POST("/review", articleColumn.Review)
 	}
 }

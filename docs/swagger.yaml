@@ -103,6 +103,24 @@ definitions:
     - pageNo
     - pageSize
     type: object
+  articleColumn.ListForm:
+    properties:
+      name:
+        type: string
+      pageNo:
+        example: 1
+        minimum: 0
+        type: integer
+      pageSize:
+        example: 10
+        minimum: 0
+        type: integer
+      status:
+        type: string
+    required:
+    - pageNo
+    - pageSize
+    type: object
   articleColumn.ReviewForm:
     properties:
       description:
@@ -302,14 +320,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: 文章专栏审核
+      description: 文章审核
       parameters:
       - description: 请求对象
         in: body
         name: param
         required: true
         schema:
-          $ref: '#/definitions/articleColumn.ReviewForm'
+          $ref: '#/definitions/article.ReviewForm'
       produces:
       - application/json
       responses:
@@ -323,9 +341,9 @@ paths:
             $ref: '#/definitions/utils.EmptyInfo'
       security:
       - ApiKeyAuth: []
-      summary: 文章专栏审核
+      summary: 文章审核
       tags:
-      - articleColumn专栏
+      - article文章
   /article/save:
     post:
       consumes:
@@ -437,10 +455,17 @@ paths:
       tags:
       - articleColumn专栏
   /articleColumn/getAllArticleColumnList:
-    get:
+    post:
       consumes:
       - application/json
       description: 获取全部专栏
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/articleColumn.ListForm'
       produces:
       - application/json
       responses:
@@ -455,6 +480,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取全部专栏
+      tags:
+      - articleColumn专栏
+  /articleColumn/review:
+    post:
+      consumes:
+      - application/json
+      description: 文章专栏审核
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/articleColumn.ReviewForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 文章专栏审核
       tags:
       - articleColumn专栏
   /articleColumn/save:
