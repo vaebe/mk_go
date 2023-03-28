@@ -52,6 +52,7 @@ type AllListForm struct {
 	Title    string `json:"title" form:"title"`
 	Classify string `json:"classify" form:"classify"`
 	Tag      string `json:"tag" form:"tag"`
+	Status   string `json:"status" form:"status" enums:"1,2,3,4,5"`
 }
 
 // UserArticleListForm 获取文章列表

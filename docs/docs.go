@@ -881,6 +881,16 @@ const docTemplate = `{
                     "minimum": 0,
                     "example": 10
                 },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5"
+                    ]
+                },
                 "tag": {
                     "type": "string"
                 },

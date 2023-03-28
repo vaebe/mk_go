@@ -83,8 +83,8 @@ func GetArticleList(ctx *gin.Context) {
 	}
 
 	var articles []article.Article
-	res := global.DB.Where("title LIKE ? AND tags LIKE ? AND classify LIKE ?",
-		"%"+listForm.Title+"%", "%"+listForm.Tag+"%", "%"+listForm.Classify+"%").Find(&articles)
+	res := global.DB.Where("title LIKE ? AND tags LIKE ? AND classify LIKE ? AND status LIKE ?",
+		"%"+listForm.Title+"%", "%"+listForm.Tag+"%", "%"+listForm.Classify+"%", "%"+listForm.Status+"%").Find(&articles)
 
 	// 存在错误
 	if res.Error != nil {
@@ -99,8 +99,11 @@ func GetArticleList(ctx *gin.Context) {
 	// 分页
 	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
 
-	// todo 全部列表不需要返回文章详情
-	// 增加用户名称 、comments  评论数
+	for i := range articles {
+		articles[i].Content = ""
+	}
+
+	// todo 增加用户名称 、comments  评论数
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
 		PageSize: listForm.PageSize,
 		PageNo:   listForm.PageNo,
