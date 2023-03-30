@@ -31,13 +31,14 @@ func main() {
 		file.LoadFileRouter(baseRouter)
 	}
 
-	serviceAddress := fmt.Sprintf("%s:%d", "0.0.0.0", 53105)
+	port := 53105
+	serviceAddress := fmt.Sprintf("%s:%d", "0.0.0.0", port)
 
 	// 初始化配置
 	initialize.InitConfig()
 
 	// 初始化swagger
-	initialize.InitSwagger(r, serviceAddress)
+	initialize.InitSwagger(r, port)
 
 	err := r.Run(serviceAddress)
 	if err != nil {
