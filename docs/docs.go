@@ -664,6 +664,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/enum/getEnumsList": {
+            "post": {
+                "description": "分页获取枚举列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "enum枚举"
+                ],
+                "summary": "分页获取枚举列表",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/enum.ListForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/enum/save": {
             "post": {
                 "security": [
@@ -1194,6 +1234,31 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "enum.ListForm": {
+            "type": "object",
+            "required": [
+                "pageNo",
+                "pageSize"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "pageNo": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 1
+                },
+                "pageSize": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 10
+                },
+                "typeName": {
                     "type": "string"
                 }
             }

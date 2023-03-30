@@ -20,3 +20,10 @@ type EnumsForm struct {
 	TypeCode string `form:"typeCode" json:"typeCode" binding:"required"`
 	ParentId string `form:"parentId" json:"parentId"`
 }
+
+// ListForm 分页查询枚举参数
+type ListForm struct {
+	models.PaginationParameters
+	Name     string `json:"name" form:"name"`
+	TypeName string `json:"typeName" form:"typeName"`
+}

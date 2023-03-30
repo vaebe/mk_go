@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"mk/global"
+	"mk/models"
 	"mk/models/enum"
 	"mk/utils"
 )
@@ -162,4 +163,47 @@ func GetAllEnums(ctx *gin.Context) {
 	}
 
 	utils.ResponseResultsSuccess(ctx, enums)
+}
+
+// GetEnumsList
+//
+//	@Summary			分页获取枚举列表
+//	@Description	分页获取枚举列表
+//	@Tags				enum枚举
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		enum.ListForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Router			/enum/getEnumsList [post]
+func GetEnumsList(ctx *gin.Context) {
+	listForm := enum.ListForm{}
+
+	if err := ctx.ShouldBind(&listForm); err != nil {
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	var enums []enum.Enum
+	res := global.DB.Where("name LIKE ? AND type_name LIKE ?", "%"+listForm.Name+"%", "%"+listForm.TypeName+"%").Find(&enums)
+
+	// 存在错误
+	if res.Error != nil {
+		zap.S().Info(res.Error)
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	// 获取总数
+	total := int32(res.RowsAffected)
+
+	// 分页
+	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&enums)
+
+	utils.ResponseResultsSuccess(ctx, &models.PagingData{
+		PageSize: listForm.PageSize,
+		PageNo:   listForm.PageNo,
+		Total:    total,
+		List:     enums,
+	})
 }

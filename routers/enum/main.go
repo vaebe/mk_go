@@ -14,5 +14,6 @@ func LoadEnumRouter(r *gin.RouterGroup) {
 		userRoutes.GET("/details", enum.Details)
 		userRoutes.GET("/getEnumsByType", enum.GetEnumsByType)
 		userRoutes.GET("/getAllEnums", enum.GetAllEnums)
+		userRoutes.POST("/getEnumsList", enum.GetEnumsList)
 	}
 }

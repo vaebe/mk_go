@@ -165,6 +165,24 @@ definitions:
     - typeName
     - value
     type: object
+  enum.ListForm:
+    properties:
+      name:
+        type: string
+      pageNo:
+        example: 1
+        minimum: 0
+        type: integer
+      pageSize:
+        example: 10
+        minimum: 0
+        type: integer
+      typeName:
+        type: string
+    required:
+    - pageNo
+    - pageSize
+    type: object
   user.ListForm:
     properties:
       email:
@@ -638,6 +656,32 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 根据分类查询枚举
+      tags:
+      - enum枚举
+  /enum/getEnumsList:
+    post:
+      consumes:
+      - application/json
+      description: 分页获取枚举列表
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/enum.ListForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 分页获取枚举列表
       tags:
       - enum枚举
   /enum/save:
