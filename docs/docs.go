@@ -729,7 +729,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/enum.EnumsForm"
+                            "$ref": "#/definitions/enum.SaveForm"
                         }
                     }
                 ],
@@ -1212,32 +1212,6 @@ const docTemplate = `{
                 }
             }
         },
-        "enum.EnumsForm": {
-            "type": "object",
-            "required": [
-                "name",
-                "typeCode",
-                "typeName",
-                "value"
-            ],
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "parentId": {
-                    "type": "string"
-                },
-                "typeCode": {
-                    "type": "string"
-                },
-                "typeName": {
-                    "type": "string"
-                },
-                "value": {
-                    "type": "string"
-                }
-            }
-        },
         "enum.ListForm": {
             "type": "object",
             "required": [
@@ -1259,6 +1233,35 @@ const docTemplate = `{
                     "example": 10
                 },
                 "typeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "enum.SaveForm": {
+            "type": "object",
+            "required": [
+                "name",
+                "typeCode",
+                "typeName",
+                "value"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "string"
+                },
+                "typeCode": {
+                    "type": "string"
+                },
+                "typeName": {
+                    "type": "string"
+                },
+                "value": {
                     "type": "string"
                 }
             }

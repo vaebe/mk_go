@@ -12,8 +12,9 @@ type Enum struct {
 	ParentId string `gorm:"type:varbinary(100); comment '枚举上级id'" json:"parentId"`
 }
 
-// EnumsForm 枚举保存表单
-type EnumsForm struct {
+// SaveForm 枚举保存表单
+type SaveForm struct {
+	ID       int32  `form:"id" json:"id" `
 	Name     string `form:"name" json:"name" binding:"required"`
 	Value    string `form:"value" json:"value" binding:"required"`
 	TypeName string `form:"typeName" json:"typeName" binding:"required"`

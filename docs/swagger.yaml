@@ -147,24 +147,6 @@ definitions:
     - introduction
     - name
     type: object
-  enum.EnumsForm:
-    properties:
-      name:
-        type: string
-      parentId:
-        type: string
-      typeCode:
-        type: string
-      typeName:
-        type: string
-      value:
-        type: string
-    required:
-    - name
-    - typeCode
-    - typeName
-    - value
-    type: object
   enum.ListForm:
     properties:
       name:
@@ -182,6 +164,26 @@ definitions:
     required:
     - pageNo
     - pageSize
+    type: object
+  enum.SaveForm:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      parentId:
+        type: string
+      typeCode:
+        type: string
+      typeName:
+        type: string
+      value:
+        type: string
+    required:
+    - name
+    - typeCode
+    - typeName
+    - value
     type: object
   user.ListForm:
     properties:
@@ -695,7 +697,7 @@ paths:
         name: param
         required: true
         schema:
-          $ref: '#/definitions/enum.EnumsForm'
+          $ref: '#/definitions/enum.SaveForm'
       produces:
       - application/json
       responses:

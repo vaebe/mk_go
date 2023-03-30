@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"mk/global"
 	"mk/models"
+	"mk/models/article"
 	"mk/models/enum"
 	"mk/utils"
 )
@@ -16,35 +17,41 @@ import (
 //	@Tags			enum枚举
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	body		enum.EnumsForm	true	"请求对象"
+//	@Param			param	body		enum.SaveForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth
 //	@Router			/enum/save [post]
 func Save(ctx *gin.Context) {
-	enumForm := enum.EnumsForm{}
-	if err := ctx.ShouldBind(&enumForm); err != nil {
-		zap.S().Info("枚举保存信息:", &enumForm)
+	saveForm := enum.SaveForm{}
+	if err := ctx.ShouldBind(&saveForm); err != nil {
 		utils.HandleValidatorError(ctx, err)
 		return
 	}
 
-	res := global.DB.Create(&enum.Enum{
-		Value:    enumForm.Value,
-		Name:     enumForm.Name,
-		TypeCode: enumForm.TypeCode,
-		TypeName: enumForm.TypeName,
-	})
-
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	saveInfo := enum.Enum{
+		Value:    saveForm.Value,
+		Name:     saveForm.Name,
+		TypeCode: saveForm.TypeCode,
+		TypeName: saveForm.TypeName,
 	}
 
-	utils.ResponseResultsSuccess(ctx, enumForm)
+	// id 不存在新增
+	if saveForm.ID == 0 {
+		global.DB.Create(&saveInfo)
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveInfo.ID})
+	} else {
+		res := global.DB.Model(&article.Article{}).Where("id = ?", saveForm.ID).Updates(&saveInfo)
+		if res.Error != nil {
+			utils.ResponseResultsError(ctx, res.Error.Error())
+			return
+		}
+
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveInfo.ID})
+	}
 }
 
-// Delete
+// Delete todo 考虑增加类型 如系统则不能被删除
 //
 //	@Summary		根据id删除指定枚举
 //	@Description	根据id删除指定枚举
@@ -95,7 +102,7 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
-	enumInfo := enum.EnumsForm{}
+	enumInfo := enum.SaveForm{}
 	res := global.DB.Model(&enum.Enum{}).Where("id = ?", enumsId).First(&enumInfo)
 
 	if res.Error != nil {
@@ -126,7 +133,7 @@ func GetEnumsByType(ctx *gin.Context) {
 		return
 	}
 
-	var enumsList []enum.EnumsForm
+	var enumsList []enum.SaveForm
 	res := global.DB.Model(&enum.Enum{}).Where("type_code", typeCode).Find(&enumsList)
 
 	if res.Error != nil {
@@ -149,14 +156,14 @@ func GetEnumsByType(ctx *gin.Context) {
 //	@Security		ApiKeyAuth
 //	@Router			/enum/getAllEnums [get]
 func GetAllEnums(ctx *gin.Context) {
-	var enumsList []enum.EnumsForm
+	var enumsList []enum.SaveForm
 	res := global.DB.Model(&enum.Enum{}).Find(&enumsList)
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, res.Error.Error())
 		return
 	}
 
-	enums := make(map[string][]enum.EnumsForm)
+	enums := make(map[string][]enum.SaveForm)
 
 	for _, v := range enumsList {
 		enums[v.TypeCode] = append(enums[v.TypeCode], v)
