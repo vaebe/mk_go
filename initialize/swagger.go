@@ -6,17 +6,21 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
 	"mk/docs"
+	"mk/global"
 	"os/exec"
 )
 
 // InitSwagger 初始化swagger
 func InitSwagger(r *gin.Engine, serviceAddress string) {
-	// 执行命令生成swagger
-	cmd := exec.Command("swag", "init")
-	stdoutStderr, err := cmd.CombinedOutput()
-	zap.S().Infof("\n%s", stdoutStderr)
-	if err != nil {
-		panic(err)
+	// 非开发环境环境无需生成swagger
+	if global.ENV == "dev" {
+		// 执行命令生成 swagger
+		cmd := exec.Command("swag", "init")
+		stdoutStderr, err := cmd.CombinedOutput()
+		zap.S().Infof("\n%s", stdoutStderr)
+		if err != nil {
+			panic(err)
+		}
 	}
 
 	docs.SwaggerInfo.Title = "MK API"

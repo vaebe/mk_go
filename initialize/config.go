@@ -28,6 +28,13 @@ func setConfig() {
 		panic(err)
 	}
 
+	// 设置环境
+
+	if err := v.UnmarshalKey("env", &global.ENV); err != nil {
+		panic(err)
+	}
+	zap.S().Infof("env配置信息: %v", global.ENV)
+
 	// mysqlConfig - 全局变量
 	if err := v.UnmarshalKey("mysqlConfig", &global.MysqlConfig); err != nil {
 		panic(err)

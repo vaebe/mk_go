@@ -31,7 +31,7 @@ func main() {
 		file.LoadFileRouter(baseRouter)
 	}
 
-	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", 53105)
+	serviceAddress := fmt.Sprintf("%s:%d", "0.0.0.0", 53105)
 
 	// 初始化配置
 	initialize.InitConfig()

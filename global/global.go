@@ -8,6 +8,7 @@ import (
 )
 
 var (
+	ENV         string
 	Trans       ut.Translator
 	DB          *gorm.DB
 	RedisClient *redis.Client
