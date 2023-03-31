@@ -147,9 +147,12 @@ definitions:
         type: string
       name:
         type: string
+      userId:
+        type: integer
     required:
     - introduction
     - name
+    - userId
     type: object
   enum.ListForm:
     properties:

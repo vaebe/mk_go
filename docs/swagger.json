@@ -1189,7 +1189,8 @@
             "type": "object",
             "required": [
                 "introduction",
-                "name"
+                "name",
+                "userId"
             ],
             "properties": {
                 "coverImg": {
@@ -1203,6 +1204,9 @@
                 },
                 "name": {
                     "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },

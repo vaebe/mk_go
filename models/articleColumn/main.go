@@ -7,6 +7,7 @@ import (
 // ArticleColumn 文章专栏
 type ArticleColumn struct {
 	models.BaseModel
+	UserId       int32  `gorm:"type:int;not null;comment '用户id'" json:"userId"`
 	Name         string `gorm:"type:varbinary(100);unique;not null;comment '专栏名称'" json:"name"`
 	Introduction string `gorm:"type:varbinary(300);unique;not null;comment '专栏简介'" json:"introduction"`
 	CoverImg     string `gorm:"type:varbinary(200);not null;comment '专栏封面'" json:"coverImg"`
@@ -18,6 +19,7 @@ type ArticleColumn struct {
 // SaveForm 文章专栏信息
 type SaveForm struct {
 	ID           int32  `json:"id" form:"id"`
+	UserId       int32  `json:"userId" form:"userId" binding:"required"`
 	Name         string `json:"name" form:"name" binding:"required"`
 	Introduction string `json:"introduction" form:"introduction" binding:"required"`
 	CoverImg     string `json:"coverImg" form:"coverImg"`

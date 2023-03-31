@@ -1200,7 +1200,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "introduction",
-                "name"
+                "name",
+                "userId"
             ],
             "properties": {
                 "coverImg": {
@@ -1214,6 +1215,9 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },
