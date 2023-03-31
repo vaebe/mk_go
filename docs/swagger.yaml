@@ -99,6 +99,10 @@ definitions:
         example: 10
         minimum: 0
         type: integer
+      status:
+        description: 1草稿 2待审核 3审核未通过 4已发布
+        example: "1"
+        type: string
     required:
     - pageNo
     - pageSize

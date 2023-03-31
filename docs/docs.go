@@ -1146,6 +1146,11 @@ const docTemplate = `{
                     "type": "integer",
                     "minimum": 0,
                     "example": 10
+                },
+                "status": {
+                    "description": "1草稿 2待审核 3审核未通过 4已发布",
+                    "type": "string",
+                    "example": "1"
                 }
             }
         },

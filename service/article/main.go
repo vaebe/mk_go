@@ -133,7 +133,13 @@ func GetUserArticleList(ctx *gin.Context) {
 
 	userId, _ := ctx.Get("userId")
 	var articles []article.Article
-	res := global.DB.Where("user_id", userId).Find(&articles)
+	res := global.DB.Where("user_id = ?", userId)
+
+	if listForm.Status == "" {
+		res.Not("status = ?", "1").Find(&articles)
+	} else {
+		res.Where("status = ?", listForm.Status).Find(&articles)
+	}
 
 	// 存在错误
 	if res.Error != nil {
@@ -145,7 +151,6 @@ func GetUserArticleList(ctx *gin.Context) {
 	// 获取总数
 	total := int32(res.RowsAffected)
 
-	// todo 根据参数状态过滤数据 all 不包含 草稿
 	// 分页
 	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
 

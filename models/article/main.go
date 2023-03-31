@@ -58,6 +58,7 @@ type AllListForm struct {
 // UserArticleListForm 获取文章列表
 type UserArticleListForm struct {
 	models.PaginationParameters
+	Status string `json:"status" form:"status" example:"1"` // 1草稿 2待审核 3审核未通过 4已发布
 }
 
 // ReviewForm 文章审核表单
