@@ -5,7 +5,6 @@ import (
 	"go.uber.org/zap"
 	"mk/global"
 	"mk/models"
-	"mk/models/article"
 	"mk/models/enum"
 	"mk/utils"
 )
@@ -41,7 +40,7 @@ func Save(ctx *gin.Context) {
 		global.DB.Create(&saveInfo)
 		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveInfo.ID})
 	} else {
-		res := global.DB.Model(&article.Article{}).Where("id = ?", saveForm.ID).Updates(&saveInfo)
+		res := global.DB.Model(&enum.Enum{}).Where("id = ?", saveForm.ID).Updates(&saveInfo)
 		if res.Error != nil {
 			utils.ResponseResultsError(ctx, res.Error.Error())
 			return
