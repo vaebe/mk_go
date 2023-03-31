@@ -7,13 +7,13 @@ import (
 
 // LoadEnumRouter 加载枚举路由
 func LoadEnumRouter(r *gin.RouterGroup) {
-	userRoutes := r.Group("enum")
+	routes := r.Group("enum")
 	{
-		userRoutes.POST("/save", enum.Save)
-		userRoutes.DELETE("/delete", enum.Delete)
-		userRoutes.GET("/details", enum.Details)
-		userRoutes.GET("/getEnumsByType", enum.GetEnumsByType)
-		userRoutes.GET("/getAllEnums", enum.GetAllEnums)
-		userRoutes.POST("/getEnumsList", enum.GetEnumsList)
+		routes.POST("/save", enum.Save)
+		routes.DELETE("/delete", enum.Delete)
+		routes.GET("/details", enum.Details)
+		routes.GET("/getEnumsByType", enum.GetEnumsByType)
+		routes.GET("/getAllEnums", enum.GetAllEnums)
+		routes.POST("/getEnumsList", enum.GetEnumsList)
 	}
 }

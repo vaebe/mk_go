@@ -7,12 +7,12 @@ import (
 
 // LoadArticleColumnRouter 加载文章专栏路由
 func LoadArticleColumnRouter(r *gin.RouterGroup) {
-	userRoutes := r.Group("articleColumn")
+	routes := r.Group("articleColumn")
 	{
-		userRoutes.POST("/save", articleColumn.Save)
-		userRoutes.DELETE("/delete", articleColumn.Delete)
-		userRoutes.GET("/details", articleColumn.Details)
-		userRoutes.POST("/getList", articleColumn.List)
-		userRoutes.POST("/review", articleColumn.Review)
+		routes.POST("/save", articleColumn.Save)
+		routes.DELETE("/delete", articleColumn.Delete)
+		routes.GET("/details", articleColumn.Details)
+		routes.POST("/getList", articleColumn.List)
+		routes.POST("/review", articleColumn.Review)
 	}
 }

@@ -6,12 +6,12 @@ import (
 )
 
 func LoadUserRouter(r *gin.RouterGroup) {
-	userRoutes := r.Group("user")
+	routes := r.Group("user")
 	{
-		userRoutes.POST("/login", user.Login)
-		userRoutes.POST("/register", user.Register)
-		userRoutes.POST("/sendVerificationCode", user.SendVerificationCode)
-		userRoutes.POST("/getUserList", user.GetUserList)
-		userRoutes.GET("/getUserDetails", user.Details)
+		routes.POST("/login", user.Login)
+		routes.POST("/register", user.Register)
+		routes.POST("/sendVerificationCode", user.SendVerificationCode)
+		routes.POST("/getUserList", user.GetUserList)
+		routes.GET("/getUserDetails", user.Details)
 	}
 }

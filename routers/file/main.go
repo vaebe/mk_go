@@ -7,8 +7,8 @@ import (
 
 // LoadFileRouter 加载文件操作路由
 func LoadFileRouter(r *gin.RouterGroup) {
-	userRoutes := r.Group("file")
+	routes := r.Group("file")
 	{
-		userRoutes.POST("/upload", file.Upload)
+		routes.POST("/upload", file.Upload)
 	}
 }

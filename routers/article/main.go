@@ -7,13 +7,13 @@ import (
 
 // LoadArticleRouter 加载文章路由
 func LoadArticleRouter(r *gin.RouterGroup) {
-	userRoutes := r.Group("article")
+	routes := r.Group("article")
 	{
-		userRoutes.POST("/save", article.Save)
-		userRoutes.POST("/saveDraft", article.Draft)
-		userRoutes.POST("/getArticleList", article.GetArticleList)
-		userRoutes.POST("/getUserArticleList", article.GetUserArticleList)
-		userRoutes.GET("/getArticleDetails", article.Details)
-		userRoutes.POST("/review", article.Review)
+		routes.POST("/save", article.Save)
+		routes.POST("/saveDraft", article.Draft)
+		routes.POST("/getArticleList", article.GetArticleList)
+		routes.POST("/getUserArticleList", article.GetUserArticleList)
+		routes.GET("/getArticleDetails", article.Details)
+		routes.POST("/review", article.Review)
 	}
 }
