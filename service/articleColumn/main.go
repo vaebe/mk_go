@@ -120,10 +120,10 @@ func Details(ctx *gin.Context) {
 	utils.ResponseResultsSuccess(ctx, columnInfo)
 }
 
-// AllArticleColumnList
+// List
 //
-//	@Summary		获取全部专栏
-//	@Description	获取全部专栏
+//	@Summary		获取专栏列表
+//	@Description	获取专栏列表
 //	@Tags			articleColumn专栏
 //	@Accept			json
 //	@Produce		json
@@ -131,8 +131,8 @@ func Details(ctx *gin.Context) {
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth
-//	@Router			/articleColumn/getAllArticleColumnList [post]
-func AllArticleColumnList(ctx *gin.Context) {
+//	@Router			/articleColumn/getList [post]
+func List(ctx *gin.Context) {
 	listForm := articleColumn.ListForm{}
 
 	if err := ctx.ShouldBind(&listForm); err != nil {

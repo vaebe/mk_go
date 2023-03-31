@@ -366,14 +366,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/articleColumn/getAllArticleColumnList": {
+        "/articleColumn/getList": {
             "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "获取全部专栏",
+                "description": "获取专栏列表",
                 "consumes": [
                     "application/json"
                 ],
@@ -383,7 +383,7 @@ const docTemplate = `{
                 "tags": [
                     "articleColumn专栏"
                 ],
-                "summary": "获取全部专栏",
+                "summary": "获取专栏列表",
                 "parameters": [
                     {
                         "description": "请求对象",

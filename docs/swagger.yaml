@@ -478,11 +478,11 @@ paths:
       summary: 获取专栏详情
       tags:
       - articleColumn专栏
-  /articleColumn/getAllArticleColumnList:
+  /articleColumn/getList:
     post:
       consumes:
       - application/json
-      description: 获取全部专栏
+      description: 获取专栏列表
       parameters:
       - description: 请求对象
         in: body
@@ -503,7 +503,7 @@ paths:
             $ref: '#/definitions/utils.EmptyInfo'
       security:
       - ApiKeyAuth: []
-      summary: 获取全部专栏
+      summary: 获取专栏列表
       tags:
       - articleColumn专栏
   /articleColumn/review:
