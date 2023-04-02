@@ -1,6 +1,9 @@
 package article
 
-import "mk/models"
+import (
+	"mk/models"
+	"mk/utils/localTime"
+)
 
 // Article 文章
 type Article struct {
@@ -47,20 +50,21 @@ type SaveForm struct {
 
 // Details 详情信息
 type Details struct {
-	ID               int32    `json:"id" form:"id"`
-	UserId           int32    `json:"userId" form:"userId" `
-	Title            string   `json:"title" form:"title"`
-	Content          string   `json:"content" form:"content" `
-	Classify         string   `json:"classify" form:"classify"`
-	Tags             []string `json:"tags" form:"tags" swaggertype:"array,string"`
-	CoverImg         string   `json:"coverImg" form:"coverImg"`
-	CollectionColumn []int32  `json:"collectionColumn" form:"collectionColumn" swaggertype:"array,int32"`
-	Summary          string   `json:"summary" form:"summary"`
-	Views            int      `json:"views" form:"views"`
-	Likes            int      `json:"likes" form:"likes"`
-	Favorites        int      `json:"favorites" form:"favorites"`
-	ShowNumber       int      `json:"showNumber" form:"showNumber"`
-	Status           string   `json:"status" form:"status"`
+	ID               int32                `json:"id" form:"id"`
+	UserId           int32                `json:"userId" form:"userId" `
+	Title            string               `json:"title" form:"title"`
+	Content          string               `json:"content" form:"content" `
+	Classify         string               `json:"classify" form:"classify"`
+	Tags             []string             `json:"tags" form:"tags" swaggertype:"array,string"`
+	CoverImg         string               `json:"coverImg" form:"coverImg"`
+	CollectionColumn []int32              `json:"collectionColumn" form:"collectionColumn" swaggertype:"array,int32"`
+	Summary          string               `json:"summary" form:"summary"`
+	Views            int                  `json:"views" form:"views"`
+	Likes            int                  `json:"likes" form:"likes"`
+	Favorites        int                  `json:"favorites" form:"favorites"`
+	ShowNumber       int                  `json:"showNumber" form:"showNumber"`
+	Status           string               `json:"status" form:"status"`
+	UpdatedAt        *localTime.LocalTime `json:"updatedAt" form:"updatedAt"`
 }
 
 // AllListForm 获取全部文章列表

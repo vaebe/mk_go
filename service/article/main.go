@@ -304,6 +304,7 @@ func Details(ctx *gin.Context) {
 		Favorites:  details.Favorites,
 		ShowNumber: details.ShowNumber,
 		Status:     details.Status,
+		UpdatedAt:  details.UpdatedAt,
 	}
 
 	var columns []article.ArticlesAssociatedColumns
