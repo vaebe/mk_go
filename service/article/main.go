@@ -3,47 +3,141 @@ package article
 import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 	"mk/global"
 	"mk/models"
 	"mk/models/article"
 	"mk/utils"
 )
 
+// 保存关联专栏信息
+func saveArticlesAssociatedColumns(tx *gorm.DB, saveInfo article.SaveForm) error {
+	res := tx.Where("id = ?", saveInfo.ID).Delete(&article.ArticlesAssociatedColumns{})
+	if res.Error != nil {
+		return res.Error
+	}
+
+	if len(saveInfo.CollectionColumn) == 0 {
+		return nil
+	}
+
+	var articlesAssociatedColumns []article.ArticlesAssociatedColumns
+	for _, v := range saveInfo.CollectionColumn {
+		articlesAssociatedColumns = append(articlesAssociatedColumns, article.ArticlesAssociatedColumns{
+			ColumnId:  v,
+			ArticleId: saveInfo.ID,
+		})
+	}
+
+	res = tx.Create(&articlesAssociatedColumns)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	return nil
+}
+
+// 保存文章关联标签信息
+func saveArticlesRelatedTags(tx *gorm.DB, saveInfo article.SaveForm) error {
+	res := tx.Where("id = ?", saveInfo.ID).Delete(&article.ArticlesRelatedTags{})
+	if res.Error != nil {
+		return res.Error
+	}
+
+	if len(saveInfo.Tags) == 0 {
+		return nil
+	}
+
+	var articlesRelatedTags []article.ArticlesRelatedTags
+	for _, v := range saveInfo.Tags {
+		articlesRelatedTags = append(articlesRelatedTags, article.ArticlesRelatedTags{
+			TagId:     v,
+			ArticleId: saveInfo.ID,
+		})
+	}
+
+	res = tx.Create(&articlesRelatedTags)
+	if res.Error != nil {
+		return res.Error
+	}
+
+	return nil
+}
+
 // SaveArticle 保存文章
 func SaveArticle(ctx *gin.Context, status string) {
-	saveDraftForm := article.SaveDraftForm{}
+	saveForm := article.SaveForm{}
 
-	if err := ctx.ShouldBind(&saveDraftForm); err != nil {
+	if err := ctx.ShouldBind(&saveForm); err != nil {
 		utils.HandleValidatorError(ctx, err)
 		return
 	}
 
 	articleInfo := article.Article{
-		UserId:           saveDraftForm.UserId,
-		Classify:         saveDraftForm.Classify,
-		CollectionColumn: saveDraftForm.CollectionColumn,
-		Content:          saveDraftForm.Content,
-		CoverImg:         saveDraftForm.CoverImg,
-		Tags:             saveDraftForm.Tags,
-		Title:            saveDraftForm.Title,
-		Summary:          saveDraftForm.Summary,
-		Status:           status,
+		UserId:   saveForm.UserId,
+		Classify: saveForm.Classify,
+		Content:  saveForm.Content,
+		CoverImg: saveForm.CoverImg,
+		Title:    saveForm.Title,
+		Summary:  saveForm.Summary,
+		Status:   status,
 	}
 
 	// id 不存在新增
-	if saveDraftForm.ID == 0 {
-		global.DB.Create(&articleInfo)
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": articleInfo.ID})
-	} else {
-		userId, _ := ctx.Get("userId")
-		// 增加 userId 防止非对应用户更改信息
-		res := global.DB.Model(&article.Article{}).Where("id = ? AND user_id = ?", saveDraftForm.ID, userId).Updates(&articleInfo)
+	if saveForm.ID == 0 {
+		res := global.DB.Create(&articleInfo)
 		if res.Error != nil {
 			utils.ResponseResultsError(ctx, res.Error.Error())
 			return
 		}
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": articleInfo.ID})
+	} else {
+		// 创建事务
+		tx := global.DB.Begin()
 
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveDraftForm.ID})
+		// 发生 panic 回滚事务
+		defer func() {
+			if r := recover(); r != nil {
+				tx.Rollback()
+			}
+		}()
+
+		// 保存文章信息
+		userId, _ := ctx.Get("userId")
+		articleInfo.ID = saveForm.ID
+		res := tx.Model(&article.Article{}).Where("id = ? AND user_id = ?", saveForm.ID, userId).Updates(&articleInfo)
+		if res.Error != nil {
+			// 发生错误回滚事务
+			tx.Rollback()
+			utils.ResponseResultsError(ctx, res.Error.Error())
+			return
+		}
+
+		// 保存文章关联专栏信息
+		err := saveArticlesAssociatedColumns(tx, saveForm)
+		if err != nil {
+			// 发生错误回滚事务
+			tx.Rollback()
+			utils.ResponseResultsError(ctx, err.Error())
+			return
+		}
+		// 保存关联标签信息
+		err = saveArticlesRelatedTags(tx, saveForm)
+		if err != nil {
+			// 发生错误回滚事务
+			tx.Rollback()
+			utils.ResponseResultsError(ctx, err.Error())
+			return
+		}
+
+		// 提交事务
+		err = tx.Commit().Error
+		if err != nil {
+			utils.ResponseResultsError(ctx, err.Error())
+			return
+		}
+
+		utils.ResponseResultsSuccess(ctx, map[string]any{"id": articleInfo.ID})
 	}
 }
 

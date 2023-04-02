@@ -11,7 +11,7 @@ import (
 //	@Tags			article文章
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	body		article.SaveDraftForm	true	"请求对象"
+//	@Param			param	body		article.SaveForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth

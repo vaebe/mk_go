@@ -35,59 +35,7 @@ definitions:
         example: "3"
         type: string
     type: object
-  article.SaveDraftForm:
-    properties:
-      classify:
-        type: string
-      collectionColumn:
-        type: string
-      content:
-        type: string
-      coverImg:
-        type: string
-      id:
-        type: integer
-      summary:
-        type: string
-      tags:
-        type: string
-      title:
-        type: string
-      userId:
-        type: integer
-    required:
-    - title
-    - userId
-    type: object
   article.SaveForm:
-    properties:
-      classify:
-        type: string
-      collectionColumn:
-        type: string
-      content:
-        type: string
-      coverImg:
-        type: string
-      id:
-        type: integer
-      summary:
-        type: string
-      tags:
-        type: string
-      title:
-        type: string
-      userId:
-        type: integer
-    required:
-    - classify
-    - collectionColumn
-    - content
-    - coverImg
-    - summary
-    - tags
-    - title
-    - userId
     type: object
   article.UserArticleListForm:
     properties:
@@ -410,7 +358,7 @@ paths:
         name: param
         required: true
         schema:
-          $ref: '#/definitions/article.SaveDraftForm'
+          $ref: '#/definitions/article.SaveForm'
       produces:
       - application/json
       responses:

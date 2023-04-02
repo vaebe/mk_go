@@ -260,7 +260,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/article.SaveDraftForm"
+                            "$ref": "#/definitions/article.SaveForm"
                         }
                     }
                 ],
@@ -1052,83 +1052,8 @@ const docTemplate = `{
                 }
             }
         },
-        "article.SaveDraftForm": {
-            "type": "object",
-            "required": [
-                "title",
-                "userId"
-            ],
-            "properties": {
-                "classify": {
-                    "type": "string"
-                },
-                "collectionColumn": {
-                    "type": "string"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "coverImg": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "summary": {
-                    "type": "string"
-                },
-                "tags": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
-        },
         "article.SaveForm": {
-            "type": "object",
-            "required": [
-                "classify",
-                "collectionColumn",
-                "content",
-                "coverImg",
-                "summary",
-                "tags",
-                "title",
-                "userId"
-            ],
-            "properties": {
-                "classify": {
-                    "type": "string"
-                },
-                "collectionColumn": {
-                    "type": "string"
-                },
-                "content": {
-                    "type": "string"
-                },
-                "coverImg": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "summary": {
-                    "type": "string"
-                },
-                "tags": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
+            "type": "object"
         },
         "article.UserArticleListForm": {
             "type": "object",

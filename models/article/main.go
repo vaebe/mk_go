@@ -23,8 +23,8 @@ type Article struct {
 // ArticlesRelatedTags 文章关联的标签
 type ArticlesRelatedTags struct {
 	models.BaseModel
-	ArticleId int32 `gorm:"type:int;not null;comment '文章id'" json:"articleId"`
-	TagId     int32 `gorm:"type:int;not null;comment '文章标签id'" json:"tagId"`
+	ArticleId int32  `gorm:"type:int;not null;comment '文章id'" json:"articleId"`
+	TagId     string `gorm:"type:varbinary(100);;not null;comment '文章标签id'" json:"tagId"`
 }
 
 // ArticlesAssociatedColumns 文章关联的专栏
@@ -36,28 +36,15 @@ type ArticlesAssociatedColumns struct {
 
 // SaveForm 文章保存表单
 type SaveForm struct {
-	ID               int32  `json:"id" form:"id"`
-	UserId           int32  `json:"userId" form:"userId" binding:"required"`
-	Title            string `json:"title" form:"title" binding:"required"`
-	Content          string `json:"content" form:"content" binding:"required"`
-	Classify         string `json:"classify" form:"classify" binding:"required"`
-	Tags             string `json:"tags" form:"tags" binding:"required"`
-	CoverImg         string `json:"coverImg" form:"coverImg" binding:"required"`
-	CollectionColumn string `json:"collectionColumn" form:"collectionColumn" binding:"required"`
-	Summary          string `json:"summary" form:"summary" binding:"required"`
-}
-
-// SaveDraftForm 保存草稿表单
-type SaveDraftForm struct {
-	ID               int32  `json:"id" form:"id"`
-	UserId           int32  `json:"userId" form:"userId" binding:"required"`
-	Title            string `json:"title" form:"title" binding:"required"`
-	Content          string `json:"content" form:"content"`
-	Classify         string `json:"classify" form:"classify"`
-	Tags             string `json:"tags" form:"tags"`
-	CoverImg         string `json:"coverImg" form:"coverImg"`
-	CollectionColumn string `json:"collectionColumn" form:"collectionColumn"`
-	Summary          string `json:"summary" form:"summary"`
+	ID               int32    `json:"id" form:"id"`
+	UserId           int32    `json:"userId" form:"userId" binding:"required"`
+	Title            string   `json:"title" form:"title"`
+	Content          string   `json:"content" form:"content" binding:"required"`
+	Classify         string   `json:"classify" form:"classify"`
+	Tags             []string `json:"tags" form:"tags" swaggertype:"array,string"`
+	CoverImg         string   `json:"coverImg" form:"coverImg"`
+	CollectionColumn []int32  `json:"collectionColumn" form:"collectionColumn" swaggertype:"array,int32"`
+	Summary          string   `json:"summary" form:"summary"`
 }
 
 // AllListForm 获取全部文章列表
