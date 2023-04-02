@@ -276,12 +276,18 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
-	userId, _ := ctx.Get("userId")
 	details := article.Article{}
-	res := global.DB.Where("id = ? AND user_id = ?", articleId, userId).First(&details)
+	res := global.DB.Where("id = ?", articleId).First(&details)
 
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, "文章不存在！")
+		return
+	}
+
+	// 查看记录加1
+	res = global.DB.Model(&article.Article{}).Where("id = ?", articleId).UpdateColumn("Views", gorm.Expr("Views + ?", 1))
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
 		return
 	}
 
@@ -293,7 +299,7 @@ func Details(ctx *gin.Context) {
 		Classify:   details.Classify,
 		CoverImg:   details.CoverImg,
 		Summary:    details.Summary,
-		Views:      details.Views,
+		Views:      details.Views + 1,
 		Likes:      details.Likes,
 		Favorites:  details.Favorites,
 		ShowNumber: details.ShowNumber,
