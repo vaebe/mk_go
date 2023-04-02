@@ -277,14 +277,61 @@ func Details(ctx *gin.Context) {
 	}
 
 	userId, _ := ctx.Get("userId")
-	var articles []article.Article
-	res := global.DB.Where("id = ? AND user_id = ?", articleId, userId).First(&articles)
+	details := article.Article{}
+	res := global.DB.Where("id = ? AND user_id = ?", articleId, userId).First(&details)
 
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, "文章不存在！")
 		return
 	}
-	utils.ResponseResultsSuccess(ctx, articles[0])
+
+	result := article.Details{
+		ID:         details.ID,
+		UserId:     details.UserId,
+		Title:      details.Title,
+		Content:    details.Content,
+		Classify:   details.Classify,
+		CoverImg:   details.CoverImg,
+		Summary:    details.Summary,
+		Views:      details.Views,
+		Likes:      details.Likes,
+		Favorites:  details.Favorites,
+		ShowNumber: details.ShowNumber,
+		Status:     details.Status,
+	}
+
+	var columns []article.ArticlesAssociatedColumns
+	res = global.DB.Select("column_id").Where("article_id", details.ID).Find(&columns)
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	for _, v := range columns {
+		result.CollectionColumn = append(result.CollectionColumn, v.ColumnId)
+	}
+
+	// 数据为空返回空数组
+	if len(columns) == 0 {
+		result.CollectionColumn = make([]int32, 0)
+	}
+
+	var tags []article.ArticlesRelatedTags
+	global.DB.Select("tag_id").Where("article_id", details.ID).Find(&tags)
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	if len(tags) == 0 {
+		result.Tags = make([]string, 0)
+	}
+
+	for _, v := range tags {
+		result.Tags = append(result.Tags, v.TagId)
+	}
+
+	utils.ResponseResultsSuccess(ctx, result)
 }
 
 // Review
