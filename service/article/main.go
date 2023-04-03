@@ -28,6 +28,7 @@ func saveArticlesAssociatedColumns(tx *gorm.DB, saveInfo article.SaveForm) error
 		articlesAssociatedColumns = append(articlesAssociatedColumns, articleAssociatedInfo.ArticlesAssociatedColumns{
 			ColumnId:  v,
 			ArticleId: saveInfo.ID,
+			UserId:    saveInfo.UserId,
 		})
 	}
 
@@ -55,6 +56,7 @@ func saveArticlesRelatedTags(tx *gorm.DB, saveInfo article.SaveForm) error {
 		articlesRelatedTags = append(articlesRelatedTags, articleAssociatedInfo.ArticlesRelatedTags{
 			TagId:     v,
 			ArticleId: saveInfo.ID,
+			UserId:    saveInfo.UserId,
 		})
 	}
 
@@ -106,6 +108,14 @@ func SaveArticle(ctx *gin.Context, status string) {
 
 		// 保存文章信息
 		userId, _ := ctx.Get("userId")
+
+		// 验证是否是当前用户的文章
+		if saveForm.UserId != userId {
+			tx.Rollback()
+			utils.ResponseResultsError(ctx, "非当前用户文章不能保存！")
+			return
+		}
+
 		articleInfo.ID = saveForm.ID
 		res := tx.Model(&article.Article{}).Where("id = ? AND user_id = ?", saveForm.ID, userId).Updates(&articleInfo)
 		if res.Error != nil {
