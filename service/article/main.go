@@ -178,21 +178,34 @@ func GetArticleList(ctx *gin.Context) {
 	}
 
 	var articles []article.Article
-	res := global.DB.Where("title LIKE ? AND classify LIKE ? AND status LIKE ?",
-		"%"+listForm.Title+"%", "%"+listForm.Classify+"%", "%"+listForm.Status+"%").Find(&articles)
+	db := global.DB
+
+	if listForm.Title != "" {
+		db = db.Where("title LIKE ?", "%"+listForm.Title+"%")
+	}
+
+	if listForm.Classify != "" {
+		db = db.Where("classify LIKE ?", "%"+listForm.Classify+"%")
+	}
+
+	if listForm.Status != "" {
+		db = db.Where("status = ?", listForm.Status)
+	}
+
+	db.Find(&articles)
 
 	// 存在错误
-	if res.Error != nil {
-		zap.S().Info(res.Error)
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	if db.Error != nil {
+		zap.S().Info(db.Error)
+		utils.ResponseResultsError(ctx, db.Error.Error())
 		return
 	}
 
 	// 获取总数
-	total := int32(res.RowsAffected)
+	total := int32(db.RowsAffected)
 
 	// 分页
-	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
+	db.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
 
 	for i := range articles {
 		articles[i].Content = ""
