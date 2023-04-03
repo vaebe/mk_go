@@ -102,15 +102,15 @@ func Delete(ctx *gin.Context) {
 //	@Security		ApiKeyAuth
 //	@Router			/articleColumn/details [get]
 func Details(ctx *gin.Context) {
-	enumsId := ctx.Query("id")
+	columnId := ctx.Query("id")
 
-	if enumsId == "" {
+	if columnId == "" {
 		utils.ResponseResultsError(ctx, "专栏id不能为空！")
 		return
 	}
 
 	columnInfo := articleColumn.ArticleColumn{}
-	res := global.DB.Model(&articleColumn.ArticleColumn{}).Where("id = ?", enumsId).First(&columnInfo)
+	res := global.DB.Model(&articleColumn.ArticleColumn{}).Where("id = ?", columnId).First(&columnInfo)
 
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, res.Error.Error())
@@ -142,30 +142,30 @@ func List(ctx *gin.Context) {
 
 	userId, _ := ctx.Get("userId")
 	var articleColumnList []articleColumn.ArticleColumn
-	res := global.DB.Where("user_id = ? ", userId)
+	db := global.DB.Where("user_id = ? ", userId)
 
 	if listForm.Name != "" {
-		res.Where("name LIKE ?", "%"+listForm.Name+"%")
+		db.Where("name LIKE ?", "%"+listForm.Name+"%")
 	}
 
 	if listForm.Status != "" {
-		res.Where("status = ?", listForm.Status)
+		db.Where("status = ?", listForm.Status)
 	}
 
-	res.Find(&articleColumnList)
+	db.Find(&articleColumnList)
 
 	// 存在错误
-	if res.Error != nil {
-		zap.S().Info(res.Error)
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	if db.Error != nil {
+		zap.S().Info(db.Error)
+		utils.ResponseResultsError(ctx, db.Error.Error())
 		return
 	}
 
 	// 获取总数
-	total := int32(res.RowsAffected)
+	total := int32(db.RowsAffected)
 
 	// 分页
-	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articleColumnList)
+	db.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articleColumnList)
 
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
 		PageSize: listForm.PageSize,

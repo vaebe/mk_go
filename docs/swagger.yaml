@@ -429,6 +429,33 @@ paths:
       summary: 获取专栏详情
       tags:
       - articleColumn专栏
+  /articleColumn/getAssociatedArticlesList:
+    get:
+      consumes:
+      - application/json
+      description: 获取专栏关联文章列表
+      parameters:
+      - description: 专栏id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取专栏关联文章列表
+      tags:
+      - articleColumn专栏
   /articleColumn/getList:
     post:
       consumes:
