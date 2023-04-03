@@ -46,9 +46,18 @@ func InitMysql() {
 		panic(err)
 	}
 
-	// 自动建表
-	err = global.DB.AutoMigrate(&user.User{}, &article.Article{}, &articleAssociatedInfo.ArticlesAssociatedColumns{}, &articleAssociatedInfo.ArticlesRelatedTags{}, &enum.Enum{}, &articleColumn.ArticleColumn{})
-	if err != nil {
-		panic(err)
+	if global.MysqlConfig.AutoMigrate {
+		err = global.DB.AutoMigrate(
+			&user.User{},
+			&article.Article{},
+			&articleAssociatedInfo.ArticlesAssociatedColumns{},
+			&articleAssociatedInfo.ArticlesRelatedTags{},
+			&enum.Enum{},
+			&articleColumn.ArticleColumn{},
+		)
+		// 自动建表
+		if err != nil {
+			panic(err)
+		}
 	}
 }
