@@ -13,7 +13,8 @@ import (
 
 // 保存关联专栏信息
 func saveArticlesAssociatedColumns(tx *gorm.DB, saveInfo article.SaveForm) error {
-	res := tx.Where("id = ?", saveInfo.ID).Delete(&articleAssociatedInfo.ArticlesAssociatedColumns{})
+	// 关联信息直接删除
+	res := tx.Where("id = ?", saveInfo.ID).Unscoped().Delete(&articleAssociatedInfo.ArticlesAssociatedColumns{})
 	if res.Error != nil {
 		return res.Error
 	}
@@ -40,7 +41,7 @@ func saveArticlesAssociatedColumns(tx *gorm.DB, saveInfo article.SaveForm) error
 
 // 保存文章关联标签信息
 func saveArticlesRelatedTags(tx *gorm.DB, saveInfo article.SaveForm) error {
-	res := tx.Where("id = ?", saveInfo.ID).Delete(&articleAssociatedInfo.ArticlesRelatedTags{})
+	res := tx.Where("id = ?", saveInfo.ID).Unscoped().Delete(&articleAssociatedInfo.ArticlesRelatedTags{})
 	if res.Error != nil {
 		return res.Error
 	}
