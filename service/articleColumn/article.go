@@ -152,6 +152,7 @@ func AddAssociatedArticle(ctx *gin.Context) {
 
 	// 验证通过创建关联信息
 	res = global.DB.Create(&articleAssociatedInfo.ArticlesAssociatedColumns{
+		UserId:    articleInfo.UserId,
 		ArticleId: saveForm.ArticleId,
 		ColumnId:  saveForm.ColumnId,
 	})
