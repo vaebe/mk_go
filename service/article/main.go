@@ -7,12 +7,13 @@ import (
 	"mk/global"
 	"mk/models"
 	"mk/models/article"
+	"mk/models/articleAssociatedInfo"
 	"mk/utils"
 )
 
 // 保存关联专栏信息
 func saveArticlesAssociatedColumns(tx *gorm.DB, saveInfo article.SaveForm) error {
-	res := tx.Where("id = ?", saveInfo.ID).Delete(&article.ArticlesAssociatedColumns{})
+	res := tx.Where("id = ?", saveInfo.ID).Delete(&articleAssociatedInfo.ArticlesAssociatedColumns{})
 	if res.Error != nil {
 		return res.Error
 	}
@@ -21,9 +22,9 @@ func saveArticlesAssociatedColumns(tx *gorm.DB, saveInfo article.SaveForm) error
 		return nil
 	}
 
-	var articlesAssociatedColumns []article.ArticlesAssociatedColumns
+	var articlesAssociatedColumns []articleAssociatedInfo.ArticlesAssociatedColumns
 	for _, v := range saveInfo.CollectionColumn {
-		articlesAssociatedColumns = append(articlesAssociatedColumns, article.ArticlesAssociatedColumns{
+		articlesAssociatedColumns = append(articlesAssociatedColumns, articleAssociatedInfo.ArticlesAssociatedColumns{
 			ColumnId:  v,
 			ArticleId: saveInfo.ID,
 		})
@@ -39,7 +40,7 @@ func saveArticlesAssociatedColumns(tx *gorm.DB, saveInfo article.SaveForm) error
 
 // 保存文章关联标签信息
 func saveArticlesRelatedTags(tx *gorm.DB, saveInfo article.SaveForm) error {
-	res := tx.Where("id = ?", saveInfo.ID).Delete(&article.ArticlesRelatedTags{})
+	res := tx.Where("id = ?", saveInfo.ID).Delete(&articleAssociatedInfo.ArticlesRelatedTags{})
 	if res.Error != nil {
 		return res.Error
 	}
@@ -48,9 +49,9 @@ func saveArticlesRelatedTags(tx *gorm.DB, saveInfo article.SaveForm) error {
 		return nil
 	}
 
-	var articlesRelatedTags []article.ArticlesRelatedTags
+	var articlesRelatedTags []articleAssociatedInfo.ArticlesRelatedTags
 	for _, v := range saveInfo.Tags {
-		articlesRelatedTags = append(articlesRelatedTags, article.ArticlesRelatedTags{
+		articlesRelatedTags = append(articlesRelatedTags, articleAssociatedInfo.ArticlesRelatedTags{
 			TagId:     v,
 			ArticleId: saveInfo.ID,
 		})
@@ -307,7 +308,7 @@ func Details(ctx *gin.Context) {
 		UpdatedAt:  details.UpdatedAt,
 	}
 
-	var columns []article.ArticlesAssociatedColumns
+	var columns []articleAssociatedInfo.ArticlesAssociatedColumns
 	res = global.DB.Select("column_id").Where("article_id", details.ID).Find(&columns)
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, res.Error.Error())
@@ -323,7 +324,7 @@ func Details(ctx *gin.Context) {
 		result.CollectionColumn = make([]int32, 0)
 	}
 
-	var tags []article.ArticlesRelatedTags
+	var tags []articleAssociatedInfo.ArticlesRelatedTags
 	global.DB.Select("tag_id").Where("article_id", details.ID).Find(&tags)
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, res.Error.Error())

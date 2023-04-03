@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"mk/global"
 	"mk/models/article"
+	"mk/models/articleAssociatedInfo"
 	"mk/utils"
 )
 
@@ -29,7 +30,7 @@ func GetAssociatedArticlesList(ctx *gin.Context) {
 
 	// 查询专栏关联文章
 	var articleIds []int32
-	var articlesAssociatedColumns []article.ArticlesAssociatedColumns
+	var articlesAssociatedColumns []articleAssociatedInfo.ArticlesAssociatedColumns
 	res := global.DB.Select("article_id").Where("column_id = ?", columnId).Find(&articlesAssociatedColumns)
 
 	if res.Error != nil {

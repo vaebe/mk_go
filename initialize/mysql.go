@@ -9,6 +9,7 @@ import (
 	"log"
 	"mk/global"
 	"mk/models/article"
+	"mk/models/articleAssociatedInfo"
 	"mk/models/articleColumn"
 	"mk/models/enum"
 	"mk/models/user"
@@ -46,7 +47,7 @@ func InitMysql() {
 	}
 
 	// 自动建表
-	err = global.DB.AutoMigrate(&user.User{}, &article.Article{}, &article.ArticlesAssociatedColumns{}, &article.ArticlesRelatedTags{}, &enum.Enum{}, &articleColumn.ArticleColumn{})
+	err = global.DB.AutoMigrate(&user.User{}, &article.Article{}, &articleAssociatedInfo.ArticlesAssociatedColumns{}, &articleAssociatedInfo.ArticlesRelatedTags{}, &enum.Enum{}, &articleColumn.ArticleColumn{})
 	if err != nil {
 		panic(err)
 	}
