@@ -15,5 +15,7 @@ func LoadArticleColumnRouter(r *gin.RouterGroup) {
 		routes.POST("/getList", articleColumn.List)
 		routes.POST("/review", articleColumn.Review)
 		routes.GET("/getAssociatedArticlesList", articleColumn.GetAssociatedArticlesList)
+		routes.POST("/deleteAssociatedArticle", articleColumn.DeleteAssociatedArticle)
+		routes.POST("/addAssociatedArticle", articleColumn.AddAssociatedArticle)
 	}
 }

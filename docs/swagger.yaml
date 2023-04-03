@@ -55,6 +55,16 @@ definitions:
     - pageNo
     - pageSize
     type: object
+  articleAssociatedInfo.ArticlesAssociatedColumnsForm:
+    properties:
+      articleId:
+        type: integer
+      columnId:
+        type: integer
+    required:
+    - articleId
+    - columnId
+    type: object
   articleColumn.ListForm:
     properties:
       name:
@@ -402,6 +412,34 @@ paths:
       summary: 保存草稿
       tags:
       - article文章
+  /articleColumn/addAssociatedArticle:
+    post:
+      consumes:
+      - application/json
+      description: 添加关联文章
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/articleAssociatedInfo.ArticlesAssociatedColumnsForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 添加关联文章
+      tags:
+      - articleColumn专栏
   /articleColumn/delete:
     delete:
       consumes:
@@ -427,6 +465,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 根据id删除专栏
+      tags:
+      - articleColumn专栏
+  /articleColumn/deleteAssociatedArticle:
+    post:
+      consumes:
+      - application/json
+      description: 删除关联文章
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/articleAssociatedInfo.ArticlesAssociatedColumnsForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 删除关联文章
       tags:
       - articleColumn专栏
   /articleColumn/details:

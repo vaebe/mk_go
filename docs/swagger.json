@@ -312,6 +312,51 @@
                 }
             }
         },
+        "/articleColumn/addAssociatedArticle": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "添加关联文章",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "添加关联文章",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/articleAssociatedInfo.ArticlesAssociatedColumnsForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/articleColumn/delete": {
             "delete": {
                 "security": [
@@ -337,6 +382,51 @@
                         "name": "id",
                         "in": "query",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
+        "/articleColumn/deleteAssociatedArticle": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "删除关联文章",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "删除关联文章",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/articleAssociatedInfo.ArticlesAssociatedColumnsForm"
+                        }
                     }
                 ],
                 "responses": {
@@ -1151,6 +1241,21 @@
                     "description": "1草稿 2待审核 3审核未通过 4已发布",
                     "type": "string",
                     "example": "1"
+                }
+            }
+        },
+        "articleAssociatedInfo.ArticlesAssociatedColumnsForm": {
+            "type": "object",
+            "required": [
+                "articleId",
+                "columnId"
+            ],
+            "properties": {
+                "articleId": {
+                    "type": "integer"
+                },
+                "columnId": {
+                    "type": "integer"
                 }
             }
         },
