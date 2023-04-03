@@ -15,5 +15,6 @@ func LoadArticleRouter(r *gin.RouterGroup) {
 		routes.POST("/getUserArticleList", article.GetUserArticleList)
 		routes.GET("/getArticleDetails", article.Details)
 		routes.POST("/review", article.Review)
+		routes.DELETE("/delete", article.Delete)
 	}
 }

@@ -356,6 +356,42 @@ func Details(ctx *gin.Context) {
 	utils.ResponseResultsSuccess(ctx, result)
 }
 
+// Delete
+//
+//	@Summary		文章删除
+//	@Description	文章删除
+//	@Tags			article文章
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"文章id"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/article/delete [delete]
+func Delete(ctx *gin.Context) {
+	articleId := ctx.Query("id")
+
+	if articleId == "" {
+		utils.ResponseResultsError(ctx, "文章id不能为空！")
+		return
+	}
+
+	userId, _ := ctx.Get("userId")
+	res := global.DB.Where("id = ? AND user_id = ?", articleId, userId).Delete(&article.Article{})
+
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	if res.RowsAffected == 0 {
+		utils.ResponseResultsError(ctx, "需要删除的数据不存在！")
+		return
+	}
+
+	utils.ResponseResultsSuccess(ctx, "删除成功！")
+}
+
 // Review
 //
 //	@Summary		文章审核

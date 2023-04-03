@@ -210,6 +210,33 @@ info:
   contact:
     name: API Support
 paths:
+  /article/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 文章删除
+      parameters:
+      - description: 文章id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 文章删除
+      tags:
+      - article文章
   /article/getArticleDetails:
     get:
       consumes:

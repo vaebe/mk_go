@@ -80,8 +80,7 @@ func Delete(ctx *gin.Context) {
 	userId, _ := ctx.Get("userId")
 	res := global.DB.Where("id = ? AND user_id = ?", columnId, userId).Delete(&articleColumn.ArticleColumn{})
 
-	total := res.RowsAffected
-	if total == 0 {
+	if res.RowsAffected == 0 {
 		utils.ResponseResultsError(ctx, "需要删除的数据不存在！")
 		return
 	}
