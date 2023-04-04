@@ -577,6 +577,33 @@ paths:
       summary: 获取专栏列表
       tags:
       - articleColumn专栏
+  /articleColumn/listArticlesThatCanBeIncluded:
+    get:
+      consumes:
+      - application/json
+      description: 获取可以被收录的文章列表
+      parameters:
+      - description: 专栏id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取可以被收录的文章列表
+      tags:
+      - articleColumn专栏
   /articleColumn/review:
     post:
       consumes:

@@ -30,9 +30,9 @@ func GetAssociatedArticlesList(ctx *gin.Context) {
 	}
 
 	// 查询专栏关联文章
-	var articleIds []int32
-	var articlesAssociatedColumns []articleAssociatedInfo.ArticlesAssociatedColumns
-	res := global.DB.Select("article_id").Where("column_id = ?", columnId).Find(&articlesAssociatedColumns)
+
+	var linkedData []articleAssociatedInfo.ArticlesAssociatedColumns
+	res := global.DB.Select("article_id").Where("column_id = ?", columnId).Find(&linkedData)
 
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, res.Error.Error())
@@ -40,14 +40,73 @@ func GetAssociatedArticlesList(ctx *gin.Context) {
 	}
 
 	// 获取文章id数组
-	for _, v := range articlesAssociatedColumns {
-		articleIds = append(articleIds, v.ArticleId)
+	articleIdsMap := make(map[int32]bool)
+	for _, v := range linkedData {
+		articleIdsMap[v.ArticleId] = true
+	}
+
+	articleIds := make([]int32, 0, len(articleIdsMap))
+	for id := range articleIdsMap {
+		articleIds = append(articleIds, id)
 	}
 
 	// 根据文章id 查询返回
 	var articles []article.Article
 	res = global.DB.Where("id IN ?", articleIds).Find(&articles)
 
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	utils.ResponseResultsSuccess(ctx, articles)
+}
+
+// ListArticlesThatCanBeIncluded
+//
+//	@Summary			获取可以被收录的文章列表
+//	@Description	获取可以被收录的文章列表
+//	@Tags					articleColumn专栏
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"专栏id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/articleColumn/listArticlesThatCanBeIncluded [get]
+func ListArticlesThatCanBeIncluded(ctx *gin.Context) {
+	columnId := ctx.Query("id")
+
+	if columnId == "" {
+		utils.ResponseResultsError(ctx, "专栏id不能为空！")
+		return
+	}
+
+	// 获取关联次数大于2 或者是当前专栏关联的文章 = 不可以被再次关联
+	var linkedData []articleAssociatedInfo.ArticlesAssociatedColumns
+	res := global.DB.Where("article_id IN (?) OR id != ?",
+		global.DB.Table("articles_associated_columns").Select("article_id").Group("article_id").Having("COUNT(*) > 2"), columnId).
+		Find(&linkedData)
+
+	if res.Error != nil {
+		utils.ResponseResultsError(ctx, res.Error.Error())
+		return
+	}
+
+	// 获取文章id数组
+	articleIdsMap := make(map[int32]bool)
+	for _, v := range linkedData {
+		articleIdsMap[v.ArticleId] = true
+	}
+
+	articleIds := make([]int32, 0, len(articleIdsMap))
+	for id := range articleIdsMap {
+		articleIds = append(articleIds, id)
+	}
+
+	// 查询可以关联的数据
+	var articles []article.Article
+	res = global.DB.Where("NOT id IN (?) AND status = ?", articleIds, "4").Find(&articles)
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, res.Error.Error())
 		return

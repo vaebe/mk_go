@@ -587,6 +587,49 @@ const docTemplate = `{
                 }
             }
         },
+        "/articleColumn/listArticlesThatCanBeIncluded": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "获取可以被收录的文章列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "articleColumn专栏"
+                ],
+                "summary": "获取可以被收录的文章列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "专栏id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/articleColumn/review": {
             "post": {
                 "security": [
