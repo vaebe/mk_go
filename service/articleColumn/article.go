@@ -106,9 +106,17 @@ func ListArticlesThatCanBeIncluded(ctx *gin.Context) {
 
 	// 查询可以关联的数据
 	var articles []article.Article
-	res = global.DB.Where("NOT id IN (?) AND status = ?", articleIds, "4").Find(&articles)
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	db := global.DB.Where("status = ?", "4").Find(&articles)
+
+	// ids 不存在无需查询
+	if len(articleIds) != 0 {
+		db.Where("NOT id IN (?)", articleIds)
+	}
+
+	db.Find(&articles)
+
+	if db.Error != nil {
+		utils.ResponseResultsError(ctx, db.Error.Error())
 		return
 	}
 
@@ -181,9 +189,11 @@ func AddAssociatedArticle(ctx *gin.Context) {
 		return
 	}
 
-	if columnInfo.UserId != userId {
-		utils.ResponseResultsError(ctx, "非本用户的专栏无法关联！")
-		return
+	if val, ok := userId.(int32); ok {
+		if columnInfo.UserId != val {
+			utils.ResponseResultsError(ctx, "非本用户的专栏无法关联！")
+			return
+		}
 	}
 
 	if columnInfo.Status != "3" {
@@ -199,9 +209,11 @@ func AddAssociatedArticle(ctx *gin.Context) {
 		return
 	}
 
-	if articleInfo.UserId != userId {
-		utils.ResponseResultsError(ctx, "非本用户的文章无法关联！")
-		return
+	if val, ok := userId.(int32); ok {
+		if articleInfo.UserId != val {
+			utils.ResponseResultsError(ctx, "非本用户的文章无法关联！")
+			return
+		}
 	}
 
 	if articleInfo.Status != "4" {
