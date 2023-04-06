@@ -269,8 +269,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
-      security:
-      - ApiKeyAuth: []
       summary: 获取文章详情
       tags:
       - article文章

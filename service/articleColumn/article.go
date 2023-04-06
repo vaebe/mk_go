@@ -194,6 +194,9 @@ func AddAssociatedArticle(ctx *gin.Context) {
 			utils.ResponseResultsError(ctx, "非本用户的专栏无法关联！")
 			return
 		}
+	} else {
+		utils.ResponseResultsError(ctx, "获取用户id失败！")
+		return
 	}
 
 	if columnInfo.Status != "3" {
@@ -214,6 +217,9 @@ func AddAssociatedArticle(ctx *gin.Context) {
 			utils.ResponseResultsError(ctx, "非本用户的文章无法关联！")
 			return
 		}
+	} else {
+		utils.ResponseResultsError(ctx, "获取用户id失败！")
+		return
 	}
 
 	if articleInfo.Status != "4" {

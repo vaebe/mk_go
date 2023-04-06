@@ -106,16 +106,20 @@ func SaveArticle(ctx *gin.Context, status string) {
 			}
 		}()
 
-		// 保存文章信息
-		userId, _ := ctx.Get("userId")
-
 		// 验证是否是当前用户的文章
-		if saveForm.UserId != userId {
-			tx.Rollback()
-			utils.ResponseResultsError(ctx, "非当前用户文章不能保存！")
+		userId, _ := ctx.Get("userId")
+		if val, ok := userId.(int32); ok {
+			if saveForm.UserId != val {
+				tx.Rollback()
+				utils.ResponseResultsError(ctx, "非当前用户文章不能保存！")
+				return
+			}
+		} else {
+			utils.ResponseResultsError(ctx, "获取用户id失败！")
 			return
 		}
 
+		// 保存文章信息
 		articleInfo.ID = saveForm.ID
 		res := tx.Model(&article.Article{}).Where("id = ? AND user_id = ?", saveForm.ID, userId).Updates(&articleInfo)
 		if res.Error != nil {
@@ -291,7 +295,6 @@ func GetUserArticleList(ctx *gin.Context) {
 //	@Param			id	query		int	true	"文章id"
 //	@Success		200	{object}	utils.ResponseResultInfo
 //	@Failure		500	{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
 //	@Router			/article/getArticleDetails [get]
 func Details(ctx *gin.Context) {
 	articleId := ctx.Query("id")

@@ -62,11 +62,6 @@ const docTemplate = `{
         },
         "/article/getArticleDetails": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取文章详情",
                 "consumes": [
                     "application/json"
