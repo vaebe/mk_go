@@ -715,6 +715,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/commentInfo/save": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "保存评论信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "commentInfo评论"
+                ],
+                "summary": "保存评论信息",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/commentInfo.SaveForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/enum/delete": {
             "delete": {
                 "security": [
@@ -1369,6 +1414,39 @@ const docTemplate = `{
                 },
                 "name": {
                     "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "commentInfo.SaveForm": {
+            "type": "object",
+            "required": [
+                "commentText",
+                "objId",
+                "userId"
+            ],
+            "properties": {
+                "commentText": {
+                    "type": "string"
+                },
+                "imgUrl": {
+                    "type": "string"
+                },
+                "objId": {
+                    "type": "integer"
+                },
+                "parentCommentId": {
+                    "type": "integer"
+                },
+                "replyUserId": {
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "评论类型 1 文章 2沸点",
+                    "type": "string",
+                    "example": "1"
                 },
                 "userId": {
                     "type": "integer"

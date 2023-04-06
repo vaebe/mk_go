@@ -5,8 +5,8 @@ import (
 	"mk/service/enum"
 )
 
-// LoadEnumRouter 加载枚举路由
-func LoadEnumRouter(r *gin.RouterGroup) {
+// LoadRouter 加载枚举路由
+func LoadRouter(r *gin.RouterGroup) {
 	routes := r.Group("enum")
 	{
 		routes.POST("/save", enum.Save)

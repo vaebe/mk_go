@@ -5,8 +5,8 @@ import (
 	"mk/service/articleColumn"
 )
 
-// LoadArticleColumnRouter 加载文章专栏路由
-func LoadArticleColumnRouter(r *gin.RouterGroup) {
+// LoadRouter 加载文章专栏路由
+func LoadRouter(r *gin.RouterGroup) {
 	routes := r.Group("articleColumn")
 	{
 		routes.POST("/save", articleColumn.Save)

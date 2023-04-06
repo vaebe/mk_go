@@ -7,6 +7,7 @@ import (
 	middlewares "mk/middleware"
 	"mk/routers/article"
 	"mk/routers/articleColumn"
+	"mk/routers/commentInfo"
 	"mk/routers/enum"
 	"mk/routers/file"
 	"mk/routers/user"
@@ -18,17 +19,20 @@ import (
 // @name						Authorization
 func main() {
 	// 路由白名单
-	routerWhiteList := []string{"/mk/user/login", "/mk/article/getArticleList", "/mk/user/register", "/swagger/index.html", "/favicon.ico"}
+	routerWhiteList := []string{"/mk/user/login", "/mk/article/getArticleList",
+		"/mk/article/getArticleDetails", "/mk/user/register",
+		"/swagger/index.html", "/favicon.ico"}
 
 	r := gin.Default()
 	r.Use(middlewares.Cors(), middlewares.JWTAuth(routerWhiteList))
 	baseRouter := r.Group("/mk")
 	{
-		user.LoadUserRouter(baseRouter)
-		article.LoadArticleRouter(baseRouter)
-		enum.LoadEnumRouter(baseRouter)
-		articleColumn.LoadArticleColumnRouter(baseRouter)
-		file.LoadFileRouter(baseRouter)
+		user.LoadRouter(baseRouter)
+		article.LoadRouter(baseRouter)
+		enum.LoadRouter(baseRouter)
+		articleColumn.LoadRouter(baseRouter)
+		file.LoadRouter(baseRouter)
+		commentInfo.LoadRouter(baseRouter)
 	}
 
 	port := 53105

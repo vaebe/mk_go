@@ -112,6 +112,29 @@ definitions:
     - name
     - userId
     type: object
+  commentInfo.SaveForm:
+    properties:
+      commentText:
+        type: string
+      imgUrl:
+        type: string
+      objId:
+        type: integer
+      parentCommentId:
+        type: integer
+      replyUserId:
+        type: integer
+      type:
+        description: 评论类型 1 文章 2沸点
+        example: "1"
+        type: string
+      userId:
+        type: integer
+    required:
+    - commentText
+    - objId
+    - userId
+    type: object
   enum.ListForm:
     properties:
       name:
@@ -658,6 +681,34 @@ paths:
       summary: 保存专栏
       tags:
       - articleColumn专栏
+  /commentInfo/save:
+    post:
+      consumes:
+      - application/json
+      description: 保存评论信息
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/commentInfo.SaveForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 保存评论信息
+      tags:
+      - commentInfo评论
   /enum/delete:
     delete:
       consumes:

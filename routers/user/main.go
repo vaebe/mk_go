@@ -5,7 +5,8 @@ import (
 	"mk/service/user"
 )
 
-func LoadUserRouter(r *gin.RouterGroup) {
+// LoadRouter 加载用户信息路由
+func LoadRouter(r *gin.RouterGroup) {
 	routes := r.Group("user")
 	{
 		routes.POST("/login", user.Login)
