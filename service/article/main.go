@@ -108,14 +108,9 @@ func SaveArticle(ctx *gin.Context, status string) {
 
 		// 验证是否是当前用户的文章
 		userId, _ := ctx.Get("userId")
-		if val, ok := userId.(int32); ok {
-			if saveForm.UserId != val {
-				tx.Rollback()
-				utils.ResponseResultsError(ctx, "非当前用户文章不能保存！")
-				return
-			}
-		} else {
-			utils.ResponseResultsError(ctx, "获取用户id失败！")
+		if saveForm.UserId != userId {
+			tx.Rollback()
+			utils.ResponseResultsError(ctx, "非当前用户文章不能保存！")
 			return
 		}
 

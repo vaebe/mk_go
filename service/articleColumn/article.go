@@ -189,13 +189,8 @@ func AddAssociatedArticle(ctx *gin.Context) {
 		return
 	}
 
-	if val, ok := userId.(int32); ok {
-		if columnInfo.UserId != val {
-			utils.ResponseResultsError(ctx, "非本用户的专栏无法关联！")
-			return
-		}
-	} else {
-		utils.ResponseResultsError(ctx, "获取用户id失败！")
+	if columnInfo.UserId != userId {
+		utils.ResponseResultsError(ctx, "非本用户的专栏无法关联！")
 		return
 	}
 
@@ -212,13 +207,8 @@ func AddAssociatedArticle(ctx *gin.Context) {
 		return
 	}
 
-	if val, ok := userId.(int32); ok {
-		if articleInfo.UserId != val {
-			utils.ResponseResultsError(ctx, "非本用户的文章无法关联！")
-			return
-		}
-	} else {
-		utils.ResponseResultsError(ctx, "获取用户id失败！")
+	if articleInfo.UserId != userId {
+		utils.ResponseResultsError(ctx, "非本用户的文章无法关联！")
 		return
 	}
 
