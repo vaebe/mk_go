@@ -11,6 +11,7 @@ import (
 	"mk/models/article"
 	"mk/models/articleAssociatedInfo"
 	"mk/models/articleColumn"
+	"mk/models/commentInfo"
 	"mk/models/enum"
 	"mk/models/user"
 	"os"
@@ -54,6 +55,7 @@ func InitMysql() {
 			&articleAssociatedInfo.ArticlesRelatedTags{},
 			&enum.Enum{},
 			&articleColumn.ArticleColumn{},
+			&commentInfo.CommentInfo{},
 		)
 		// 自动建表
 		if err != nil {

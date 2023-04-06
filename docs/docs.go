@@ -715,6 +715,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/commentInfo/getListById": {
+            "get": {
+                "description": "根据id获取评论列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "commentInfo评论"
+                ],
+                "summary": "根据id获取评论列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "对象id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/commentInfo/save": {
             "post": {
                 "security": [
@@ -1425,6 +1463,7 @@ const docTemplate = `{
             "required": [
                 "commentText",
                 "objId",
+                "type",
                 "userId"
             ],
             "properties": {

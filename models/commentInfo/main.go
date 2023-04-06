@@ -24,10 +24,5 @@ type SaveForm struct {
 	ReplyUserId     int32  `json:"replyUserId" form:"replyUserId"`
 	CommentText     string `json:"commentText" form:"commentText" binding:"required"`
 	ImgUrl          string `json:"imgUrl" form:"imgUrl"`
-	Type            string `json:"type" form:"type" example:"1"` // 评论类型 1 文章 2沸点
-}
-
-// DetailForm 获取文章评论详情
-type DetailForm struct {
-	ObjId int32 `json:"objId" form:"objId" binding:"required"`
+	Type            string `json:"type" form:"type" example:"1" binding:"required"` // 评论类型 1 文章 2沸点
 }
