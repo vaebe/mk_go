@@ -184,3 +184,34 @@ func GetListById(ctx *gin.Context) {
 
 	utils.ResponseResultsSuccess(ctx, tree)
 }
+
+// Delete
+//
+//	@Summary		根据id删除评论
+//	@Description	根据id删除评论
+//	@Tags			commentInfo评论
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		int	true	"评论id"
+//	@Success		200	{object}	utils.ResponseResultInfo
+//	@Failure		500	{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/commentInfo/delete [delete]
+func Delete(ctx *gin.Context) {
+	dataId := ctx.Query("id")
+
+	if dataId == "" {
+		utils.ResponseResultsError(ctx, "专栏id不能为空！")
+		return
+	}
+
+	userId, _ := ctx.Get("userId")
+	res := global.DB.Where("id = ? AND user_id = ?", dataId, userId).Delete(&commentInfo.CommentInfo{})
+
+	if res.RowsAffected == 0 {
+		utils.ResponseResultsError(ctx, "需要删除的数据不存在！")
+		return
+	}
+
+	utils.ResponseResultsSuccess(ctx, "删除成功！")
+}

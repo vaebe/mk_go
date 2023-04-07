@@ -11,5 +11,6 @@ func LoadRouter(r *gin.RouterGroup) {
 	{
 		routes.POST("/save", commentInfo.Save)
 		routes.GET("/getListById", commentInfo.GetListById)
+		routes.GET("/delete", commentInfo.Delete)
 	}
 }

@@ -681,6 +681,33 @@ paths:
       summary: 保存专栏
       tags:
       - articleColumn专栏
+  /commentInfo/delete:
+    delete:
+      consumes:
+      - application/json
+      description: 根据id删除评论
+      parameters:
+      - description: 评论id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 根据id删除评论
+      tags:
+      - commentInfo评论
   /commentInfo/getListById:
     get:
       consumes:
