@@ -89,7 +89,7 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 // JWTAuth token校验
 func JWTAuth(whitelist []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		curRoutePath := c.Request.RequestURI
+		curRoutePath := c.Request.URL.Path
 		// 白名单路由内不验证token
 		isWhitelistRouting := funk.Contains(whitelist, curRoutePath)
 		// swagger 路由不验证token

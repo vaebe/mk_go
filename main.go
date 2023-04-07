@@ -19,9 +19,15 @@ import (
 // @name						Authorization
 func main() {
 	// 路由白名单
-	routerWhiteList := []string{"/mk/user/login", "/mk/article/getArticleList",
-		"/mk/article/getArticleDetails", "/mk/user/register",
-		"/swagger/index.html", "/favicon.ico"}
+	routerWhiteList := []string{
+		"/mk/user/login",
+		"/mk/user/register",
+		"/mk/article/getArticleList",
+		"/mk/article/getArticleDetails",
+		"/mk/commentInfo/getListById",
+		"/swagger/index.html",
+		"/favicon.ico",
+	}
 
 	r := gin.Default()
 	r.Use(middlewares.Cors(), middlewares.JWTAuth(routerWhiteList))
