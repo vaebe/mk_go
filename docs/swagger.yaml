@@ -122,19 +122,18 @@ definitions:
         type: integer
       parentCommentId:
         type: integer
+      replyInfoId:
+        type: integer
       replyUserId:
         type: integer
       type:
         description: 评论类型 1 文章 2沸点
         example: "1"
         type: string
-      userId:
-        type: integer
     required:
     - commentText
     - objId
     - type
-    - userId
     type: object
   enum.ListForm:
     properties:

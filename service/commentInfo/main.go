@@ -28,10 +28,12 @@ func Save(ctx *gin.Context) {
 		return
 	}
 
+	userId, _ := ctx.Get("userId")
 	saveInfo := commentInfo.CommentInfo{
 		ObjId:           saveForm.ObjId,
 		ParentCommentId: saveForm.ParentCommentId,
-		UserId:          saveForm.UserId,
+		ReplyInfoId:     saveForm.ReplyInfoId,
+		UserId:          userId.(int32),
 		ReplyUserId:     saveForm.ReplyUserId,
 		CommentText:     saveForm.CommentText,
 		ImgUrl:          saveForm.ImgUrl,
@@ -47,25 +49,53 @@ func Save(ctx *gin.Context) {
 }
 
 type ItemType struct {
-	ID              int32
-	ParentCommentId int32
-	ObjId           int32
-	UserId          int32
-	ReplyUserId     int32
-	CommentText     string
-	ImgUrl          string
-	Type            string
-	NickName        string
-	UserAvatar      string
-	Posts           string
+	commentInfo.CommentInfo
+	ReplyInfoText string    `json:"replyInfoText"`
+	Level         int32     `json:"level"`
+	UserInfo      user.User `json:"userInfo"`
+	ReplyUserInfo user.User `json:"replyUserInfo"`
 }
 
 type TreeItem struct {
 	ItemType
-	Children []*TreeItem
+	Children []*TreeItem `json:"children"`
 }
 
 type IdMapTreeType map[int32]*TreeItem
+
+// 获取以 id 做 key 的用户信息对象
+func getUserInfoMapWithIdAskey(infoList []commentInfo.CommentInfo) (map[int32]user.User, error) {
+	// 获取信息中的全部 userId map 可以去重
+	userIdsMap := make(map[int32]bool)
+	for _, v := range infoList {
+		userIdsMap[v.UserId] = true
+
+		if v.ReplyUserId != 0 {
+			userIdsMap[v.ReplyUserId] = true
+		}
+	}
+
+	// 获取userIds list 数据
+	userIds := make([]int32, 0, len(userIdsMap))
+	for id := range userIdsMap {
+		userIds = append(userIds, id)
+	}
+
+	// 查询用户信息数据
+	var userList []user.User
+	res := global.DB.Select("id", "nick_name", "user_avatar", "posts").Where("id in (?)", userIds).Find(&userList)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
+	userInfoMap := make(map[int32]user.User)
+	for _, v := range userList {
+		userInfoMap[v.ID] = v
+	}
+
+	return userInfoMap, nil
+}
 
 // GetListById
 //
@@ -88,14 +118,31 @@ func GetListById(ctx *gin.Context) {
 
 	var infoList []commentInfo.CommentInfo
 	res := global.DB.Where("obj_id = ?", objId).Find(&infoList)
-
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, res.Error.Error())
 		return
 	}
 
-	var userInfoObj map[int32]user.User
+	// 没有评论直接返回空list，无需执行后续操作
+	if len(infoList) == 0 {
+		utils.ResponseResultsSuccess(ctx, infoList)
+		return
+	}
 
+	// 以id做key的评论信息对象
+	commentInfoMap := make(map[int32]commentInfo.CommentInfo)
+	for _, v := range infoList {
+		commentInfoMap[v.ID] = v
+	}
+
+	// 获取以用户 id 做 key 的用户信息对象
+	userinfoMap, err := getUserInfoMapWithIdAskey(infoList)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
+		return
+	}
+
+	// list 转森林结构返回
 	var tree []*TreeItem
 	idMapTreeItem := make(IdMapTreeType)
 	for _, item := range infoList {
@@ -105,31 +152,30 @@ func GetListById(ctx *gin.Context) {
 		treeItem.ObjId = item.ObjId
 		treeItem.UserId = item.UserId
 		treeItem.ReplyUserId = item.ReplyUserId
+		treeItem.ReplyInfoId = item.ReplyInfoId
 		treeItem.CommentText = item.CommentText
 		treeItem.ImgUrl = item.ImgUrl
 		treeItem.Type = item.Type
+		treeItem.CreatedAt = item.CreatedAt
+		treeItem.UserInfo = userinfoMap[item.UserId]
+		treeItem.ReplyUserInfo = userinfoMap[item.ReplyUserId]
 
-		// 获取用户信息
-		userInfo, ok := userInfoObj[item.UserId]
-		if !ok {
-			res := global.DB.Where("id = ?", item.UserId).First(&userInfo)
-
-			if res.Error != nil {
-				utils.ResponseResultsError(ctx, res.Error.Error())
-				return
+		// 回复用户id 存在获取引用信息，引用信息不存在则表示已删除
+		if item.ReplyUserId != 0 {
+			if val, ok := commentInfoMap[item.ReplyInfoId]; !ok {
+				treeItem.ReplyInfoText = "该评论已被删除"
+			} else {
+				treeItem.ReplyInfoText = val.CommentText
 			}
 		}
 
-		// 用户信息
-		treeItem.NickName = userInfo.NickName
-		treeItem.UserAvatar = userInfo.UserAvatar
-		treeItem.Posts = userInfo.Posts
-
 		// 根节点收集
 		if item.ParentCommentId == 0 {
+			treeItem.Level = 1
 			tree = append(tree, &treeItem)
 		} else {
 			// 子节点收集
+			treeItem.Level = 2
 			idMapTreeItem[item.ParentCommentId].Children = append(idMapTreeItem[item.ParentCommentId].Children, &treeItem)
 		}
 		// 把节点映射到map表

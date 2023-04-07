@@ -1463,8 +1463,7 @@ const docTemplate = `{
             "required": [
                 "commentText",
                 "objId",
-                "type",
-                "userId"
+                "type"
             ],
             "properties": {
                 "commentText": {
@@ -1479,6 +1478,9 @@ const docTemplate = `{
                 "parentCommentId": {
                     "type": "integer"
                 },
+                "replyInfoId": {
+                    "type": "integer"
+                },
                 "replyUserId": {
                     "type": "integer"
                 },
@@ -1486,9 +1488,6 @@ const docTemplate = `{
                     "description": "评论类型 1 文章 2沸点",
                     "type": "string",
                     "example": "1"
-                },
-                "userId": {
-                    "type": "integer"
                 }
             }
         },
