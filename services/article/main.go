@@ -206,7 +206,6 @@ func GetArticleList(ctx *gin.Context) {
 
 	// 存在错误
 	if db.Error != nil {
-		zap.S().Info(db.Error)
 		utils.ResponseResultsError(ctx, db.Error.Error())
 		return
 	}
@@ -328,6 +327,7 @@ func Details(ctx *gin.Context) {
 		ShowNumber: details.ShowNumber,
 		Status:     details.Status,
 		UpdatedAt:  details.UpdatedAt,
+		CreatedAt:  details.CreatedAt,
 	}
 
 	var columns []articleAssociatedInfo.ArticlesAssociatedColumns

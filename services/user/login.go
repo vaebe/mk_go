@@ -11,7 +11,7 @@ import (
 	middlewares "mk/middleware"
 	"mk/models"
 	"mk/models/user"
-	"mk/service/email"
+	"mk/services/email"
 	"mk/utils"
 	"time"
 )

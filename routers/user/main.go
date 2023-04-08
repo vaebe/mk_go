@@ -3,7 +3,7 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	middlewares "mk/middleware"
-	"mk/service/user"
+	"mk/services/user"
 )
 
 // LoadRouter 加载用户信息路由

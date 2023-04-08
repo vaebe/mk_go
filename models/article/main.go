@@ -51,6 +51,7 @@ type Details struct {
 	ShowNumber       int                  `json:"showNumber" form:"showNumber"`
 	Status           string               `json:"status" form:"status"`
 	UpdatedAt        *localTime.LocalTime `json:"updatedAt" form:"updatedAt"`
+	CreatedAt        *localTime.LocalTime `json:"createdAt" form:"createdAt"`
 }
 
 // AllListForm 获取全部文章列表

@@ -2,7 +2,7 @@ package enum
 
 import (
 	"github.com/gin-gonic/gin"
-	"mk/service/enum"
+	"mk/services/enum"
 )
 
 // LoadRouter 加载枚举路由
