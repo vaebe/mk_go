@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/gin-gonic/gin"
+	middlewares "mk/middleware"
 	"mk/service/user"
 )
 
@@ -12,7 +13,8 @@ func LoadRouter(r *gin.RouterGroup) {
 		routes.POST("/login", user.Login)
 		routes.POST("/register", user.Register)
 		routes.POST("/sendVerificationCode", user.SendVerificationCode)
-		routes.POST("/getUserList", user.GetUserList)
 		routes.GET("/getUserDetails", user.Details)
+		// 非管理员不能获取用户列表
+		routes.POST("/getUserList", middlewares.IsAdmin(), user.GetUserList)
 	}
 }

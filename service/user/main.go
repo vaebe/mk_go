@@ -29,7 +29,16 @@ func GetUserList(ctx *gin.Context) {
 	}
 
 	var users []user.User
-	res := global.DB.Where("user_account LIKE ? AND nick_name LIKE ?", "%"+userListForm.Email+"%", "%"+userListForm.NickName+"%").Find(&users)
+	db := global.DB
+	if userListForm.Email != "" {
+		db.Where("user_account LIKE ?", "%"+userListForm.Email+"%")
+	}
+
+	if userListForm.NickName != "" {
+		db.Where("nick_name LIKE ?", "%"+userListForm.NickName+"%")
+	}
+
+	res := db.Find(&users)
 
 	// 存在错误
 	if res.Error != nil {

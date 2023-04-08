@@ -23,7 +23,7 @@ func generateToken(user user.User) (token string, err error) {
 	claims := models.CustomClaims{
 		ID:          user.ID,
 		NickName:    user.NickName,
-		AuthorityId: uint(user.Role),
+		AuthorityId: user.Role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			NotBefore: jwt.NewNumericDate(time.Now()),                     // 签名的生效时间
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // 24小时
