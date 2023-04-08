@@ -1121,7 +1121,7 @@
                 }
             }
         },
-        "/user/getUserDetails": {
+        "/user/details": {
             "get": {
                 "security": [
                     {

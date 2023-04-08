@@ -13,7 +13,7 @@ func LoadRouter(r *gin.RouterGroup) {
 		routes.POST("/login", user.Login)
 		routes.POST("/register", user.Register)
 		routes.POST("/sendVerificationCode", user.SendVerificationCode)
-		routes.GET("/getUserDetails", user.Details)
+		routes.GET("/details", user.Details)
 		// 非管理员不能获取用户列表
 		routes.POST("/getUserList", middlewares.IsAdmin(), user.GetUserList)
 	}

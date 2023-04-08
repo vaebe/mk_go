@@ -1132,7 +1132,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/getUserDetails": {
+        "/user/details": {
             "get": {
                 "security": [
                     {

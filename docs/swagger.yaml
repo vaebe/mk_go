@@ -944,7 +944,7 @@ paths:
       summary: 文件上传
       tags:
       - file文件
-  /user/getUserDetails:
+  /user/details:
     get:
       consumes:
       - application/json

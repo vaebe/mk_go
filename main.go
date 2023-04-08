@@ -22,6 +22,7 @@ func main() {
 	routerWhiteList := []string{
 		"/mk/user/login",
 		"/mk/user/register",
+		"/mk/user/details",
 		"/mk/article/getArticleList",
 		"/mk/article/getArticleDetails",
 		"/mk/commentInfo/getListById",

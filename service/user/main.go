@@ -53,6 +53,10 @@ func GetUserList(ctx *gin.Context) {
 	// 分页
 	res.Scopes(utils.Paginate(userListForm.PageNo, userListForm.PageSize)).Find(&users)
 
+	for i := range users {
+		users[i].Password = ""
+	}
+
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
 		PageSize: userListForm.PageSize,
 		PageNo:   userListForm.PageNo,
@@ -72,21 +76,22 @@ func GetUserList(ctx *gin.Context) {
 //	@Success		200	{object}	utils.ResponseResultInfo
 //	@Failure		500	{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth
-//	@Router			/user/getUserDetails [get]
+//	@Router			/user/details [get]
 func Details(ctx *gin.Context) {
-	articleId := ctx.Query("id")
+	userId := ctx.Query("id")
 
-	if articleId == "" {
+	if userId == "" {
 		utils.ResponseResultsError(ctx, "用户id不能为空！")
 		return
 	}
 
-	var users []user.User
-	res := global.DB.Where("id", articleId).First(&users)
+	userInfo := user.User{}
+	res := global.DB.Where("id", userId).First(&userInfo)
+	userInfo.Password = ""
 
 	if res.Error != nil {
 		utils.ResponseResultsError(ctx, "用户不存在！")
 		return
 	}
-	utils.ResponseResultsSuccess(ctx, users[0])
+	utils.ResponseResultsSuccess(ctx, userInfo)
 }
