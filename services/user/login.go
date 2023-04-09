@@ -69,31 +69,28 @@ func SendVerificationCode(ctx *gin.Context) {
 }
 
 // loginSuccess 登陆成功后的操作
-func loginSuccess(ctx *gin.Context, user user.User) {
-	token, err := generateToken(user)
+func loginSuccess(ctx *gin.Context, userInfo user.User) {
+	token, err := generateToken(userInfo)
 	if err != nil {
 		zap.S().Info("生成token错误", err.Error())
 		utils.ResponseResultsError(ctx, "生成token错误!")
 		return
 	}
 
-	resultsData := map[string]any{
-		"id":                    user.ID,
-		"nickName":              user.NickName,
-		"userAvatar":            user.UserAvatar,
-		"userName":              user.UserName,
-		"userAccount":           user.UserAccount,
-		"github":                user.Github,
-		"posts":                 user.Posts,
-		"role":                  user.Role,
-		"company":               user.Company,
-		"homepage":              user.Homepage,
-		"personalProfile":       user.PersonalProfile,
-		"userCreationPoints":    user.UserCreationPoints,
-		"userInteractionPoints": user.UserInteractionPoints,
-		"token":                 token,
-		"expired_at":            (time.Now().Unix() + 60*60*24*30) * 1000,
+	type ResultsData struct {
+		UserInfo  user.User `json:"userInfo"`
+		Token     string    `json:"token"`
+		ExpiredAt int64     `json:"expired_at"`
 	}
+
+	resultsData := ResultsData{
+		UserInfo:  userInfo,
+		Token:     token,
+		ExpiredAt: (time.Now().Unix() + 60*60*24*30) * 1000,
+	}
+
+	resultsData.UserInfo.Password = ""
+
 	utils.ResponseResultsSuccess(ctx, resultsData)
 }
 
