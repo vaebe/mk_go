@@ -40,6 +40,6 @@ type LoginForm struct {
 // ListForm 获取用户列表查询参数
 type ListForm struct {
 	models.PaginationParameters
-	Email    string `json:"email" form:"email" `
-	NickName string `json:"nickName" form:"nickName" `
+	Email    string `json:"email" form:"email"`
+	NickName string `json:"nickName" form:"nickName"`
 }

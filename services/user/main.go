@@ -22,20 +22,20 @@ import (
 //	@Security		ApiKeyAuth
 //	@Router			/user/getUserList [post]
 func GetUserList(ctx *gin.Context) {
-	userListForm := user.ListForm{}
-	if err := ctx.ShouldBind(&userListForm); err != nil {
+	listForm := user.ListForm{}
+	if err := ctx.ShouldBind(&listForm); err != nil {
 		utils.HandleValidatorError(ctx, err)
 		return
 	}
 
 	var users []user.User
 	db := global.DB
-	if userListForm.Email != "" {
-		db.Where("user_account LIKE ?", "%"+userListForm.Email+"%")
+	if listForm.Email != "" {
+		db = db.Where("user_account LIKE ?", "%"+listForm.Email+"%")
 	}
 
-	if userListForm.NickName != "" {
-		db.Where("nick_name LIKE ?", "%"+userListForm.NickName+"%")
+	if listForm.NickName != "" {
+		db = db.Where("nick_name LIKE ?", "%"+listForm.NickName+"%")
 	}
 
 	res := db.Find(&users)
@@ -51,15 +51,15 @@ func GetUserList(ctx *gin.Context) {
 	total := int32(res.RowsAffected)
 
 	// 分页
-	res.Scopes(utils.Paginate(userListForm.PageNo, userListForm.PageSize)).Find(&users)
+	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&users)
 
 	for i := range users {
 		users[i].Password = ""
 	}
 
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
-		PageSize: userListForm.PageSize,
-		PageNo:   userListForm.PageNo,
+		PageSize: listForm.PageSize,
+		PageNo:   listForm.PageNo,
 		Total:    total,
 		List:     users,
 	})
