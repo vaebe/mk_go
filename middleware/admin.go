@@ -9,10 +9,9 @@ import (
 func IsAdmin() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		// 获取jwt验证后设置的用户信息
-		claims, _ := ctx.Get("claims")
+		authorityId, _ := ctx.Get("authorityId")
 
-		// AuthorityId != 2 表示非管理员
-		if claims != 2 {
+		if authorityId.(int32) != 2 {
 			utils.ResponseResultsError(ctx, "用户无权限！")
 			ctx.Abort()
 			return
