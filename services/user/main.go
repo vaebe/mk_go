@@ -95,3 +95,46 @@ func Details(ctx *gin.Context) {
 	}
 	utils.ResponseResultsSuccess(ctx, userInfo)
 }
+
+// Edit
+//
+//	@Summary		编辑用户信息
+//	@Description	编辑用户信息
+//	@Tags			user用户
+//	@Accept			json
+//	@Produce		json
+//	@Param			param	body		user.EditForm	true	"请求对象"
+//	@Success		200		{object}	utils.ResponseResultInfo
+//	@Failure		500		{object}	utils.EmptyInfo
+//	@Security		ApiKeyAuth
+//	@Router			/user/edit [post]
+func Edit(ctx *gin.Context) {
+	editForm := user.EditForm{}
+	if err := ctx.ShouldBind(&editForm); err != nil {
+		utils.HandleValidatorError(ctx, err)
+		return
+	}
+
+	userId, _ := ctx.Get("userId")
+	if editForm.ID != userId {
+		utils.ResponseResultsError(ctx, "非本人不可修改用户信息！")
+		return
+	}
+
+	res := global.DB.Where("id = ?", userId).Updates(&user.User{
+		NickName:        editForm.NickName,
+		Posts:           editForm.Posts,
+		Homepage:        editForm.Homepage,
+		PersonalProfile: editForm.PersonalProfile,
+		Github:          editForm.Github,
+		UserAvatar:      editForm.UserAvatar,
+		Company:         editForm.Company,
+	})
+
+	if res.RowsAffected == 0 {
+		utils.ResponseResultsError(ctx, "需要更新的数据不存在！")
+		return
+	}
+
+	utils.ResponseResultsSuccess(ctx, "更新用户信息成功！")
+}

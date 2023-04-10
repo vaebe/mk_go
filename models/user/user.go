@@ -24,6 +24,18 @@ type VerificationCodeForm struct {
 	Email string `form:"email" json:"email" binding:"required,email"`
 }
 
+// EditForm 用户信息编辑
+type EditForm struct {
+	ID              int32  `json:"id" form:"id" binding:"required"`
+	NickName        string `json:"nickName" form:"nickName" binding:"required,min=4,max=40"`
+	UserAvatar      string `json:"userAvatar" form:"userAvatar"`
+	Github          string `json:"github" form:"github"`
+	Posts           string `json:"posts" form:"posts"`
+	Company         string `json:"company" form:"company"`
+	Homepage        string `json:"homepage" form:"homepage"`
+	PersonalProfile string `json:"personalProfile" form:"personalProfile"`
+}
+
 // RegisterForm 注册
 type RegisterForm struct {
 	Email    string `form:"email" json:"email" binding:"required,email"`

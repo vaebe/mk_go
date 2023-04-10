@@ -1175,6 +1175,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/edit": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "编辑用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user用户"
+                ],
+                "summary": "编辑用户信息",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.EditForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
+        },
         "/user/getUserList": {
             "post": {
                 "security": [
@@ -1399,7 +1444,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "pageNo",
-                "pageSize"
+                "pageSize",
+                "userId"
             ],
             "properties": {
                 "pageNo": {
@@ -1416,6 +1462,9 @@ const docTemplate = `{
                     "description": "1草稿 2待审核 3审核未通过 4已发布",
                     "type": "string",
                     "example": "1"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },
@@ -1584,6 +1633,41 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.EditForm": {
+            "type": "object",
+            "required": [
+                "id",
+                "nickName"
+            ],
+            "properties": {
+                "company": {
+                    "type": "string"
+                },
+                "github": {
+                    "type": "string"
+                },
+                "homepage": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "nickName": {
+                    "type": "string",
+                    "maxLength": 40,
+                    "minLength": 4
+                },
+                "personalProfile": {
+                    "type": "string"
+                },
+                "posts": {
+                    "type": "string"
+                },
+                "userAvatar": {
                     "type": "string"
                 }
             }

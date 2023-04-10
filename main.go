@@ -25,6 +25,7 @@ func main() {
 		"/mk/user/details",
 		"/mk/enum/getAllEnums",
 		"/mk/article/getArticleList",
+		"/mk/article/getUserArticleList",
 		"/mk/article/getArticleDetails",
 		"/mk/commentInfo/getListById",
 		"/swagger/index.html",

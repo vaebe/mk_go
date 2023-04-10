@@ -51,9 +51,12 @@ definitions:
         description: 1草稿 2待审核 3审核未通过 4已发布
         example: "1"
         type: string
+      userId:
+        type: integer
     required:
     - pageNo
     - pageSize
+    - userId
     type: object
   articleAssociatedInfo.ArticlesAssociatedColumnsForm:
     properties:
@@ -172,6 +175,30 @@ definitions:
     - typeCode
     - typeName
     - value
+    type: object
+  user.EditForm:
+    properties:
+      company:
+        type: string
+      github:
+        type: string
+      homepage:
+        type: string
+      id:
+        type: integer
+      nickName:
+        maxLength: 40
+        minLength: 4
+        type: string
+      personalProfile:
+        type: string
+      posts:
+        type: string
+      userAvatar:
+        type: string
+    required:
+    - id
+    - nickName
     type: object
   user.ListForm:
     properties:
@@ -969,6 +996,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取用户详情
+      tags:
+      - user用户
+  /user/edit:
+    post:
+      consumes:
+      - application/json
+      description: 编辑用户信息
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/user.EditForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      security:
+      - ApiKeyAuth: []
+      summary: 编辑用户信息
       tags:
       - user用户
   /user/getUserList:
