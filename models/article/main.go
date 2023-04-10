@@ -66,6 +66,7 @@ type AllListForm struct {
 // UserArticleListForm 获取文章列表
 type UserArticleListForm struct {
 	models.PaginationParameters
+	UserId int32  `json:"userId" form:"userId" binding:"required"`
 	Status string `json:"status" form:"status" example:"1"` // 1草稿 2待审核 3审核未通过 4已发布
 }
 

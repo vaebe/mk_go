@@ -248,9 +248,8 @@ func GetUserArticleList(ctx *gin.Context) {
 		return
 	}
 
-	userId, _ := ctx.Get("userId")
 	var articles []article.Article
-	res := global.DB.Where("user_id = ?", userId)
+	res := global.DB.Where("user_id = ?", listForm.UserId)
 
 	if listForm.Status == "" {
 		res.Not("status = ?", "1").Find(&articles)
