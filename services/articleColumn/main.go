@@ -139,9 +139,8 @@ func List(ctx *gin.Context) {
 		return
 	}
 
-	userId, _ := ctx.Get("userId")
 	var articleColumnList []articleColumn.ArticleColumn
-	db := global.DB.Where("user_id = ? ", userId)
+	db := global.DB.Where("user_id = ? ", listForm.UserId)
 
 	if listForm.Name != "" {
 		db.Where("name LIKE ?", "%"+listForm.Name+"%")

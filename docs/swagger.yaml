@@ -82,9 +82,12 @@ definitions:
         type: integer
       status:
         type: string
+      userId:
+        type: integer
     required:
     - pageNo
     - pageSize
+    - userId
     type: object
   articleColumn.ReviewForm:
     properties:

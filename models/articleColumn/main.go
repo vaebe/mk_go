@@ -28,6 +28,7 @@ type SaveForm struct {
 // ListForm 获取列表
 type ListForm struct {
 	models.PaginationParameters
+	UserId int32  `json:"userId" form:"userId" binding:"required"`
 	Name   string `json:"name" form:"name"`
 	Status string `json:"status" form:"status"`
 }
