@@ -140,14 +140,19 @@ func List(ctx *gin.Context) {
 	}
 
 	var articleColumnList []articleColumn.ArticleColumn
-	db := global.DB.Where("user_id = ? ", listForm.UserId)
+
+	db := global.DB
+
+	if listForm.UserId != 0 {
+		db = db.Where("user_id = ? ", listForm.UserId)
+	}
 
 	if listForm.Name != "" {
-		db.Where("name LIKE ?", "%"+listForm.Name+"%")
+		db = db.Where("name LIKE ?", "%"+listForm.Name+"%")
 	}
 
 	if listForm.Status != "" {
-		db.Where("status = ?", listForm.Status)
+		db = db.Where("status = ?", listForm.Status)
 	}
 
 	db.Find(&articleColumnList)

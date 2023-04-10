@@ -1487,8 +1487,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "pageNo",
-                "pageSize",
-                "userId"
+                "pageSize"
             ],
             "properties": {
                 "name": {

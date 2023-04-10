@@ -87,7 +87,6 @@ definitions:
     required:
     - pageNo
     - pageSize
-    - userId
     type: object
   articleColumn.ReviewForm:
     properties:
