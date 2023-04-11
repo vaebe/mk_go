@@ -5,7 +5,7 @@ import (
 	"mk/utils/localTime"
 )
 
-// Article 文章
+// Article 文章 todo 点赞 评论 收藏 关联表实时查 完成后删除
 type Article struct {
 	models.BaseModel
 	UserId     int32  `gorm:"type:int;not null;comment '用户id'" json:"userId"`
@@ -54,9 +54,10 @@ type Details struct {
 	CreatedAt        *localTime.LocalTime `json:"createdAt" form:"createdAt"`
 }
 
-// AllListForm 获取全部文章列表
-type AllListForm struct {
+// ListForm 获取全部文章列表
+type ListForm struct {
 	models.PaginationParameters
+	UserId   int32  `json:"userId" form:"userId"`
 	Title    string `json:"title" form:"title"`
 	Classify string `json:"classify" form:"classify"`
 	Tag      string `json:"tag" form:"tag"`

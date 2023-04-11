@@ -1,5 +1,5 @@
 definitions:
-  article.AllListForm:
+  article.ListForm:
     properties:
       classify:
         type: string
@@ -19,6 +19,8 @@ definitions:
         type: string
       title:
         type: string
+      userId:
+        type: integer
     required:
     - pageNo
     - pageSize
@@ -36,27 +38,6 @@ definitions:
         type: string
     type: object
   article.SaveForm:
-    type: object
-  article.UserArticleListForm:
-    properties:
-      pageNo:
-        example: 1
-        minimum: 0
-        type: integer
-      pageSize:
-        example: 10
-        minimum: 0
-        type: integer
-      status:
-        description: 1草稿 2待审核 3审核未通过 4已发布
-        example: "1"
-        type: string
-      userId:
-        type: integer
-    required:
-    - pageNo
-    - pageSize
-    - userId
     type: object
   articleAssociatedInfo.ArticlesAssociatedColumnsForm:
     properties:
@@ -335,7 +316,7 @@ paths:
         name: param
         required: true
         schema:
-          $ref: '#/definitions/article.AllListForm'
+          $ref: '#/definitions/article.ListForm'
       produces:
       - application/json
       responses:
@@ -348,34 +329,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
       summary: 获取文章列表
-      tags:
-      - article文章
-  /article/getUserArticleList:
-    post:
-      consumes:
-      - application/json
-      description: 获取用户文章列表
-      parameters:
-      - description: 请求对象
-        in: body
-        name: param
-        required: true
-        schema:
-          $ref: '#/definitions/article.UserArticleListForm'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.ResponseResultInfo'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.EmptyInfo'
-      security:
-      - ApiKeyAuth: []
-      summary: 获取用户文章列表
       tags:
       - article文章
   /article/review:

@@ -2,12 +2,13 @@ package article
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"mk/global"
 	"mk/models"
 	"mk/models/article"
 	"mk/models/articleAssociatedInfo"
+	"mk/models/user"
+	"mk/services/common"
 	"mk/utils"
 )
 
@@ -175,12 +176,12 @@ func Save(ctx *gin.Context) {
 //	@Tags			article文章
 //	@Accept			json
 //	@Produce		json
-//	@Param			param	body		article.AllListForm	true	"请求对象"
+//	@Param			param	body		article.ListForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
 //	@Router			/article/getArticleList [post]
 func GetArticleList(ctx *gin.Context) {
-	listForm := article.AllListForm{}
+	listForm := article.ListForm{}
 
 	if err := ctx.ShouldBind(&listForm); err != nil {
 		utils.HandleValidatorError(ctx, err)
@@ -189,6 +190,10 @@ func GetArticleList(ctx *gin.Context) {
 
 	var articles []article.Article
 	db := global.DB
+
+	if listForm.UserId != 0 {
+		db = db.Where("user_id", listForm.UserId)
+	}
 
 	if listForm.Title != "" {
 		db = db.Where("title LIKE ?", "%"+listForm.Title+"%")
@@ -216,65 +221,58 @@ func GetArticleList(ctx *gin.Context) {
 	// 分页
 	db.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
 
-	for i := range articles {
+	articleIds := make([]int32, 0, len(articles))
+	userIdsMap := make(map[int32]bool)
+
+	for i, v := range articles {
 		articles[i].Content = ""
+		userIdsMap[v.UserId] = true
+		articleIds = append(articleIds, v.ID)
 	}
 
-	// todo 增加用户名称 、comments  评论数
-	utils.ResponseResultsSuccess(ctx, &models.PagingData{
-		PageSize: listForm.PageSize,
-		PageNo:   listForm.PageNo,
-		Total:    total,
-		List:     articles,
-	})
-}
+	// 查用户信息
+	userIds := make([]int32, 0, len(userIdsMap))
+	for id := range userIdsMap {
+		userIds = append(userIds, id)
+	}
 
-// GetUserArticleList
-//
-//	@Summary		获取用户文章列表
-//	@Description	获取用户文章列表
-//	@Tags			article文章
-//	@Accept			json
-//	@Produce		json
-//	@Param			param	body		article.UserArticleListForm	true	"请求对象"
-//	@Success		200		{object}	utils.ResponseResultInfo
-//	@Failure		500		{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
-//	@Router			/article/getUserArticleList [post]
-func GetUserArticleList(ctx *gin.Context) {
-	listForm := article.UserArticleListForm{}
-	if err := ctx.ShouldBind(&listForm); err != nil {
-		utils.HandleValidatorError(ctx, err)
+	userInfoMap, err := common.GetUserInfoMapWithIdAskey(userIds)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
-	var articles []article.Article
-	res := global.DB.Where("user_id = ?", listForm.UserId)
-
-	if listForm.Status == "" {
-		res.Not("status = ?", "1").Find(&articles)
-	} else {
-		res.Where("status = ?", listForm.Status).Find(&articles)
-	}
-
-	// 存在错误
-	if res.Error != nil {
-		zap.S().Info(res.Error)
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	// 查文章标签信息
+	articleTagsMap, err := common.GetArticleTagMapWithIdAskey(articleIds)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
-	// 获取总数
-	total := int32(res.RowsAffected)
+	// 获取评论数量
 
-	// 分页
-	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articles)
+	type ArticleInfo struct {
+		ArticleDetails   article.Article `json:"articleDetails"`
+		UserInfo         user.User       `json:"userInfo"`
+		Tags             []string        `json:"tags"`
+		NumberOfComments int             `json:"numberOfComments"`
+	}
+
+	var resultList []ArticleInfo
+	for _, v := range articles {
+		resultList = append(resultList, ArticleInfo{
+			ArticleDetails:   v,
+			UserInfo:         userInfoMap[v.UserId],
+			Tags:             articleTagsMap[v.ID],
+			NumberOfComments: 0,
+		})
+	}
 
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
 		PageSize: listForm.PageSize,
 		PageNo:   listForm.PageNo,
 		Total:    total,
-		List:     articles,
+		List:     resultList,
 	})
 }
 

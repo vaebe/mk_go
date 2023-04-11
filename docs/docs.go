@@ -118,52 +118,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/article.AllListForm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/utils.ResponseResultInfo"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/utils.EmptyInfo"
-                        }
-                    }
-                }
-            }
-        },
-        "/article/getUserArticleList": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "获取用户文章列表",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "article文章"
-                ],
-                "summary": "获取用户文章列表",
-                "parameters": [
-                    {
-                        "description": "请求对象",
-                        "name": "param",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/article.UserArticleListForm"
+                            "$ref": "#/definitions/article.ListForm"
                         }
                     }
                 ],
@@ -1387,7 +1342,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "article.AllListForm": {
+        "article.ListForm": {
             "type": "object",
             "required": [
                 "pageNo",
@@ -1417,6 +1372,9 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                },
+                "userId": {
+                    "type": "integer"
                 }
             }
         },
@@ -1439,34 +1397,6 @@ const docTemplate = `{
         },
         "article.SaveForm": {
             "type": "object"
-        },
-        "article.UserArticleListForm": {
-            "type": "object",
-            "required": [
-                "pageNo",
-                "pageSize",
-                "userId"
-            ],
-            "properties": {
-                "pageNo": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "example": 1
-                },
-                "pageSize": {
-                    "type": "integer",
-                    "minimum": 0,
-                    "example": 10
-                },
-                "status": {
-                    "description": "1草稿 2待审核 3审核未通过 4已发布",
-                    "type": "string",
-                    "example": "1"
-                },
-                "userId": {
-                    "type": "integer"
-                }
-            }
         },
         "articleAssociatedInfo.ArticlesAssociatedColumnsForm": {
             "type": "object",
