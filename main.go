@@ -45,13 +45,13 @@ func main() {
 	}
 
 	port := 53105
-	serviceAddress := fmt.Sprintf("%s:%d", "0.0.0.0", port)
+	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", port)
 
 	// 初始化配置
 	initialize.InitConfig()
 
 	// 初始化swagger
-	initialize.InitSwagger(r, port)
+	initialize.InitSwagger(r, serviceAddress)
 
 	err := r.Run(serviceAddress)
 	if err != nil {
