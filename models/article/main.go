@@ -9,7 +9,7 @@ import (
 type Article struct {
 	models.BaseModel
 	UserId     int32  `gorm:"type:int;not null;comment '用户id'" json:"userId"`
-	Title      string `gorm:"type:varbinary(100);unique;not null;comment '文章标题'" json:"title"`
+	Title      string `gorm:"type:varbinary(100);comment '文章标题'" json:"title"`
 	Content    string `gorm:"type:longtext;not null;comment '文章内容'" json:"content"`
 	Classify   string `gorm:"type:varbinary(200);not null;comment '文章分类'" json:"classify"`
 	CoverImg   string `gorm:"type:varbinary(200);not null;comment '文章封面'" json:"coverImg"`
