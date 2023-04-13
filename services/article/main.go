@@ -250,7 +250,6 @@ func GetArticleList(ctx *gin.Context) {
 	}
 
 	// 获取评论数量
-
 	type ArticleInfo struct {
 		ArticleDetails   article.Article `json:"articleDetails"`
 		UserInfo         user.User       `json:"userInfo"`
@@ -260,6 +259,10 @@ func GetArticleList(ctx *gin.Context) {
 
 	var resultList []ArticleInfo
 	for _, v := range articles {
+		if v.Title == "" {
+			v.Title = "无标题"
+		}
+
 		resultList = append(resultList, ArticleInfo{
 			ArticleDetails:   v,
 			UserInfo:         userInfoMap[v.UserId],
