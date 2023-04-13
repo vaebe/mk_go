@@ -307,10 +307,12 @@ func Details(ctx *gin.Context) {
 	}
 
 	// 查看记录加1
-	res = global.DB.Model(&article.Article{}).Where("id = ?", articleId).UpdateColumn("Views", gorm.Expr("Views + ?", 1))
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	if details.Status == "4" {
+		res := global.DB.Model(&article.Article{}).Where("id = ?", articleId).UpdateColumn("Views", gorm.Expr("Views + ?", 1))
+		if res.Error != nil {
+			utils.ResponseResultsError(ctx, res.Error.Error())
+			return
+		}
 	}
 
 	result := article.Details{
