@@ -7,6 +7,7 @@ import (
 	"github.com/thoas/go-funk"
 	"mk/global"
 	"mk/models"
+	"mk/models/user"
 	"net/http"
 	"strings"
 	"time"
@@ -137,4 +138,20 @@ func JWTAuth(whitelist []string) gin.HandlerFunc {
 		c.Set("authorityId", claims.AuthorityId)
 		c.Next()
 	}
+}
+
+// GenerateLoginToken 生成登陆token
+func GenerateLoginToken(user user.User) (token string, err error) {
+	j := NewJWT()
+	claims := models.CustomClaims{
+		ID:          user.ID,
+		NickName:    user.NickName,
+		AuthorityId: user.Role,
+		RegisteredClaims: jwt.RegisteredClaims{
+			NotBefore: jwt.NewNumericDate(time.Now()),                     // 签名的生效时间
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // 24小时
+			Issuer:    "1057",
+		},
+	}
+	return j.CreateToken(claims)
 }
