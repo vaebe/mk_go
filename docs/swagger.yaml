@@ -1009,6 +1009,32 @@ paths:
       summary: 获取user用户列表
       tags:
       - user用户
+  /user/getVerificationCode:
+    post:
+      consumes:
+      - application/json
+      description: 获取验证码
+      parameters:
+      - description: 请求对象
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/user.VerificationCodeForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.ResponseResultInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.EmptyInfo'
+      summary: 获取验证码
+      tags:
+      - user用户
   /user/login:
     post:
       consumes:
@@ -1059,32 +1085,6 @@ paths:
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
       summary: 用户注册
-      tags:
-      - user用户
-  /user/sendVerificationCode:
-    post:
-      consumes:
-      - application/json
-      description: 发送验证码
-      parameters:
-      - description: 请求对象
-        in: body
-        name: param
-        required: true
-        schema:
-          $ref: '#/definitions/user.VerificationCodeForm'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.ResponseResultInfo'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.EmptyInfo'
-      summary: 发送验证码
       tags:
       - user用户
 securityDefinitions:

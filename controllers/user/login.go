@@ -13,18 +13,18 @@ import (
 	"time"
 )
 
-// SendVerificationCode
+// GetVerificationCode
 //
-//	@Summary		发送验证码
-//	@Description	发送验证码
+//	@Summary		获取验证码
+//	@Description	获取验证码
 //	@Tags			user用户
 //	@Accept			json
 //	@Produce		json
 //	@Param			param	body		user.VerificationCodeForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
-//	@Router			/user/sendVerificationCode [post]
-func SendVerificationCode(ctx *gin.Context) {
+//	@Router			/user/getVerificationCode [post]
+func GetVerificationCode(ctx *gin.Context) {
 	//表单验证
 	verificationCodeForm := user.VerificationCodeForm{}
 

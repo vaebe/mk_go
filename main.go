@@ -23,6 +23,7 @@ func main() {
 		"/mk/user/login",
 		"/mk/user/register",
 		"/mk/user/details",
+		"/mk/user/getVerificationCode",
 		"/mk/enum/getAllEnums",
 		"/mk/article/getArticleList",
 		"/mk/article/getUserArticleList",
