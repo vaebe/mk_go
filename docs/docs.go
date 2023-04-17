@@ -1339,6 +1339,46 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/userServices/sendVerificationCode": {
+            "post": {
+                "description": "发送验证码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user用户"
+                ],
+                "summary": "发送验证码",
+                "parameters": [
+                    {
+                        "description": "请求对象",
+                        "name": "param",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.VerificationCodeForm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.ResponseResultInfo"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/utils.EmptyInfo"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

@@ -19,7 +19,7 @@ func setConfig() {
 	configFilePrefix := "config"
 
 	// 配置文件路径
-	configFileName := fmt.Sprintf("./%s-dev.yaml", configFilePrefix)
+	configFileName := fmt.Sprintf("./config/%s-dev.yaml", configFilePrefix)
 
 	v := viper.New()
 	//文件的路径如何设置
