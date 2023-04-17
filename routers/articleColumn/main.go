@@ -2,7 +2,7 @@ package articleColumn
 
 import (
 	"github.com/gin-gonic/gin"
-	"mk/services/articleColumn"
+	"mk/controllers/articleColumn"
 )
 
 // LoadRouter 加载文章专栏路由

@@ -2,7 +2,7 @@ package article
 
 import (
 	"github.com/gin-gonic/gin"
-	"mk/services/article"
+	"mk/controllers/article"
 )
 
 // LoadRouter 加载文章路由

@@ -2,7 +2,7 @@ package file
 
 import (
 	"github.com/gin-gonic/gin"
-	"mk/services/file"
+	"mk/controllers/file"
 )
 
 // LoadRouter 加载文件操作路由

@@ -2,7 +2,7 @@ package commentInfo
 
 import (
 	"github.com/gin-gonic/gin"
-	"mk/services/commentInfo"
+	"mk/controllers/commentInfo"
 )
 
 // LoadRouter 加载评论信息路由
