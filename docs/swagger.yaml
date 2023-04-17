@@ -936,7 +936,7 @@ paths:
         in: query
         name: id
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -1062,32 +1062,6 @@ paths:
       tags:
       - user用户
   /user/sendVerificationCode:
-    post:
-      consumes:
-      - application/json
-      description: 发送验证码
-      parameters:
-      - description: 请求对象
-        in: body
-        name: param
-        required: true
-        schema:
-          $ref: '#/definitions/user.VerificationCodeForm'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/utils.ResponseResultInfo'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/utils.EmptyInfo'
-      summary: 发送验证码
-      tags:
-      - user用户
-  /userServices/sendVerificationCode:
     post:
       consumes:
       - application/json

@@ -2,36 +2,16 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/golang-jwt/jwt/v4"
 	"go.uber.org/zap"
-	"math/rand"
 	"mk/global"
 	middlewares "mk/middleware"
-	"mk/models"
 	"mk/models/user"
-	"mk/services/email"
+	"mk/services/emailServices"
+	"mk/services/userServices"
 	"mk/utils"
 	"time"
 )
-
-// generateToken 生成token
-func generateToken(user user.User) (token string, err error) {
-	//生成token
-	j := middlewares.NewJWT()
-	claims := models.CustomClaims{
-		ID:          user.ID,
-		NickName:    user.NickName,
-		AuthorityId: user.Role,
-		RegisteredClaims: jwt.RegisteredClaims{
-			NotBefore: jwt.NewNumericDate(time.Now()),                     // 签名的生效时间
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)), // 24小时
-			Issuer:    "1057",
-		},
-	}
-	return j.CreateToken(claims)
-}
 
 // SendVerificationCode
 //
@@ -58,7 +38,7 @@ func SendVerificationCode(ctx *gin.Context) {
 	verificationCode := utils.GenerateSmsCode(6)
 
 	// 发送验证码邮件
-	err := email.SendTheVerificationCodeEmail(verificationCode, verificationCodeForm.Email)
+	err := emailServices.SendTheVerificationCodeEmail(verificationCode, verificationCodeForm.Email)
 	if err != nil {
 		utils.ResponseResultsError(ctx, "发送邮件验证码失败")
 	}
@@ -70,7 +50,7 @@ func SendVerificationCode(ctx *gin.Context) {
 
 // loginSuccess 登陆成功后的操作
 func loginSuccess(ctx *gin.Context, userInfo user.User) {
-	token, err := generateToken(userInfo)
+	token, err := middlewares.GenerateLoginToken(userInfo)
 	if err != nil {
 		zap.S().Info("生成token错误", err.Error())
 		utils.ResponseResultsError(ctx, "生成token错误!")
@@ -94,16 +74,6 @@ func loginSuccess(ctx *gin.Context, userInfo user.User) {
 	utils.ResponseResultsSuccess(ctx, resultsData)
 }
 
-// generateUserId 生成用户id
-func generateUserId() int32 {
-	// 获取最后一个创建的用户
-	lastUserInfo := user.User{}
-	global.DB.Last(&lastUserInfo)
-
-	rand.NewSource(time.Now().UnixNano())
-	return lastUserInfo.ID + int32(rand.Intn(101))
-}
-
 // Register
 //
 //	@Summary		用户注册
@@ -124,30 +94,9 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	// 验证短信验证码
-	redisCode := global.RedisClient.Get(context.Background(), registerForm.Email)
-	verificationCode, _ := redisCode.Result()
-
-	if verificationCode == "redis" || verificationCode != registerForm.Code {
-		zap.S().Infof("验证码不正确:应为%s实际为%s", verificationCode, registerForm.Code)
-
-		utils.ResponseResultsError(ctx, "验证码不正确!")
-		return
-	}
-
-	userId := generateUserId()
-	userInfo := user.User{
-		NickName:    fmt.Sprintf("mk%v", userId),
-		UserName:    fmt.Sprintf("mk%v", userId),
-		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
-		UserAccount: registerForm.Email, // 暂时使用邮箱注册
-		Password:    registerForm.PassWord,
-	}
-	userRes := global.DB.Create(&userInfo)
-
-	if userRes.Error != nil {
-		zap.S().Info("创建用户失败！", userRes.Error)
-		utils.ResponseResultsError(ctx, userRes.Error.Error())
+	userInfo, err := userServices.Register(registerForm)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
@@ -174,12 +123,9 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	userInfo := user.User{}
-
-	global.DB.Where("user_account = ?", loginForm.Email).First(&userInfo)
-
-	if userInfo.Password != loginForm.PassWord {
-		utils.ResponseResultsError(ctx, "密码不正确")
+	userInfo, err := userServices.VerifyUserPassword(loginForm)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 

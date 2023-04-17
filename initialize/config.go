@@ -53,7 +53,7 @@ func setConfig() {
 	}
 	zap.S().Infof("JWTConfig配置信息: %v", global.JWTConfig)
 
-	// email 邮箱
+	// emailServices 邮箱
 	if err := v.UnmarshalKey("emailConfig", &global.EmailConfig); err != nil {
 		panic(err)
 	}
