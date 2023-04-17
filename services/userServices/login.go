@@ -22,10 +22,13 @@ func Register(registerForm user.RegisterForm) (user.User, error) {
 		return user.User{}, errors.New("验证码不正确")
 	}
 
-	uid := fmt.Sprintf("mk%v", uuid.NewString())
+	// 生成不带 - 的uuid
+	uuidObj := uuid.New()
+	uuidStr := fmt.Sprintf("mk%x", uuidObj[:])
+
 	userInfo := user.User{
-		NickName:    uid,
-		UserName:    uid,
+		NickName:    uuidStr,
+		UserName:    uuidStr,
 		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
 		UserAccount: registerForm.Email, // 暂时使用邮箱注册
 		Password:    registerForm.PassWord,
