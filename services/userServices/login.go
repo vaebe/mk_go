@@ -8,6 +8,7 @@ import (
 	"go.uber.org/zap"
 	"mk/global"
 	"mk/models/user"
+	"mk/utils/password"
 )
 
 // Register 用户注册
@@ -26,12 +27,18 @@ func Register(registerForm user.RegisterForm) (user.User, error) {
 	uuidObj := uuid.New()
 	uuidStr := fmt.Sprintf("mk%x", uuidObj[:])
 
+	pwdStr, err := password.EncryptByAes([]byte(registerForm.PassWord))
+
+	if err != nil {
+		return user.User{}, err
+	}
+
 	userInfo := user.User{
 		NickName:    uuidStr,
 		UserName:    uuidStr,
 		UserAvatar:  "https://foruda.gitee.com/avatar/1677018140565464033/3040380_mucuni_1578973546.png",
 		UserAccount: registerForm.Email, // 暂时使用邮箱注册
-		Password:    registerForm.PassWord,
+		Password:    pwdStr,
 	}
 	res := global.DB.Create(&userInfo)
 
