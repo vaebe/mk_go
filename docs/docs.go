@@ -1643,8 +1643,8 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
-                    "maxLength": 20,
-                    "minLength": 3,
+                    "maxLength": 300,
+                    "minLength": 6,
                     "example": "123456"
                 }
             }
@@ -1668,7 +1668,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "maxLength": 20,
-                    "minLength": 3
+                    "minLength": 6
                 }
             }
         },

@@ -208,8 +208,8 @@ definitions:
         type: string
       password:
         example: "123456"
-        maxLength: 20
-        minLength: 3
+        maxLength: 300
+        minLength: 6
         type: string
     required:
     - email
@@ -225,7 +225,7 @@ definitions:
         type: string
       password:
         maxLength: 20
-        minLength: 3
+        minLength: 6
         type: string
     required:
     - code

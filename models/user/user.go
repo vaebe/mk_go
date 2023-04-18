@@ -39,14 +39,14 @@ type EditForm struct {
 // RegisterForm 注册
 type RegisterForm struct {
 	Email    string `form:"email" json:"email" binding:"required,email"`
-	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
+	PassWord string `form:"password" json:"password" binding:"required,min=6,max=20"`
 	Code     string `form:"code" json:"code" binding:"required,min=6,max=6"`
 }
 
 // LoginForm 登陆
 type LoginForm struct {
 	Email    string `form:"email" json:"email" binding:"required,email" example:"mk@163.com"`
-	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20" example:"123456"`
+	PassWord string `form:"password" json:"password" binding:"required,min=6,max=300" example:"123456"`
 }
 
 // ListForm 获取用户列表查询参数
