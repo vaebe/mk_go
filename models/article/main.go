@@ -2,6 +2,7 @@ package article
 
 import (
 	"mk/models"
+	"mk/models/user"
 	"mk/utils/localTime"
 )
 
@@ -62,6 +63,14 @@ type ListForm struct {
 	Classify string `json:"classify" form:"classify"`
 	Tag      string `json:"tag" form:"tag"`
 	Status   string `json:"status" form:"status" example:"1"` // 1草稿 2待审核 3审核未通过 4已发布 5已删除
+}
+
+// ArticleInfo 文章列表返回数据
+type ArticleInfo struct {
+	ArticleDetails   Article   `json:"articleDetails"`
+	UserInfo         user.User `json:"userInfo"`
+	Tags             []string  `json:"tags"`
+	NumberOfComments int       `json:"numberOfComments"`
 }
 
 // UserArticleListForm 获取文章列表
