@@ -2,10 +2,9 @@ package enum
 
 import (
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
-	"mk/global"
 	"mk/models"
 	"mk/models/enum"
+	"mk/services/enumServices"
 	"mk/utils"
 )
 
@@ -28,26 +27,13 @@ func Save(ctx *gin.Context) {
 		return
 	}
 
-	saveInfo := enum.Enum{
-		Value:    saveForm.Value,
-		Name:     saveForm.Name,
-		TypeCode: saveForm.TypeCode,
-		TypeName: saveForm.TypeName,
+	id, err := enumServices.CreateAndUpdate(saveForm)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
+		return
 	}
 
-	// id 不存在新增
-	if saveForm.ID == 0 {
-		global.DB.Create(&saveInfo)
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveInfo.ID})
-	} else {
-		res := global.DB.Model(&enum.Enum{}).Where("id = ?", saveForm.ID).Updates(&saveInfo)
-		if res.Error != nil {
-			utils.ResponseResultsError(ctx, res.Error.Error())
-			return
-		}
-
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveInfo.ID})
-	}
+	utils.ResponseResultsSuccess(ctx, map[string]any{"id": id})
 }
 
 // Delete todo 考虑增加类型 如系统则不能被删除
@@ -70,11 +56,9 @@ func Delete(ctx *gin.Context) {
 		return
 	}
 
-	res := global.DB.Where("id = ?", enumsId).Delete(&enum.Enum{})
-
-	total := res.RowsAffected
-	if total == 0 {
-		utils.ResponseResultsError(ctx, "需要删除的数据不存在！")
+	err := enumServices.Delete(enumsId)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
@@ -101,15 +85,13 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
-	enumInfo := enum.SaveForm{}
-	res := global.DB.Model(&enum.Enum{}).Where("id = ?", enumsId).First(&enumInfo)
-
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	details, err := enumServices.Details(enumsId)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
-	utils.ResponseResultsSuccess(ctx, enumInfo)
+	utils.ResponseResultsSuccess(ctx, details)
 }
 
 // GetEnumsByType
@@ -132,15 +114,13 @@ func GetEnumsByType(ctx *gin.Context) {
 		return
 	}
 
-	var enumsList []enum.SaveForm
-	res := global.DB.Model(&enum.Enum{}).Where("type_code", typeCode).Find(&enumsList)
-
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	enumList, err := enumServices.GetEnumsByType(typeCode)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
-	utils.ResponseResultsSuccess(ctx, enumsList)
+	utils.ResponseResultsSuccess(ctx, enumList)
 }
 
 // GetAllEnums
@@ -155,20 +135,13 @@ func GetEnumsByType(ctx *gin.Context) {
 //	@Security		ApiKeyAuth
 //	@Router			/enum/getAllEnums [get]
 func GetAllEnums(ctx *gin.Context) {
-	var enumsList []enum.SaveForm
-	res := global.DB.Model(&enum.Enum{}).Find(&enumsList)
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	enumsObj, err := enumServices.GetAllEnums()
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
-	enums := make(map[string][]enum.SaveForm)
-
-	for _, v := range enumsList {
-		enums[v.TypeCode] = append(enums[v.TypeCode], v)
-	}
-
-	utils.ResponseResultsSuccess(ctx, enums)
+	utils.ResponseResultsSuccess(ctx, enumsObj)
 }
 
 // GetEnumsList
@@ -190,26 +163,16 @@ func GetEnumsList(ctx *gin.Context) {
 		return
 	}
 
-	var enums []enum.Enum
-	res := global.DB.Where("name LIKE ? AND type_name LIKE ?", "%"+listForm.Name+"%", "%"+listForm.TypeName+"%").Find(&enums)
-
-	// 存在错误
-	if res.Error != nil {
-		zap.S().Info(res.Error)
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	enumsList, total, err := enumServices.GetEnumsList(listForm)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
-
-	// 获取总数
-	total := int32(res.RowsAffected)
-
-	// 分页
-	res.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&enums)
 
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
 		PageSize: listForm.PageSize,
 		PageNo:   listForm.PageNo,
 		Total:    total,
-		List:     enums,
+		List:     enumsList,
 	})
 }
