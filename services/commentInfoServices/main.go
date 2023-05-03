@@ -6,6 +6,7 @@ import (
 	"mk/models/commentInfo"
 )
 
+// Save 保存评论信息
 func Save(saveForm commentInfo.SaveForm, loginUserId int32) error {
 	saveInfo := commentInfo.CommentInfo{
 		ObjId:           saveForm.ObjId,
@@ -33,6 +34,7 @@ func GetListById(objId string) ([]commentInfo.CommentInfo, error) {
 	return infoList, db.Error
 }
 
+// Delete 根据 id 删除评论信息
 func Delete(id string, loginUserId int32) error {
 	db := global.DB.Where("id = ? AND user_id = ?", id, loginUserId).Delete(&commentInfo.CommentInfo{})
 
