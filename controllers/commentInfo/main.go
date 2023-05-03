@@ -2,9 +2,10 @@ package commentInfo
 
 import (
 	"github.com/gin-gonic/gin"
-	"mk/global"
 	"mk/models/commentInfo"
 	"mk/models/user"
+	"mk/services/commentInfoServices"
+	"mk/services/common"
 	"mk/utils"
 )
 
@@ -29,23 +30,34 @@ func Save(ctx *gin.Context) {
 	}
 
 	userId, _ := ctx.Get("userId")
-	saveInfo := commentInfo.CommentInfo{
-		ObjId:           saveForm.ObjId,
-		ParentCommentId: saveForm.ParentCommentId,
-		ReplyInfoId:     saveForm.ReplyInfoId,
-		UserId:          userId.(int32),
-		ReplyUserId:     saveForm.ReplyUserId,
-		CommentText:     saveForm.CommentText,
-		ImgUrl:          saveForm.ImgUrl,
-		Type:            saveForm.Type,
-	}
+	err := commentInfoServices.Save(saveForm, userId.(int32))
 
-	res := global.DB.Create(&saveInfo)
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 	utils.ResponseResultsSuccess(ctx, "保存成功！")
+}
+
+// 根据评论信息数据获取以用户id做key用户信息对象
+func getUserInfoMap(infoList []commentInfo.CommentInfo) (map[int32]user.User, error) {
+	userIdsMap := make(map[int32]bool)
+	for _, v := range infoList {
+		userIdsMap[v.UserId] = true
+
+		if v.ReplyUserId != 0 {
+			userIdsMap[v.ReplyUserId] = true
+		}
+	}
+
+	// 获取userIds list 数据
+	userIds := make([]int32, 0, len(userIdsMap))
+	for id := range userIdsMap {
+		userIds = append(userIds, id)
+	}
+
+	// 获取以用户 id 做 key 的用户信息对象
+	return common.GetUserInfoMapWithIdAskey(userIds)
 }
 
 type ItemType struct {
@@ -62,40 +74,6 @@ type TreeItem struct {
 }
 
 type IdMapTreeType map[int32]*TreeItem
-
-// 获取以 id 做 key 的用户信息对象
-func getUserInfoMapWithIdAskey(infoList []commentInfo.CommentInfo) (map[int32]user.User, error) {
-	// 获取信息中的全部 userId map 可以去重
-	userIdsMap := make(map[int32]bool)
-	for _, v := range infoList {
-		userIdsMap[v.UserId] = true
-
-		if v.ReplyUserId != 0 {
-			userIdsMap[v.ReplyUserId] = true
-		}
-	}
-
-	// 获取userIds list 数据
-	userIds := make([]int32, 0, len(userIdsMap))
-	for id := range userIdsMap {
-		userIds = append(userIds, id)
-	}
-
-	// 查询用户信息数据
-	var userList []user.User
-	res := global.DB.Select("id", "nick_name", "user_avatar", "posts").Where("id in (?)", userIds).Find(&userList)
-
-	if res.Error != nil {
-		return nil, res.Error
-	}
-
-	userInfoMap := make(map[int32]user.User)
-	for _, v := range userList {
-		userInfoMap[v.ID] = v
-	}
-
-	return userInfoMap, nil
-}
 
 // GetListById
 //
@@ -116,16 +94,17 @@ func GetListById(ctx *gin.Context) {
 		return
 	}
 
-	var infoList []commentInfo.CommentInfo
-	res := global.DB.Where("obj_id = ?", objId).Find(&infoList)
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	infoList, err := commentInfoServices.GetListById(objId)
+	// 没有评论直接返回空list，无需执行后续操作
+	if err != nil || len(infoList) == 0 {
+		utils.ResponseResultsSuccess(ctx, infoList)
 		return
 	}
 
-	// 没有评论直接返回空list，无需执行后续操作
-	if len(infoList) == 0 {
-		utils.ResponseResultsSuccess(ctx, infoList)
+	// 获取以用户 id 做 key 的用户信息对象
+	userInfoMap, err := getUserInfoMap(infoList)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
@@ -133,13 +112,6 @@ func GetListById(ctx *gin.Context) {
 	commentInfoMap := make(map[int32]commentInfo.CommentInfo)
 	for _, v := range infoList {
 		commentInfoMap[v.ID] = v
-	}
-
-	// 获取以用户 id 做 key 的用户信息对象
-	userinfoMap, err := getUserInfoMapWithIdAskey(infoList)
-	if err != nil {
-		utils.ResponseResultsError(ctx, err.Error())
-		return
 	}
 
 	// list 转森林结构返回
@@ -157,8 +129,8 @@ func GetListById(ctx *gin.Context) {
 		treeItem.ImgUrl = item.ImgUrl
 		treeItem.Type = item.Type
 		treeItem.CreatedAt = item.CreatedAt
-		treeItem.UserInfo = userinfoMap[item.UserId]
-		treeItem.ReplyUserInfo = userinfoMap[item.ReplyUserId]
+		treeItem.UserInfo = userInfoMap[item.UserId]
+		treeItem.ReplyUserInfo = userInfoMap[item.ReplyUserId]
 
 		// 回复用户id 存在获取引用信息，引用信息不存在则表示已删除
 		if item.ReplyUserId != 0 {
@@ -201,15 +173,14 @@ func Delete(ctx *gin.Context) {
 	dataId := ctx.Query("id")
 
 	if dataId == "" {
-		utils.ResponseResultsError(ctx, "专栏id不能为空！")
+		utils.ResponseResultsError(ctx, "评论信息id不能为空！")
 		return
 	}
 
 	userId, _ := ctx.Get("userId")
-	res := global.DB.Where("id = ? AND user_id = ?", dataId, userId).Delete(&commentInfo.CommentInfo{})
-
-	if res.RowsAffected == 0 {
-		utils.ResponseResultsError(ctx, "需要删除的数据不存在！")
+	err := commentInfoServices.Delete(dataId, userId.(int32))
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
