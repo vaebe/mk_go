@@ -1,4 +1,4 @@
-package common
+package commonServices
 
 import (
 	"mk/global"

@@ -7,7 +7,7 @@ import (
 	"mk/models/article"
 	"mk/models/articleAssociatedInfo"
 	"mk/models/user"
-	"mk/services/common"
+	"mk/services/commonServices"
 	"mk/utils"
 )
 
@@ -193,13 +193,13 @@ func GetArticleList(listForm article.ListForm) ([]article.ArticleInfo, int32, er
 		userIds = append(userIds, id)
 	}
 
-	userInfoMap, err := common.GetUserInfoMapWithIdAskey(userIds)
+	userInfoMap, err := commonServices.GetUserInfoMapWithIdAskey(userIds)
 	if err != nil {
 		return resultList, 0, err
 	}
 
 	// 查文章标签信息
-	articleTagsMap, err := common.GetArticleTagMapWithIdAskey(articleIds)
+	articleTagsMap, err := commonServices.GetArticleTagMapWithIdAskey(articleIds)
 	if err != nil {
 		return resultList, 0, err
 	}

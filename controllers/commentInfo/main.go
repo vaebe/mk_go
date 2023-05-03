@@ -5,7 +5,7 @@ import (
 	"mk/models/commentInfo"
 	"mk/models/user"
 	"mk/services/commentInfoServices"
-	"mk/services/common"
+	"mk/services/commonServices"
 	"mk/utils"
 )
 
@@ -57,7 +57,7 @@ func getUserInfoMap(infoList []commentInfo.CommentInfo) (map[int32]user.User, er
 	}
 
 	// 获取以用户 id 做 key 的用户信息对象
-	return common.GetUserInfoMapWithIdAskey(userIds)
+	return commonServices.GetUserInfoMapWithIdAskey(userIds)
 }
 
 type ItemType struct {
