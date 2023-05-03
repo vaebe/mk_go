@@ -3,9 +3,9 @@ package articleColumn
 import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"mk/global"
 	"mk/models"
 	"mk/models/articleColumn"
+	"mk/services/articleColumnServices"
 	"mk/utils"
 )
 
@@ -30,31 +30,14 @@ func Save(ctx *gin.Context) {
 		return
 	}
 
-	savaInfo := articleColumn.ArticleColumn{
-		Name:         saveForm.Name,
-		Introduction: saveForm.Introduction,
-		CoverImg:     saveForm.CoverImg,
-		Status:       "1", // 新建专栏需要审核
+	userId, _ := ctx.Get("userId")
+	infoId, err := articleColumnServices.SaveOrUpdate(saveForm, userId.(int32))
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
+		return
 	}
 
-	if savaInfo.CoverImg == "" {
-		savaInfo.CoverImg = "http://rrajr4lp6.bkt.clouddn.com/mk/default/default_article_column.jpg"
-	}
-
-	// id 不存在新增
-	if saveForm.ID == 0 {
-		global.DB.Create(&savaInfo)
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": savaInfo.ID})
-	} else {
-		userId, _ := ctx.Get("userId")
-		res := global.DB.Model(&articleColumn.ArticleColumn{}).Where("id = ? AND user_id = ?", saveForm.ID, userId).Updates(&savaInfo)
-		if res.Error != nil {
-			utils.ResponseResultsError(ctx, res.Error.Error())
-			return
-		}
-
-		utils.ResponseResultsSuccess(ctx, map[string]any{"id": saveForm.ID})
-	}
+	utils.ResponseResultsSuccess(ctx, infoId)
 }
 
 // Delete
@@ -78,10 +61,9 @@ func Delete(ctx *gin.Context) {
 	}
 
 	userId, _ := ctx.Get("userId")
-	res := global.DB.Where("id = ? AND user_id = ?", columnId, userId).Delete(&articleColumn.ArticleColumn{})
-
-	if res.RowsAffected == 0 {
-		utils.ResponseResultsError(ctx, "需要删除的数据不存在！")
+	err := articleColumnServices.Delete(columnId, userId.(int32))
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
@@ -108,11 +90,9 @@ func Details(ctx *gin.Context) {
 		return
 	}
 
-	columnInfo := articleColumn.ArticleColumn{}
-	res := global.DB.Model(&articleColumn.ArticleColumn{}).Where("id = ?", columnId).First(&columnInfo)
-
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
+	columnInfo, err := articleColumnServices.Details(columnId)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
 
@@ -139,36 +119,11 @@ func List(ctx *gin.Context) {
 		return
 	}
 
-	var articleColumnList []articleColumn.ArticleColumn
-
-	db := global.DB
-
-	if listForm.UserId != 0 {
-		db = db.Where("user_id = ? ", listForm.UserId)
-	}
-
-	if listForm.Name != "" {
-		db = db.Where("name LIKE ?", "%"+listForm.Name+"%")
-	}
-
-	if listForm.Status != "" {
-		db = db.Where("status = ?", listForm.Status)
-	}
-
-	db.Find(&articleColumnList)
-
-	// 存在错误
-	if db.Error != nil {
-		zap.S().Info(db.Error)
-		utils.ResponseResultsError(ctx, db.Error.Error())
+	articleColumnList, total, err := articleColumnServices.List(listForm)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
 		return
 	}
-
-	// 获取总数
-	total := int32(db.RowsAffected)
-
-	// 分页
-	db.Scopes(utils.Paginate(listForm.PageNo, listForm.PageSize)).Find(&articleColumnList)
 
 	utils.ResponseResultsSuccess(ctx, &models.PagingData{
 		PageSize: listForm.PageSize,
@@ -203,13 +158,11 @@ func Review(ctx *gin.Context) {
 		return
 	}
 
-	res := global.DB.Where("id = ?", reviewForm.ID).Updates(articleColumn.ArticleColumn{
-		Status: reviewForm.Status,
-	})
-
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-	} else {
-		utils.ResponseResultsSuccess(ctx, "审核成功！")
+	err := articleColumnServices.Review(reviewForm)
+	if err != nil {
+		utils.ResponseResultsError(ctx, err.Error())
+		return
 	}
+
+	utils.ResponseResultsSuccess(ctx, "审核成功！")
 }

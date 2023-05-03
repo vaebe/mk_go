@@ -1,4 +1,4 @@
-package articleColumn
+package articleColumnServices
 
 import (
 	"github.com/gin-gonic/gin"
