@@ -1,42 +1,23 @@
 package articleColumnServices
 
 import (
-	"github.com/gin-gonic/gin"
+	"errors"
 	"mk/global"
 	"mk/models/article"
 	"mk/models/articleAssociatedInfo"
 	"mk/models/articleColumn"
-	"mk/utils"
+	"mk/services/articleServices"
 )
 
-// GetAssociatedArticlesList
-//
-//	@Summary			获取专栏关联文章列表
-//	@Description	获取专栏关联文章列表
-//	@Tags					articleColumn专栏
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	query		int	true	"专栏id"
-//	@Success		200	{object}	utils.ResponseResultInfo
-//	@Failure		500	{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
-//	@Router			/articleColumn/getAssociatedArticlesList [get]
-func GetAssociatedArticlesList(ctx *gin.Context) {
-	columnId := ctx.Query("id")
-
-	if columnId == "" {
-		utils.ResponseResultsError(ctx, "专栏id不能为空！")
-		return
-	}
-
-	// 查询专栏关联文章
-
+// GetAssociatedArticlesList 获取专栏关联文章列表
+func GetAssociatedArticlesList(id string) ([]article.ArticleInfo, error) {
 	var linkedData []articleAssociatedInfo.ArticlesAssociatedColumns
-	res := global.DB.Select("article_id").Where("column_id = ?", columnId).Find(&linkedData)
+	db := global.DB.Select("article_id").Where("column_id = ?", id).Find(&linkedData)
 
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	var resultList []article.ArticleInfo
+
+	if db.Error != nil {
+		return resultList, db.Error
 	}
 
 	// 获取文章id数组
@@ -52,45 +33,28 @@ func GetAssociatedArticlesList(ctx *gin.Context) {
 
 	// 根据文章id 查询返回
 	var articles []article.Article
-	res = global.DB.Where("id IN ?", articleIds).Find(&articles)
+	db = global.DB.Where("id IN ?", articleIds).Find(&articles)
 
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	if db.Error != nil {
+		return resultList, db.Error
 	}
 
-	utils.ResponseResultsSuccess(ctx, articles)
+	resultList, err := articleServices.FormatArticleListReturnData(articles)
+	return resultList, err
 }
 
-// ListArticlesThatCanBeIncluded
-//
-//	@Summary			获取可以被收录的文章列表
-//	@Description	获取可以被收录的文章列表
-//	@Tags					articleColumn专栏
-//	@Accept			json
-//	@Produce		json
-//	@Param			id	query		int	true	"专栏id"
-//	@Success		200	{object}	utils.ResponseResultInfo
-//	@Failure		500	{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
-//	@Router			/articleColumn/listArticlesThatCanBeIncluded [get]
-func ListArticlesThatCanBeIncluded(ctx *gin.Context) {
-	columnId := ctx.Query("id")
-
-	if columnId == "" {
-		utils.ResponseResultsError(ctx, "专栏id不能为空！")
-		return
-	}
-
+// ListArticlesThatCanBeIncluded 获取可以被收录的文章列表
+func ListArticlesThatCanBeIncluded(id string) ([]article.Article, error) {
 	// 获取关联次数大于2 或者是当前专栏关联的文章 = 不可以被再次关联
 	var linkedData []articleAssociatedInfo.ArticlesAssociatedColumns
-	res := global.DB.Where("article_id IN (?) OR id != ?",
-		global.DB.Table("articles_associated_columns").Select("article_id").Group("article_id").Having("COUNT(*) > 2"), columnId).
+	db := global.DB.Where("article_id IN (?) OR id != ?",
+		global.DB.Table("articles_associated_columns").Select("article_id").Group("article_id").Having("COUNT(*) > 2"), id).
 		Find(&linkedData)
 
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	var articles []article.Article
+
+	if db.Error != nil {
+		return articles, db.Error
 	}
 
 	// 获取文章id数组
@@ -104,59 +68,23 @@ func ListArticlesThatCanBeIncluded(ctx *gin.Context) {
 		articleIds = append(articleIds, id)
 	}
 
-	// 查询可以关联的数据
-	var articles []article.Article
-	db := global.DB.Where("status = ?", "4").Find(&articles)
-
-	// ids 不存在无需查询
-	if len(articleIds) != 0 {
-		db.Where("NOT id IN (?)", articleIds)
-	}
-
-	db.Find(&articles)
-
-	if db.Error != nil {
-		utils.ResponseResultsError(ctx, db.Error.Error())
-		return
-	}
-
-	utils.ResponseResultsSuccess(ctx, articles)
+	db = global.DB.Where("NOT id IN (?) AND status = ?", articleIds, "4").Find(&articles)
+	return articles, db.Error
 }
 
-// DeleteAssociatedArticle
-//
-//	@Summary			删除关联文章
-//	@Description	删除关联文章
-//	@Tags				articleColumn专栏
-//	@Accept			json
-//	@Produce		json
-//	@Param			param	body		articleAssociatedInfo.ArticlesAssociatedColumnsForm	true	"请求对象"
-//	@Success		200	{object}	utils.ResponseResultInfo
-//	@Failure		500	{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
-//	@Router			/articleColumn/deleteAssociatedArticle [post]
-func DeleteAssociatedArticle(ctx *gin.Context) {
-	searchForm := articleAssociatedInfo.ArticlesAssociatedColumnsForm{}
-	if err := ctx.ShouldBind(&searchForm); err != nil {
-		utils.HandleValidatorError(ctx, err)
-		return
+// DeleteAssociatedArticle 删除关联文章
+func DeleteAssociatedArticle(delForm articleAssociatedInfo.ArticlesAssociatedColumnsForm, loginUserId int32) error {
+	db := global.DB.Where("column_id = ? AND article_id = ? AND user_id = ?",
+		delForm.ColumnId, delForm.ArticleId, loginUserId).Unscoped().Delete(&articleAssociatedInfo.ArticlesAssociatedColumns{})
+
+	if db.Error != nil {
+		return db.Error
 	}
 
-	userId, _ := ctx.Get("userId")
-	res := global.DB.Where("column_id = ? AND article_id = ? AND user_id = ?",
-		searchForm.ColumnId, searchForm.ArticleId, userId).Unscoped().Delete(&articleAssociatedInfo.ArticlesAssociatedColumns{})
-
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	if db.RowsAffected == 0 {
+		return errors.New("需要删除的数据不存在！")
 	}
-
-	if res.RowsAffected == 0 {
-		utils.ResponseResultsError(ctx, "需要删除的数据不存在！")
-		return
-	}
-
-	utils.ResponseResultsSuccess(ctx, "删除成功！")
+	return nil
 }
 
 // AddAssociatedArticle
@@ -171,63 +99,43 @@ func DeleteAssociatedArticle(ctx *gin.Context) {
 //	@Failure		500	{object}	utils.EmptyInfo
 //	@Security		ApiKeyAuth
 //	@Router			/articleColumn/addAssociatedArticle [post]
-func AddAssociatedArticle(ctx *gin.Context) {
-	saveForm := articleAssociatedInfo.ArticlesAssociatedColumnsForm{}
-
-	if err := ctx.ShouldBind(&saveForm); err != nil {
-		utils.HandleValidatorError(ctx, err)
-		return
-	}
-
-	userId, _ := ctx.Get("userId")
-
+func AddAssociatedArticle(saveForm articleAssociatedInfo.ArticlesAssociatedColumnsForm, loginUserId int32) error {
 	// 校验是否是当前用户的专栏
 	columnInfo := articleColumn.ArticleColumn{}
-	res := global.DB.Where("id = ?", saveForm.ColumnId).First(&columnInfo)
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	db := global.DB.Where("id = ?", saveForm.ColumnId).First(&columnInfo)
+	if db.Error != nil {
+		return db.Error
 	}
 
-	if columnInfo.UserId != userId {
-		utils.ResponseResultsError(ctx, "非本用户的专栏无法关联！")
-		return
+	if columnInfo.UserId != loginUserId {
+		return errors.New("非本用户的专栏无法关联！")
 	}
 
 	if columnInfo.Status != "3" {
-		utils.ResponseResultsError(ctx, "不是发布状态的专栏无法关联！")
-		return
+		return errors.New("不是发布状态的专栏无法关联！")
 	}
 
 	// 校验是否是当前用户的文章
 	articleInfo := article.Article{}
-	res = global.DB.Where("id = ?", saveForm.ArticleId).First(&articleInfo)
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
+	db = global.DB.Where("id = ?", saveForm.ArticleId).First(&articleInfo)
+	if db.Error != nil {
+		return db.Error
 	}
 
-	if articleInfo.UserId != userId {
-		utils.ResponseResultsError(ctx, "非本用户的文章无法关联！")
-		return
+	if articleInfo.UserId != loginUserId {
+		return errors.New("非本用户的文章无法关联！")
 	}
 
 	if articleInfo.Status != "4" {
-		utils.ResponseResultsError(ctx, "不是发布状态的文章不能关联！")
-		return
+		return errors.New("不是发布状态的文章不能关联！")
 	}
 
 	// 验证通过创建关联信息
-	res = global.DB.Create(&articleAssociatedInfo.ArticlesAssociatedColumns{
+	db = global.DB.Create(&articleAssociatedInfo.ArticlesAssociatedColumns{
 		UserId:    articleInfo.UserId,
 		ArticleId: saveForm.ArticleId,
 		ColumnId:  saveForm.ColumnId,
 	})
 
-	if res.Error != nil {
-		utils.ResponseResultsError(ctx, res.Error.Error())
-		return
-	}
-
-	utils.ResponseResultsSuccess(ctx, "关联成功！")
+	return db.Error
 }
