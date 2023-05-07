@@ -6,7 +6,6 @@ import (
 	"mk/global"
 	"mk/models/article"
 	"mk/models/articleAssociatedInfo"
-	"mk/models/user"
 	"mk/services/commonServices"
 	"mk/utils"
 )
@@ -202,14 +201,6 @@ func GetArticleList(listForm article.ListForm) ([]article.ArticleInfo, int32, er
 	articleTagsMap, err := commonServices.GetArticleTagMapWithIdAskey(articleIds)
 	if err != nil {
 		return resultList, 0, err
-	}
-
-	// 获取评论数量
-	type ArticleInfo struct {
-		ArticleDetails   article.Article `json:"articleDetails"`
-		UserInfo         user.User       `json:"userInfo"`
-		Tags             []string        `json:"tags"`
-		NumberOfComments int             `json:"numberOfComments"`
 	}
 
 	for _, v := range articles {
