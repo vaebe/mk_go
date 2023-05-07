@@ -129,6 +129,60 @@ func CreateAndUpdate(saveForm article.SaveForm, status string, loginUserId int32
 	}
 }
 
+// FormatArticleListReturnData 格式化文章列表返回数据
+func FormatArticleListReturnData(articles []article.Article) ([]article.ArticleInfo, error) {
+	var resultList []article.ArticleInfo
+	// 文章ids
+	articleIds := make([]int32, 0, len(articles))
+
+	// 用户ids map 文章用户id去重
+	userIdsMap := make(map[int32]bool)
+
+	for i, v := range articles {
+		// 将文章内容重置为 ""
+		articles[i].Content = ""
+
+		// 文章用户id去重
+		userIdsMap[v.UserId] = true
+
+		// 保存文章ids
+		articleIds = append(articleIds, v.ID)
+	}
+
+	// 查用户信息
+	userIds := make([]int32, 0, len(userIdsMap))
+	for id := range userIdsMap {
+		userIds = append(userIds, id)
+	}
+
+	userInfoMap, err := commonServices.GetUserInfoMapWithIdAskey(userIds)
+	if err != nil {
+		return resultList, err
+	}
+
+	// 查文章标签信息
+	articleTagsMap, err := commonServices.GetArticleTagMapWithIdAskey(articleIds)
+	if err != nil {
+		return resultList, err
+	}
+
+	for _, v := range articles {
+		// 标题为空赋值为无标题
+		if v.Title == "" {
+			v.Title = "无标题"
+		}
+
+		resultList = append(resultList, article.ArticleInfo{
+			ArticleDetails:   v,
+			UserInfo:         userInfoMap[v.UserId],
+			Tags:             articleTagsMap[v.ID],
+			NumberOfComments: 0,
+		})
+	}
+
+	return resultList, nil
+}
+
 // GetArticleList 获取文章列表
 func GetArticleList(listForm article.ListForm) ([]article.ArticleInfo, int32, error) {
 	var articles []article.Article
@@ -169,54 +223,7 @@ func GetArticleList(listForm article.ListForm) ([]article.ArticleInfo, int32, er
 		return resultList, 0, db.Error
 	}
 
-	// 文章ids
-	articleIds := make([]int32, 0, len(articles))
-
-	// 用户ids map 文章用户id去重
-	userIdsMap := make(map[int32]bool)
-
-	for i, v := range articles {
-		// 将文章内容重置为 ""
-		articles[i].Content = ""
-
-		// 文章用户id去重
-		userIdsMap[v.UserId] = true
-
-		// 保存文章ids
-		articleIds = append(articleIds, v.ID)
-	}
-
-	// 查用户信息
-	userIds := make([]int32, 0, len(userIdsMap))
-	for id := range userIdsMap {
-		userIds = append(userIds, id)
-	}
-
-	userInfoMap, err := commonServices.GetUserInfoMapWithIdAskey(userIds)
-	if err != nil {
-		return resultList, 0, err
-	}
-
-	// 查文章标签信息
-	articleTagsMap, err := commonServices.GetArticleTagMapWithIdAskey(articleIds)
-	if err != nil {
-		return resultList, 0, err
-	}
-
-	for _, v := range articles {
-		// 标题为空赋值为无标题
-		if v.Title == "" {
-			v.Title = "无标题"
-		}
-
-		resultList = append(resultList, article.ArticleInfo{
-			ArticleDetails:   v,
-			UserInfo:         userInfoMap[v.UserId],
-			Tags:             articleTagsMap[v.ID],
-			NumberOfComments: 0,
-		})
-	}
-
+	resultList, err := FormatArticleListReturnData(articles)
 	return resultList, total, err
 }
 
