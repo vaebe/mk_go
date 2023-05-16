@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,7 +18,7 @@ func InitSwagger(r *gin.Engine, serviceAddress string) {
 		// 执行命令生成 swagger
 		cmd := exec.Command("swag", "init")
 		stdoutStderr, err := cmd.CombinedOutput()
-		zap.S().Infof("\n%s", stdoutStderr)
+		fmt.Printf("%s", stdoutStderr)
 		if err != nil {
 			panic(err)
 		}
