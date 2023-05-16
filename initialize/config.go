@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	"fmt"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"mk/global"
@@ -15,11 +14,10 @@ func GetEnvInfo(env string) bool {
 
 // 设置 config 数据
 func setConfig() {
-	//debug := GetEnvInfo("Mk_DEBUG")
-	configFilePrefix := "config"
+	//debug := GetEnvInfo("MK_DEBUG")
 
 	// 配置文件路径
-	configFileName := fmt.Sprintf("./config/%s-dev.yaml", configFilePrefix)
+	configFileName := "./config.yaml"
 
 	v := viper.New()
 	//文件的路径如何设置
