@@ -132,7 +132,6 @@ func GetEnumsByType(ctx *gin.Context) {
 //	@Produce		json
 //	@Success		200	{object}	utils.ResponseResultInfo
 //	@Failure		500	{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
 //	@Router			/enum/getAllEnums [get]
 func GetAllEnums(ctx *gin.Context) {
 	enumsObj, err := enumServices.GetAllEnums()
