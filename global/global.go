@@ -3,6 +3,7 @@ package global
 import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/redis/go-redis/v9"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"mk/config"
 )
@@ -17,4 +18,5 @@ var (
 	RedisConfig *config.RedisConfig
 	EmailConfig *config.EmailConfig
 	QiNiuConfig *config.QiNiuConfig
+	Logger      *zap.Logger
 )

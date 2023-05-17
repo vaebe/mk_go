@@ -3,6 +3,7 @@ package initialize
 import (
 	"encoding/json"
 	"go.uber.org/zap"
+	"mk/global"
 )
 
 func InitLogger() {
@@ -23,13 +24,13 @@ func InitLogger() {
 	if err := json.Unmarshal(rawJSON, &cfg); err != nil {
 		panic(err)
 	}
-	logger := zap.Must(cfg.Build())
+	global.Logger = zap.Must(cfg.Build())
 	defer func(logger *zap.Logger) {
 		err := logger.Sync()
 		if err != nil {
 
 		}
-	}(logger)
+	}(global.Logger)
 
-	zap.ReplaceGlobals(logger)
+	zap.ReplaceGlobals(global.Logger)
 }
