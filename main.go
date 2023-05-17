@@ -7,12 +7,7 @@ import (
 	"mk/global"
 	"mk/initialize"
 	middlewares "mk/middleware"
-	"mk/routers/article"
-	"mk/routers/articleColumn"
-	"mk/routers/commentInfo"
-	"mk/routers/enum"
-	"mk/routers/file"
-	"mk/routers/user"
+	"mk/routers"
 	"time"
 )
 
@@ -31,32 +26,11 @@ func main() {
 	// 添加跨域中间件
 	r.Use(middlewares.Cors())
 
-	// 路由白名单
-	routerWhiteList := []string{
-		"/mk/user/login",
-		"/mk/user/register",
-		"/mk/user/details",
-		"/mk/user/getVerificationCode",
-		"/mk/enum/getAllEnums",
-		"/mk/article/getArticleList",
-		"/mk/article/getUserArticleList",
-		"/mk/article/getArticleDetails",
-		"/mk/commentInfo/getListById",
-		"/swagger/index.html",
-		"/favicon.ico",
-	}
 	// 添加jwt中间件
-	r.Use(middlewares.JWTAuth(routerWhiteList))
+	r.Use(middlewares.JWTAuth(routers.GetRouterWhiteList()))
 
-	baseRouter := r.Group("/mk")
-	{
-		user.LoadRouter(baseRouter)
-		article.LoadRouter(baseRouter)
-		enum.LoadRouter(baseRouter)
-		articleColumn.LoadRouter(baseRouter)
-		file.LoadRouter(baseRouter)
-		commentInfo.LoadRouter(baseRouter)
-	}
+	// 加载路由
+	routers.LoadAllRouter(r)
 
 	port := 53105
 	serviceAddress := fmt.Sprintf("%s:%d", "127.0.0.1", port)
