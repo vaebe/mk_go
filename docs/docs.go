@@ -884,11 +884,6 @@ const docTemplate = `{
         },
         "/enum/getAllEnums": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取全部数据",
                 "consumes": [
                     "application/json"

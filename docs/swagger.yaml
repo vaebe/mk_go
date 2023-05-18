@@ -813,8 +813,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
-      security:
-      - ApiKeyAuth: []
       summary: 获取全部数据
       tags:
       - enum枚举
