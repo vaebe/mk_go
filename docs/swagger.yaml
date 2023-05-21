@@ -575,8 +575,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/utils.EmptyInfo'
-      security:
-      - ApiKeyAuth: []
       summary: 获取专栏列表
       tags:
       - articleColumn专栏

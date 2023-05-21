@@ -109,7 +109,6 @@ func Details(ctx *gin.Context) {
 //	@Param			param	body		articleColumn.ListForm	true	"请求对象"
 //	@Success		200		{object}	utils.ResponseResultInfo
 //	@Failure		500		{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
 //	@Router			/articleColumn/getList [post]
 func List(ctx *gin.Context) {
 	listForm := articleColumn.ListForm{}

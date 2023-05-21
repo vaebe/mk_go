@@ -494,11 +494,6 @@ const docTemplate = `{
         },
         "/articleColumn/getList": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取专栏列表",
                 "consumes": [
                     "application/json"

@@ -20,6 +20,7 @@ func GetRouterWhiteList() []string {
 		"/mk/enum/getAllEnums",
 		"/mk/article/getArticleList",
 		"/mk/article/getArticleDetails",
+		"/mk/articleColumn/getList",
 		"/mk/commentInfo/getListById",
 		"/swagger/index.html",
 		"/favicon.ico",
