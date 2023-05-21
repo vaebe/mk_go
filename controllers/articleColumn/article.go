@@ -17,7 +17,6 @@ import (
 //	@Param			id	query		int	true	"专栏id"
 //	@Success		200	{object}	utils.ResponseResultInfo
 //	@Failure		500	{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
 //	@Router			/articleColumn/getAssociatedArticlesList [get]
 func GetAssociatedArticlesList(ctx *gin.Context) {
 	columnId := ctx.Query("id")

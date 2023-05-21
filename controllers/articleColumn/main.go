@@ -80,7 +80,6 @@ func Delete(ctx *gin.Context) {
 //	@Param			id	query		int	true	"专栏id"
 //	@Success		200	{object}	utils.ResponseResultInfo
 //	@Failure		500	{object}	utils.EmptyInfo
-//	@Security		ApiKeyAuth
 //	@Router			/articleColumn/details [get]
 func Details(ctx *gin.Context) {
 	columnId := ctx.Query("id")

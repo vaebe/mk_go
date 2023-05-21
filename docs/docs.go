@@ -408,11 +408,6 @@ const docTemplate = `{
         },
         "/articleColumn/details": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取专栏详情",
                 "consumes": [
                     "application/json"
@@ -451,11 +446,6 @@ const docTemplate = `{
         },
         "/articleColumn/getAssociatedArticlesList": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "获取专栏关联文章列表",
                 "consumes": [
                     "application/json"

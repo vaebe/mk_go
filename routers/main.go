@@ -21,6 +21,8 @@ func GetRouterWhiteList() []string {
 		"/mk/article/getArticleList",
 		"/mk/article/getArticleDetails",
 		"/mk/articleColumn/getList",
+		"/mk/articleColumn/details",
+		"/mk/articleColumn/getAssociatedArticlesList",
 		"/mk/commentInfo/getListById",
 		"/swagger/index.html",
 		"/favicon.ico",
